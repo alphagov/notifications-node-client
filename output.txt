@@ -1,0 +1,19 @@
+arguments
+   POST /notifications/sms SECRET 123 {'content': 'Hello world'}
+
+signed_url
+   l2IZlN64uoqdLOPJtFHLZ6IGtc2wJnevY8Rrvffp8Cc=
+
+claims.pay
+   l2IZlN64uoqdLOPJtFHLZ6IGtc2wJnevY8Rrvffp8Cc=
+
+================================================================================
+
+token
+   eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEyMywiaWF0IjoxNDUzNzQzMjI0LCJyZXEiOiJsMklabE42NHVvcWRMT1BKdEZITFo2SUd0YzJ3Sm5ldlk4UnJ2ZmZwOENjPSIsInBheSI6ImwySVpsTjY0dW9xZExPUEp0RkhMWjZJR3RjMndKbmV2WThScnZmZnA4Q2M9In0.VMbXyZ9YW4BcMusJuyUHJkUp3ZmxHDnG4ovcCmvdZo0
+
+jwt.decode(token)
+  { iss: 123,
+    iat: 1453743224,
+    req: 'l2IZlN64uoqdLOPJtFHLZ6IGtc2wJnevY8Rrvffp8Cc=',
+    pay: 'l2IZlN64uoqdLOPJtFHLZ6IGtc2wJnevY8Rrvffp8Cc=' }

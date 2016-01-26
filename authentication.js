@@ -11,8 +11,6 @@ function create_signature(original, secret_key) {
 
 function create_govuk_notify_token(request_method, request_path, secret, client_id, request_body) {
 
-  console.info(request_method, request_path, secret, client_id, request_body);
-
   var claims = {
     iss: client_id,
     iat: Math.round(Date.now() / 1000),

@@ -1,12 +1,12 @@
 {
-  "name": "notify-node",
+  "name": "notifications-node-client",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "GOV.UK Notify Node.js client ",
+  "main": "authentication.js",
   "scripts": {
     "test": "mocha spec/authentication.js"
   },
-  "author": "",
+  "author": "GDS developers",
   "license": "MIT",
   "dependencies": {
     "crypto": "0.0.3",

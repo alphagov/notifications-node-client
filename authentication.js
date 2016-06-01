@@ -2,7 +2,7 @@ var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 
 
-function create_govuk_notify_token(request_method, request_path, secret, client_id, request_body) {
+function createGovukNotifyToken(request_method, request_path, secret, client_id, request_body) {
 
   return jwt.sign(
     {
@@ -17,4 +17,4 @@ function create_govuk_notify_token(request_method, request_path, secret, client_
 
 }
 
-module.exports = create_govuk_notify_token;
+module.exports = createGovukNotifyToken;

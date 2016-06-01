@@ -1,7 +1,7 @@
 var expect = require('chai').expect,
     MockDate = require('mockdate'),
     jwt = require('jsonwebtoken'),
-    create_govuk_notify_token = require('../authentication.js');
+    createGovukNotifyToken = require('../authentication.js');
 
 
 describe('Authentication', function() {
@@ -18,7 +18,7 @@ describe('Authentication', function() {
 
     it('can be generated and decoded', function() {
 
-      var token = create_govuk_notify_token("POST", "/notifications/sms", "SECRET", 123),
+      var token = createGovukNotifyToken("POST", "/notifications/sms", "SECRET", 123),
           decoded = jwt.verify(token, 'SECRET');
 
       expect(token).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEyMywiaWF0IjoxMjM0NTY3ODkwfQ.R9-H_oV7d56Dal9jUAKThrZlo1_LNVqc3LCtY62WQd4');

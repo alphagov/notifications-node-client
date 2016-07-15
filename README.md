@@ -9,8 +9,8 @@ var createGOVUKNotifyToken = require('notifications-node-client');
 var yourServiceID = 123;
 var yourAPIKey = 'SECRET--DO NOT CHECK IN!';
 
-// without payload
-var token = createGOVUKNotifyToken("GET", "/notifications/sms", yourAPIKey, yourServiceID);
+// GET request
+var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
 
 request(
   {
@@ -27,8 +27,8 @@ request(
 );
 
 
-// with payload
-var token = createGOVUKNotifyToken("POST", "/notifications/sms", yourAPIKey, yourServiceID, "{content:'Hello world'}");
+// POST request
+var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
 
 request(
   {

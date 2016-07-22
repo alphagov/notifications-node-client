@@ -14,7 +14,6 @@ function createGovukNotifyToken(request_method, request_path, secret, client_id,
       headers: {typ: "JWT", alg: "HS256"}
     }
   );
-
 }
 
 module.exports = createGovukNotifyToken;

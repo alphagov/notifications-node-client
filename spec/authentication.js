@@ -1,7 +1,7 @@
 var expect = require('chai').expect,
     MockDate = require('mockdate'),
     jwt = require('jsonwebtoken'),
-    createGovukNotifyToken = require('../authentication.js');
+    createGovukNotifyToken = require('../client/authentication.js');
 
 
 describe('Authentication', function() {

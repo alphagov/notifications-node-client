@@ -23,7 +23,7 @@ function NotifyClient(baseUrl, clientId, secret) {
  */
 function createNotificationPayload(templateId, to, personalisation) {
   var payload = {
-    templateId: templateId,
+    template: templateId,
     to: to
   };
 

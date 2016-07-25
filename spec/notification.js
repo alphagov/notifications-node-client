@@ -12,7 +12,7 @@ describe('notification api', function() {
           templateId = '123',
           personalisation = {foo: 'bar'},
           data = {
-              templateId: templateId,
+              template: templateId,
               to: email,
               personalisation: personalisation
           },
@@ -42,7 +42,7 @@ describe('notification api', function() {
           templateId = '123',
           personalisation = {foo: 'bar'},
           data = {
-              templateId: templateId,
+              template: templateId,
               to: phoneNo,
               personalisation: personalisation
           },

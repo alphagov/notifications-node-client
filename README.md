@@ -4,45 +4,35 @@
 Work in progress GOV.UK Notify Node.js client. Usage:
 
 ```javascript
-var request = require('request');
-var createGOVUKNotifyToken = require('notifications-node-client');
-var yourServiceID = 123;
-var yourAPIKey = 'SECRET--DO NOT CHECK IN!';
+var NotifyClient = require('notifications-node-client').NotifyClient,
+  notifyClient = new NotifyClient(
+    process.env.NOTIFY_BASE_URL,
+    process.env.NOTIFY_SERVICE_ID,
+    process.env.NOTIFY_SECRET // API Key
+  );
 
-// GET request
-var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
-
-request(
-  {
-    method: 'GET',
-    url: 'https://api.notify.works/notifications/sms',
-    headers: {
-      'Content-type': "application/json",
-      "Authorization": "Bearer " + token
-    }
+module.exports = {
+  /**
+   * @param {String} templateId
+   * @param {String} emailAddress
+   * @param {Object} personalisation
+   *
+   * @returns {Promise}
+   */
+  sendEmail: function(templateId, emailAddress, personalisation) {
+    return notifyClient.sendEmail(templateId, emailAddress, personalisation);
   },
-  function(error, response, body) {
-    console.log(error, response, body);
+
+  /**
+   * @param {String} templateId
+   * @param {String} phoneNumber
+   * @param {Object} personalisation
+   *
+   * @returns {Promise}
+   */
+  sendSms: function(templateId, phoneNumber, personalisation) {
+    return notifyClient.sendSms(templateId, phoneNumber, personalisation);
   }
-);
-
-
-// POST request
-var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
-
-request(
-  {
-    method: 'POST',
-    url: 'https://api.notify.works/notifications/sms',
-    headers: {
-      'Content-type': "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: "{content:'Hello world'}"
-  },
-  function(error, response, body) {
-    console.log(error, response, body);
-  }
-);
+};
 
 ```

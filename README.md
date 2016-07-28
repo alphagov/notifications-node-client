@@ -1,48 +1,45 @@
 [![Build Status](https://travis-ci.org/alphagov/notifications-node-client.svg)](https://travis-ci.org/alphagov/notifications-node-client)
 [![Dependency Status](https://david-dm.org/alphagov/notifications-node-client.svg)](https://david-dm.org/alphagov/notifications-node-client)
 
-Work in progress GOV.UK Notify Node.js client. Usage:
+# GOV.UK Notify Node.js client
+
+## Installation
+```shell
+npm install notifications-node-client
+```
+
+## Getting started
+```javascript
+var NotifyClient = require('notifications-node-client').NotifyClient,
+
+notifyClient = new NotifyClient(
+  "https://api.notifications.service.gov.uk",
+  process.env.NOTIFY_SERVICE_ID,
+  process.env.NOTIFY_SECRET // API Key
+);
+```
+
+Generate an API key by logging in to
+[GOV.UK Notify](https://www.notifications.service.gov.uk) and going to
+the _API integration_ page.
+
+You will also find your service ID on the _API integration_ page.
+
+## Send a message
 
 ```javascript
-var request = require('request');
-var createGOVUKNotifyToken = require('notifications-node-client');
-var yourServiceID = 123;
-var yourAPIKey = 'SECRET--DO NOT CHECK IN!';
-
-// GET request
-var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
-
-request(
-  {
-    method: 'GET',
-    url: 'https://api.notify.works/notifications/sms',
-    headers: {
-      'Content-type': "application/json",
-      "Authorization": "Bearer " + token
-    }
-  },
-  function(error, response, body) {
-    console.log(error, response, body);
-  }
-);
-
-
-// POST request
-var token = createGOVUKNotifyToken(yourAPIKey, yourServiceID);
-
-request(
-  {
-    method: 'POST',
-    url: 'https://api.notify.works/notifications/sms',
-    headers: {
-      'Content-type': "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: "{content:'Hello world'}"
-  },
-  function(error, response, body) {
-    console.log(error, response, body);
-  }
-);
-
+notifyClient.sendEmail(templateId, emailAddress, personalisation);
 ```
+
+```javascript
+notifyClient.sendSms(templateId, phoneNumber, personalisation);
+```
+
+Find template_id by clicking API info for the template you want to send.
+
+### With personalisation
+```javascript
+notifyClient.sendSms(templateId, phoneNumber, personalisation={
+    'name': 'Amala',
+    'reference_number': '300241',
+});

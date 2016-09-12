@@ -4,14 +4,14 @@ var restClient = require('request-promise'),
 
 /**
  * @param urlBase
- * @param clientId
- * @param secret
+ * @param serviceId
+ * @param apiKeyId
  *
  * @constructor
  */
-function ApiClient(urlBase, clientId, secret) {
-  this.clientId = clientId;
-  this.secret = secret;
+function ApiClient(urlBase, serviceId, apiKeyId) {
+  this.serviceId = serviceId;
+  this.apiKeyId = apiKeyId;
   this.urlBase = urlBase;
 }
 
@@ -19,13 +19,13 @@ function ApiClient(urlBase, clientId, secret) {
  *
  * @param {string} requestMethod
  * @param {string} requestPath
- * @param {string} secret
- * @param {string}clientId
+ * @param {string} apiKeyId
+ * @param {string} serviceId
  *
  * @returns {string}
  */
-function createToken(requestMethod, requestPath, secret, clientId) {
-  return createGovukNotifyToken(requestMethod, requestPath, secret, clientId)
+function createToken(requestMethod, requestPath, apiKeyId, serviceId) {
+  return createGovukNotifyToken(requestMethod, requestPath, apiKeyId, serviceId)
 }
 
 _.extend(ApiClient.prototype, {
@@ -43,7 +43,7 @@ _.extend(ApiClient.prototype, {
       json: true,
       resolveWithFullResponse: true,
       headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.secret, this.clientId)
+        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId)
       }
     };
 
@@ -65,7 +65,7 @@ _.extend(ApiClient.prototype, {
       body: data,
       resolveWithFullResponse: true,
       headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.secret, this.clientId)
+        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId)
       }
     };
 

@@ -13,19 +13,19 @@ describe('api client', function () {
       body = {
         'body': 'body text'
       },
-      clientId = 123,
-      secret = 'SECRET',
-      apiClient = new ApiClient(urlBase, clientId, secret);
+      serviceId = 123,
+      apiKeyId = 'SECRET',
+      apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
 
     nock(urlBase, {
       reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, secret, clientId)
+        'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId)
       }
     })
       .get(path)
       .reply(200, body);
 
-    apiClient = new ApiClient(urlBase, clientId, secret);
+    apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
     apiClient.get(path)
       .then(function (response) {
         expect(response.body).to.deep.equal(body);
@@ -40,20 +40,20 @@ describe('api client', function () {
       data = {
         'data': 'qwjjs'
       },
-      clientId = 123,
-      secret = 'SECRET',
-      apiClient = new ApiClient(urlBase, clientId, secret);
+      serviceId = 123,
+      apiKeyId = 'SECRET',
+      apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
 
 
     nock(urlBase, {
       reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, secret, clientId)
+        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId)
       }
     })
       .post(path, data)
       .reply(200, {"hooray": "bkbbk"});
 
-    apiClient = new ApiClient(urlBase, clientId, secret);
+    apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
     apiClient.post(path, data)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);

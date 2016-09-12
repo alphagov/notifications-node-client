@@ -17,17 +17,17 @@ describe('notification api', function() {
               personalisation: personalisation
           },
           notifyClient,
-          clientId = 123,
-          secret = 'SECRET';
+          serviceId = 123,
+          apiKeyId = 'SECRET';
 
         nock(urlBase, {
             reqheaders: {
-                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', secret, clientId)
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', apiKeyId, serviceId)
             }})
             .post('/notifications/email', data)
             .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient = new NotifyClient(urlBase, clientId, secret);
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
         notifyClient.sendEmail(templateId, email, personalisation)
           .then(function (response) {
             expect(response.statusCode).to.equal(200);
@@ -47,17 +47,17 @@ describe('notification api', function() {
               personalisation: personalisation
           },
           notifyClient,
-          clientId = 123,
-          secret = 'SECRET';
+          serviceId = 123,
+          apiKeyId = 'SECRET';
 
         nock(urlBase, {
             reqheaders: {
-                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', secret, clientId)
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', apiKeyId, serviceId)
             }})
           .post('/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient = new NotifyClient(urlBase, clientId, secret);
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
         notifyClient.sendSms(templateId, phoneNo, personalisation)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
@@ -70,17 +70,17 @@ describe('notification api', function() {
         var urlBase = 'http://base',
           notificationId = 'wfdfdgf',
           notifyClient,
-          clientId = 123,
-          secret = 'SECRET';
+          serviceId = 123,
+          apiKeyId = 'SECRET';
 
         nock(urlBase, {
             reqheaders: {
-                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', secret, clientId)
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', apiKeyId, serviceId)
             }})
           .get('/notifications/' + notificationId)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient = new NotifyClient(urlBase, clientId, secret);
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
         notifyClient.getNotificationById(notificationId)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);

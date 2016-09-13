@@ -81,7 +81,13 @@ _.extend(NotifyClient.prototype, {
    */
   getNotificationById: function(notificationId) {
     return this.apiClient.get('/notifications/' + notificationId);
-  }
+  },
+
+  /**
+   *
+   * @returns {Promise}
+   */
+  getNotifications: function(){return this.apiClient.get('/notifications')}
 });
 
 module.exports = {

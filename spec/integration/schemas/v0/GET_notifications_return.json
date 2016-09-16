@@ -13,7 +13,15 @@
       }
     },
     "links": {
-      "type": "object"
+      "type": "object",
+      "properties" : {
+        "last": {
+          "type" : "string"
+        },
+        "next" : {
+          "type" : "string"
+        }
+      }
     },
     "page_size": {"type": "number"},
     "total": {"type": "number"}

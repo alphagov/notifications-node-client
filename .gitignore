@@ -1,2 +1,5 @@
 node_modules
 .idea/
+environment.sh
+.eslintrc.js
+docker.env

@@ -4,13 +4,13 @@ var ApiClient = require('./api_client'),
 /**
  *
  * @param baseUrl
- * @param clientId
- * @param secret
+ * @param serviceId
+ * @param apiKeyId
  *
  * @constructor
  */
-function NotifyClient(baseUrl, clientId, secret) {
-  this.apiClient = new ApiClient(baseUrl, clientId, secret);
+function NotifyClient(baseUrl, serviceId, apiKeyId) {
+  this.apiClient = new ApiClient(baseUrl, serviceId, apiKeyId);
 }
 
 /**
@@ -38,7 +38,7 @@ _.extend(NotifyClient.prototype, {
   /**
    * Usage:
    *
-   * notifyClient = new NotifyClient(urlBase, clientId, secret);
+   * notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
    *
    * notifyClient.sendEmail(templateId, email, personalisation)
    *    .then(function (response) {
@@ -81,7 +81,13 @@ _.extend(NotifyClient.prototype, {
    */
   getNotificationById: function(notificationId) {
     return this.apiClient.get('/notifications/' + notificationId);
-  }
+  },
+
+  /**
+   *
+   * @returns {Promise}
+   */
+  getNotifications: function(){return this.apiClient.get('/notifications')}
 });
 
 module.exports = {

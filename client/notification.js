@@ -87,7 +87,7 @@ _.extend(NotifyClient.prototype, {
    *
    * @returns {Promise}
    */
-  getNotifications: function(){return this.apiClient.get('/notifications?page_size=151')}
+  getNotifications: function(){return this.apiClient.get('/notifications')}
 });
 
 module.exports = {

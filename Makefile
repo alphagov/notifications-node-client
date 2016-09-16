@@ -18,6 +18,10 @@ dependencies:  ## Install build dependencies
 .PHONY: build
 build: dependencies ## Build project
 
+.PHONY: test
+test: ## Run tests
+	npm test
+
 .PHONY: integration-test
 integration-test: ## Run integration tests
 	npm test --integration
@@ -37,6 +41,15 @@ build-with-docker: prepare-docker-runner-image ## Build inside a Docker containe
 		-v `pwd`:/var/project \
 		${DOCKER_BUILDER_IMAGE_NAME} \
 		make build
+
+.PHONY: test-with-docker
+test-with-docker: prepare-docker-runner-image generate-env-file ## Run tests inside a Docker container
+	docker run -i --rm \
+		--name "${DOCKER_CONTAINER_PREFIX}-test" \
+		-v `pwd`:/var/project \
+		--env-file docker.env \
+		${DOCKER_BUILDER_IMAGE_NAME} \
+		make test
 
 .PHONY: integration-test-with-docker
 integration-test-with-docker: prepare-docker-runner-image generate-env-file ## Run integration tests inside a Docker container

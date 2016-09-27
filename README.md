@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/alphagov/notifications-node-client.svg)](https://travis-ci.org/alphagov/notifications-node-client)
 [![Dependency Status](https://david-dm.org/alphagov/notifications-node-client.svg)](https://david-dm.org/alphagov/notifications-node-client)
 
 # GOV.UK Notify Node.js client

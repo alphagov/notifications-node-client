@@ -10,14 +10,26 @@ var restClient = require('request-promise'),
  * @constructor
  */
 function ApiClient(urlBase, serviceId, apiKeyId) {
-  if (!apiKeyId && serviceId.length > 74) {
-    this.apiKeyId = serviceId.substring(serviceId.length - 36, serviceId.length);
-    this.serviceId = serviceId.substring(serviceId.length - 73, serviceId.length - 37);
+  if (arguments.length === 1 && !arguments[0].startsWith('http')) {
+    this.urlBase = 'https://api.notifications.service.gov.uk';
+    serviceId = arguments[0];
   } else {
-    this.serviceId = serviceId;
-    this.apiKeyId = apiKeyId.substring(apiKeyId.length - 36, apiKeyId.length);
+    this.urlBase = urlBase;
   }
-  this.urlBase = urlBase;
+  if (arguments.length === 2 && !arguments[0].startsWith('http')) {
+    this.serviceId = arguments[0];
+    this.apiKeyId = arguments[1];
+    this.urlBase = 'https://api.notifications.service.gov.uk';
+  } else {
+    if (!apiKeyId && serviceId.length > 74) {
+      this.apiKeyId = serviceId.substring(serviceId.length - 36, serviceId.length);
+      this.serviceId = serviceId.substring(serviceId.length - 73, serviceId.length - 37);
+    } else {
+      this.serviceId = serviceId;
+      this.apiKeyId = apiKeyId.substring(apiKeyId.length - 36, apiKeyId.length);
+    }
+  }
+
 }
 
 /**

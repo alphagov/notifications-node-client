@@ -8,7 +8,7 @@ describe('api client', function () {
 
   it('should make a get request with correct jwt token', function (done) {
 
-    var urlBase = 'http://base',
+    var urlBase = 'https://api.notifications.service.gov.uk',
       path = '/email',
       body = {
         'body': 'body text'
@@ -17,9 +17,10 @@ describe('api client', function () {
       apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
     [
+      new ApiClient(serviceId, apiKeyId),
       new ApiClient(urlBase, serviceId, apiKeyId),
       new ApiClient(urlBase, 'key_name' + '-' + serviceId + '-' + apiKeyId),
-      new ApiClient(urlBase, 'key_name' + ':' + serviceId + ':' + apiKeyId)
+      new ApiClient('key_name' + ':' + serviceId + ':' + apiKeyId),
     ].forEach(function(client, index, clients) {
 
       nock(urlBase, {

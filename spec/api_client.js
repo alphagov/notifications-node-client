@@ -13,24 +13,31 @@ describe('api client', function () {
       body = {
         'body': 'body text'
       },
-      serviceId = 123,
-      apiKeyId = 'SECRET',
-      apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
+      serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+      apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
-    nock(urlBase, {
-      reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId)
-      }
-    })
-      .get(path)
-      .reply(200, body);
+    [
+      new ApiClient(urlBase, serviceId, apiKeyId),
+      new ApiClient(urlBase, 'key_name' + '-' + serviceId + '-' + apiKeyId),
+      new ApiClient(urlBase, 'key_name' + ':' + serviceId + ':' + apiKeyId)
+    ].forEach(function(client, index, clients) {
 
-    apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
-    apiClient.get(path)
-      .then(function (response) {
-        expect(response.body).to.deep.equal(body);
-        done();
+      nock(urlBase, {
+        reqheaders: {
+          'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId)
+        }
+      })
+        .get(path)
+        .reply(200, body);
+
+      client.get(path)
+        .then(function (response) {
+          expect(response.body).to.deep.equal(body);
+          if (index == clients.length - 1) done();
+      });
+
     });
+
   });
 
   it('should make a post request with correct jwt token', function (done) {

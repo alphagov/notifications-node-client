@@ -10,8 +10,13 @@ var restClient = require('request-promise'),
  * @constructor
  */
 function ApiClient(urlBase, serviceId, apiKeyId) {
-  this.serviceId = serviceId;
-  this.apiKeyId = apiKeyId;
+  if (!apiKeyId && serviceId.length > 74) {
+    this.apiKeyId = serviceId.substring(serviceId.length - 36, serviceId.length);
+    this.serviceId = serviceId.substring(serviceId.length - 73, serviceId.length - 37);
+  } else {
+    this.serviceId = serviceId;
+    this.apiKeyId = apiKeyId.substring(apiKeyId.length - 36, apiKeyId.length);
+  }
   this.urlBase = urlBase;
 }
 

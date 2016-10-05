@@ -42,3 +42,14 @@ notifyClient.sendSms(templateId, phoneNumber, personalisation={
     'name': 'Amala',
     'reference_number': '300241',
 });
+
+
+## Get the status of one message
+```javascript
+notifyClient.getNotificationById(notificationId)
+```
+
+## Get the status of all messages
+```javascript
+notifyClient.getNotifications()
+```

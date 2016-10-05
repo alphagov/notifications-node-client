@@ -42,7 +42,7 @@ notifyClient.sendSms(templateId, phoneNumber, personalisation={
     'name': 'Amala',
     'reference_number': '300241',
 });
-
+```
 
 ## Get the status of one message
 ```javascript

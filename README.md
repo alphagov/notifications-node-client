@@ -11,18 +11,12 @@ npm install notifications-node-client
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
 
-notifyClient = new NotifyClient(
-  "https://api.notifications.service.gov.uk",
-  process.env.NOTIFY_SERVICE_ID,
-  process.env.NOTIFY_SECRET // API Key
-);
+notifyClient = new NotifyClient(apiKey);
 ```
 
 Generate an API key by logging in to
 [GOV.UK Notify](https://www.notifications.service.gov.uk) and going to
 the _API integration_ page.
-
-You will also find your service ID on the _API integration_ page.
 
 ## Send a message
 

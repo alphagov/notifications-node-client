@@ -18,8 +18,6 @@ Generate an API key by logging in to
 [GOV.UK Notify](https://www.notifications.service.gov.uk) and going to
 the _API integration_ page.
 
-You will also find your service ID on the _API integration_ page.
-
 ## Send a message
 
 ```javascript

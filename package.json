@@ -1,6 +1,6 @@
 {
   "name": "notifications-node-client",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {

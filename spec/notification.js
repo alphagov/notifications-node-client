@@ -17,8 +17,8 @@ describe('notification api', function() {
               personalisation: personalisation
           },
           notifyClient,
-          serviceId = 123,
-          apiKeyId = 'SECRET';
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
         nock(urlBase, {
             reqheaders: {
@@ -47,8 +47,8 @@ describe('notification api', function() {
               personalisation: personalisation
           },
           notifyClient,
-          serviceId = 123,
-          apiKeyId = 'SECRET';
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
         nock(urlBase, {
             reqheaders: {
@@ -70,8 +70,8 @@ describe('notification api', function() {
         var urlBase = 'http://base',
           notificationId = 'wfdfdgf',
           notifyClient,
-          serviceId = 123,
-          apiKeyId = 'SECRET';
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
         nock(urlBase, {
             reqheaders: {

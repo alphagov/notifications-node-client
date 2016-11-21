@@ -9,8 +9,11 @@ var ApiClient = require('./api_client'),
  *
  * @constructor
  */
-function NotifyClient(baseUrl, serviceId, apiKeyId) {
-  this.apiClient = new ApiClient(baseUrl, serviceId, apiKeyId);
+function NotifyClient() {
+  this.apiClient = new (Function.prototype.bind.apply(
+      ApiClient,
+      [null].concat(Array.prototype.slice.call(arguments))
+  ));
 }
 
 /**

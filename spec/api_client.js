@@ -1,12 +1,13 @@
 var expect = require('chai').expect,
   ApiClient = require('../client/api_client.js'),
   nock = require('nock'),
-  createGovukNotifyToken = require('../client/authentication.js');
+  createGovukNotifyToken = require('../client/authentication.js'),
+  version = require(__dirname + '/../package.json').version;
 
 
 describe('api client', function () {
 
-  it('should make a get request with correct jwt token', function (done) {
+  it('should make a get request with correct headers', function (done) {
 
     var urlBase = 'https://api.notifications.service.gov.uk',
       path = '/email',
@@ -25,7 +26,8 @@ describe('api client', function () {
 
       nock(urlBase, {
         reqheaders: {
-          'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId)
+          'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
+          'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
         }
       })
         .get(path)
@@ -41,7 +43,7 @@ describe('api client', function () {
 
   });
 
-  it('should make a post request with correct jwt token', function (done) {
+  it('should make a post request with correct headers', function (done) {
 
     var urlBase = 'http://base',
       path = '/email',
@@ -55,7 +57,8 @@ describe('api client', function () {
 
     nock(urlBase, {
       reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId)
+        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),
+        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     })
       .post(path, data)

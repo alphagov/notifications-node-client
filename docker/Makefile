@@ -7,4 +7,4 @@ help:
 
 .PHONY: build
 build:
-	docker build -f Dockerfile -t govuk/notify-nodejs-client-runner .
+	docker build -f Dockerfile -t govuk/notify-nodejs-client-runner --build-arg APT_HTTP_PROXY="${HTTP_PROXY}" .

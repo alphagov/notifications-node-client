@@ -43,7 +43,7 @@ describe('api client', function () {
 
   it('should make a post request with correct jwt token', function (done) {
 
-    var urlBase = 'http://base',
+    var urlBase = 'http://localhost',
       path = '/email',
       data = {
         'data': 'qwjjs'

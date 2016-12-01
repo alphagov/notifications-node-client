@@ -7,7 +7,7 @@ describe('notification api', function() {
 
     it('should send an email', function(done) {
 
-        var urlBase = 'http://base',
+        var urlBase = 'http://localhost',
           email = 'dom@example.com',
           templateId = '123',
           personalisation = {foo: 'bar'},
@@ -37,7 +37,7 @@ describe('notification api', function() {
 
     it('should send an sms', function(done) {
 
-        var urlBase = 'http://base',
+        var urlBase = 'http://localhost',
           phoneNo = '07525755555',
           templateId = '123',
           personalisation = {foo: 'bar'},
@@ -67,7 +67,7 @@ describe('notification api', function() {
 
     it('should get notification by id', function(done) {
 
-        var urlBase = 'http://base',
+        var urlBase = 'http://localhost',
           notificationId = 'wfdfdgf',
           notifyClient,
           serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',

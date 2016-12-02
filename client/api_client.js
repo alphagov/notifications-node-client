@@ -1,7 +1,8 @@
 var restClient = require('request-promise'),
     _ = require('underscore'),
     createGovukNotifyToken = require('../client/authentication.js'),
-    notifyProductionAPI = 'https://api.notifications.service.gov.uk';
+    notifyProductionAPI = 'https://api.notifications.service.gov.uk'
+    version = require(__dirname + '/../package.json').version;
 
 /**
  * @param urlBase
@@ -68,7 +69,8 @@ _.extend(ApiClient.prototype, {
       json: true,
       resolveWithFullResponse: true,
       headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId)
+        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
 
@@ -90,7 +92,8 @@ _.extend(ApiClient.prototype, {
       body: data,
       resolveWithFullResponse: true,
       headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId)
+        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
 

@@ -59,7 +59,7 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   sendEmail: function (templateId, emailAddress, personalisation) {
-    return this.apiClient.post('/notifications/email',
+    return this.apiClient.post('/v2/notifications/email',
       createNotificationPayload(templateId, emailAddress, personalisation));
   },
 
@@ -72,7 +72,7 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   sendSms: function (templateId, phoneNumber, personalisation) {
-    return this.apiClient.post('/notifications/sms',
+    return this.apiClient.post('/v2/notifications/sms',
       createNotificationPayload(templateId, phoneNumber, personalisation));
   },
 
@@ -83,14 +83,14 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   getNotificationById: function(notificationId) {
-    return this.apiClient.get('/notifications/' + notificationId);
+    return this.apiClient.get('/v2/notifications/' + notificationId);
   },
 
   /**
    *
    * @returns {Promise}
    */
-  getNotifications: function(){return this.apiClient.get('/notifications')}
+  getNotifications: function(){return this.apiClient.get('/v2/notifications')}
 });
 
 module.exports = {

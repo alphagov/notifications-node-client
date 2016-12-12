@@ -24,11 +24,18 @@ function NotifyClient() {
  *
  * @returns {Object}
  */
-function createNotificationPayload(templateId, to, personalisation) {
+function createNotificationPayload(type, templateId, to, personalisation) {
+
   var payload = {
-    template: templateId,
-    to: to
+    template_id: templateId
   };
+
+  if (type == 'email') {
+    payload.email_address = to
+  } else if (type == 'sms') {
+    payload.phone_number = to
+  }
+
 
   if (!!personalisation) {
     payload.personalisation = personalisation;
@@ -60,7 +67,7 @@ _.extend(NotifyClient.prototype, {
    */
   sendEmail: function (templateId, emailAddress, personalisation) {
     return this.apiClient.post('/v2/notifications/email',
-      createNotificationPayload(templateId, emailAddress, personalisation));
+      createNotificationPayload('email', templateId, emailAddress, personalisation));
   },
 
   /**
@@ -73,7 +80,7 @@ _.extend(NotifyClient.prototype, {
    */
   sendSms: function (templateId, phoneNumber, personalisation) {
     return this.apiClient.post('/v2/notifications/sms',
-      createNotificationPayload(templateId, phoneNumber, personalisation));
+      createNotificationPayload('sms', templateId, phoneNumber, personalisation));
   },
 
   /**

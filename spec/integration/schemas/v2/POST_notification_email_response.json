@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "description": "POST notification email response schema",
+  "type" : "object",
+  "properties": {
+      "id": {"$ref": "definitions.json#/uuid"},
+      "reference": {"type": ["string", "null"]},
+      "content": {"$ref": "definitions.json#/email_content"},
+      "uri": {"type": "string"},
+      "template": {"$ref": "definitions.json#/template"}
+  },
+  "additionalProperties": false,
+  "required": ["id", "content", "uri", "template"]
+}

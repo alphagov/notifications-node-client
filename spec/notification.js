@@ -12,8 +12,8 @@ describe('notification api', function() {
           templateId = '123',
           personalisation = {foo: 'bar'},
           data = {
-              template: templateId,
-              to: email,
+              template_id: templateId,
+              email_address: email,
               personalisation: personalisation
           },
           notifyClient,
@@ -42,8 +42,8 @@ describe('notification api', function() {
           templateId = '123',
           personalisation = {foo: 'bar'},
           data = {
-              template: templateId,
-              to: phoneNo,
+              template_id: templateId,
+              phone_number: phoneNo,
               personalisation: personalisation
           },
           notifyClient,
@@ -52,7 +52,7 @@ describe('notification api', function() {
 
         nock(urlBase, {
             reqheaders: {
-                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', apiKeyId, serviceId)
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/email', apiKeyId, serviceId)
             }})
           .post('/v2/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
@@ -75,7 +75,7 @@ describe('notification api', function() {
 
         nock(urlBase, {
             reqheaders: {
-                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/notifications/email', apiKeyId, serviceId)
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
             }})
           .get('/v2/notifications/' + notificationId)
           .reply(200, {"hooray": "bkbbk"});

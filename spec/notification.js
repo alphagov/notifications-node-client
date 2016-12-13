@@ -87,4 +87,74 @@ describe('notification api', function() {
               done();
           });
     });
+
+    it('should get all notifications', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications')
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications()
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
+    it('should get all failed notifications', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+          status = 'failed';
+
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications?status=failed')
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications(undefined, 'failed')
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
+    it('should get all failed sms notifications', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+          templateType = 'sms'
+          status = 'failed';
+
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications?template_type=sms&status=failed')
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications(templateType, status)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
 });

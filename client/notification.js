@@ -44,6 +44,32 @@ function createNotificationPayload(type, templateId, to, personalisation) {
   return payload;
 }
 
+/**
+ *
+ * @param {String} templateType
+ * @param {String} status
+ *
+ * @returns {String}
+ */
+function buildGetAllNotificationsQuery(templateType, status) {
+
+  payload = {}
+
+  if (templateType) {
+    payload.template_type = templateType;
+  }
+
+  if (status) {
+    payload.status = status;
+  }
+
+  var queryString = Object.keys(payload).map(function(key) {
+    return [key, payload[key]].map(encodeURIComponent).join("=");
+  }).join("&");
+
+  return queryString ? '?' + queryString : '';
+}
+
 _.extend(NotifyClient.prototype, {
   /**
    * Usage:
@@ -97,7 +123,9 @@ _.extend(NotifyClient.prototype, {
    *
    * @returns {Promise}
    */
-  getNotifications: function(){return this.apiClient.get('/v2/notifications')}
+  getNotifications: function(templateType, status) {
+    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status));
+  }
 });
 
 module.exports = {

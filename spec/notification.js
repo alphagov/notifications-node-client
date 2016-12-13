@@ -110,6 +110,28 @@ describe('notification api', function() {
           });
     });
 
+    it('should get all notifications with a reference', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+          reference = 'myref'
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications?reference=' + reference)
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications(undefined, undefined, reference)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
     it('should get all failed notifications', function(done) {
 
         var urlBase = 'http://localhost',
@@ -122,7 +144,7 @@ describe('notification api', function() {
             reqheaders: {
                 'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
             }})
-          .get('/v2/notifications?status=failed')
+          .get('/v2/notifications?status=' + status)
           .reply(200, {"hooray": "bkbbk"});
 
         notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
@@ -146,11 +168,36 @@ describe('notification api', function() {
             reqheaders: {
                 'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
             }})
-          .get('/v2/notifications?template_type=sms&status=failed')
+          .get('/v2/notifications?template_type=' + templateType + '&status=' + status)
           .reply(200, {"hooray": "bkbbk"});
 
         notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
         notifyClient.getNotifications(templateType, status)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
+    it('should get all delivered sms notifications with a reference', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+          templateType = 'sms'
+          status = 'delivered';
+          reference = 'myref'
+
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications?template_type=' + templateType + '&status=' + status + '&reference=' + reference)
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications(templateType, status, reference)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();

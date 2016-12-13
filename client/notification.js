@@ -21,10 +21,11 @@ function NotifyClient() {
  * @param {String} templateId
  * @param {String} to
  * @param {Object} personalisation
+ * @param {String} reference
  *
  * @returns {Object}
  */
-function createNotificationPayload(type, templateId, to, personalisation) {
+function createNotificationPayload(type, templateId, to, personalisation, reference) {
 
   var payload = {
     template_id: templateId
@@ -41,6 +42,10 @@ function createNotificationPayload(type, templateId, to, personalisation) {
     payload.personalisation = personalisation;
   }
 
+  if (reference) {
+    payload.reference = reference;
+  }
+
   return payload;
 }
 
@@ -48,10 +53,11 @@ function createNotificationPayload(type, templateId, to, personalisation) {
  *
  * @param {String} templateType
  * @param {String} status
+ * @param {String} reference
  *
  * @returns {String}
  */
-function buildGetAllNotificationsQuery(templateType, status) {
+function buildGetAllNotificationsQuery(templateType, status, reference) {
 
   payload = {}
 
@@ -61,6 +67,10 @@ function buildGetAllNotificationsQuery(templateType, status) {
 
   if (status) {
     payload.status = status;
+  }
+
+  if (reference) {
+    payload.reference = reference;
   }
 
   var queryString = Object.keys(payload).map(function(key) {
@@ -88,12 +98,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} templateId
    * @param {String} emailAddress
    * @param {Object} personalisation
+   * @param {String} reference
    *
    * @returns {Promise}
    */
-  sendEmail: function (templateId, emailAddress, personalisation) {
+  sendEmail: function (templateId, emailAddress, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/email',
-      createNotificationPayload('email', templateId, emailAddress, personalisation));
+      createNotificationPayload('email', templateId, emailAddress, personalisation, reference));
   },
 
   /**
@@ -101,12 +112,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} templateId
    * @param {String} phoneNumber
    * @param {Object} personalisation
+   * @param {String} reference
    *
    * @returns {Promise}
    */
-  sendSms: function (templateId, phoneNumber, personalisation) {
+  sendSms: function (templateId, phoneNumber, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/sms',
-      createNotificationPayload('sms', templateId, phoneNumber, personalisation));
+      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
   },
 
   /**
@@ -121,10 +133,15 @@ _.extend(NotifyClient.prototype, {
 
   /**
    *
+   * @param {String} templateType
+   * @param {String} status
+   * @param {String} reference
+   *
    * @returns {Promise}
+   *
    */
-  getNotifications: function(templateType, status) {
-    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status));
+  getNotifications: function(templateType, status, reference) {
+    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference));
   }
 });
 

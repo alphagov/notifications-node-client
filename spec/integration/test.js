@@ -17,6 +17,7 @@ describer('notification api with a live service', () => {
   let emailNotificationId;
   let smsNotificationId;
   const personalisation = { name: 'Foo' };
+  const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
 
@@ -37,11 +38,12 @@ describer('notification api with a live service', () => {
 
       var post_notification_return_email_json = require('./schemas/v2/POST_notification_email_response.json');
       const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation).then((response) => {
+      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(post_notification_return_email_json);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
         response.body.content.subject.should.equal('Functional Tests are good');
+        response.body.reference.should.equal(clientRef);
         emailNotificationId = response.body.id;
       });
 

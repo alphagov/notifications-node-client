@@ -18,6 +18,7 @@ function NotifyClient() {
 
 /**
  *
+ * @param {String} type
  * @param {String} templateId
  * @param {String} to
  * @param {Object} personalisation

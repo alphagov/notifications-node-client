@@ -290,7 +290,7 @@ Otherwise the client will raise a `StatusCodeError`:
 
 ## Get the status of all messages
 ```javascript
-notifyClient.getNotifications(templateType, status, reference)
+notifyClient.getNotifications(templateType, status, reference, olderThan)
 ```
 
 <details>
@@ -398,3 +398,7 @@ If omitted all messages are returned. Otherwise you can filter by:
 
 
 This is the `reference` you gave at the time of sending the notification. This can be omitted to ignore the filter.
+
+#### `olderThan`
+
+If omitted all messages are returned. Otherwise you can filter to retrieve all notifications older than the given notification `id`.

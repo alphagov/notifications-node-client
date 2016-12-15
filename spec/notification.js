@@ -204,4 +204,34 @@ describe('notification api', function() {
           });
     });
 
+    it('should get all failed email notifications with a reference older than a given notification', function(done) {
+
+        var urlBase = 'http://localhost',
+          notifyClient,
+          serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+          apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+          templateType = 'sms';
+          status = 'delivered';
+          reference = 'myref';
+          olderThan = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+
+        nock(urlBase, {
+            reqheaders: {
+                'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+            }})
+          .get('/v2/notifications?template_type=' + templateType +
+               '&status=' + status +
+               '&reference=' + reference +
+               '&older_than=' + olderThan
+              )
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+        notifyClient.getNotifications(templateType, status, reference, olderThan)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
 });

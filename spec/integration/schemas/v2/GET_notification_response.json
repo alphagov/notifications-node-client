@@ -44,6 +44,8 @@
         "type": {"enum": ["sms", "letter", "email"]},
         "status": {"type": "string"},
         "template": {"$ref": "definitions.json#/template"},
+        "body": {"type": "string"},
+        "subject": {"type": ["string", "null"]},
         "created_at": {"type": "string"},
         "sent_at": {"type": ["string", "null"]},
         "completed_at": {"type": ["string", "null"]}

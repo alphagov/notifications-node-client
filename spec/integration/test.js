@@ -75,6 +75,8 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(notification_json);
         response.body.type.should.equal('email');
+        response.body.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.subject.should.equal('Functional Tests are good');
       });
 
     });
@@ -86,6 +88,7 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(notification_json);
         response.body.type.should.equal('sms');
+        response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
       });
 
     });

@@ -213,7 +213,7 @@ describe('notification api', function() {
           templateType = 'sms';
           status = 'delivered';
           reference = 'myref';
-          olderThan = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+          olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
         nock(urlBase, {
             reqheaders: {
@@ -222,12 +222,12 @@ describe('notification api', function() {
           .get('/v2/notifications?template_type=' + templateType +
                '&status=' + status +
                '&reference=' + reference +
-               '&older_than=' + olderThan
+               '&older_than=' + olderThanId
               )
           .reply(200, {"hooray": "bkbbk"});
 
         notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
-        notifyClient.getNotifications(templateType, status, reference, olderThan)
+        notifyClient.getNotifications(templateType, status, reference, olderThanId)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();

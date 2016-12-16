@@ -55,10 +55,11 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
  * @param {String} templateType
  * @param {String} status
  * @param {String} reference
+ * @param {String} olderThanId
  *
  * @returns {String}
  */
-function buildGetAllNotificationsQuery(templateType, status, reference, olderThan) {
+function buildGetAllNotificationsQuery(templateType, status, reference, olderThanId) {
 
   payload = {}
 
@@ -74,8 +75,8 @@ function buildGetAllNotificationsQuery(templateType, status, reference, olderTha
     payload.reference = reference;
   }
 
-  if (olderThan) {
-    payload.older_than = olderThan;
+  if (olderThanId) {
+    payload.older_than = olderThanId;
   }
 
   var queryString = Object.keys(payload).map(function(key) {
@@ -141,12 +142,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} templateType
    * @param {String} status
    * @param {String} reference
+   * @param {String} olderThanId
    *
    * @returns {Promise}
    *
    */
-  getNotifications: function(templateType, status, reference, olderThan) {
-    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference, olderThan));
+  getNotifications: function(templateType, status, reference, olderThanId) {
+    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference, olderThanId));
   }
 });
 

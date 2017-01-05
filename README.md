@@ -224,7 +224,7 @@ Response
 
 If the request is successful, `response` will be an `Object`:
 
-```python
+```javascript
 {
     "id": "notify_id",
     "body": "Hello Foo",

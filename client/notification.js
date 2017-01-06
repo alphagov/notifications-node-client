@@ -33,9 +33,9 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
   };
 
   if (type == 'email') {
-    payload.email_address = to
+    payload.email_address = to;
   } else if (type == 'sms') {
-    payload.phone_number = to
+    payload.phone_number = to;
   }
 
 

@@ -66,14 +66,14 @@ describer('notification api with a live service', () => {
 
   describe('should retrieve', () => {
 
-    var notification_json = require('./schemas/v2/GET_notification_response.json');
+    var notificationJson = require('./schemas/v2/GET_notification_response.json');
 
     it('email by id', () => {
 
       should.exist(emailNotificationId)
       return notifyClient.getNotificationById(emailNotificationId).then((response) => {
         response.statusCode.should.equal(200);
-        expect(response.body).to.be.jsonSchema(notification_json);
+        expect(response.body).to.be.jsonSchema(notificationJson);
         response.body.type.should.equal('email');
         response.body.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
         response.body.subject.should.equal('Functional Tests are good');
@@ -86,7 +86,7 @@ describer('notification api with a live service', () => {
       should.exist(smsNotificationId)
       return notifyClient.getNotificationById(smsNotificationId).then((response) => {
         response.statusCode.should.equal(200);
-        expect(response.body).to.be.jsonSchema(notification_json);
+        expect(response.body).to.be.jsonSchema(notificationJson);
         response.body.type.should.equal('sms');
         response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
       });
@@ -95,8 +95,8 @@ describer('notification api with a live service', () => {
 
     it('all notifications', () => {
 
-      var notification_json = require('./schemas/v2/GET_notification_response.json');
-      chai.tv4.addSchema('notification.json', notification_json);
+      var notificationJson = require('./schemas/v2/GET_notification_response.json');
+      chai.tv4.addSchema('notification.json', notificationJson);
       var get_notifications_return_json = require('./schemas/v2/GET_notifications_response.json');
       return notifyClient.getNotifications().then((response) => {
         response.should.have.property('statusCode', 200);

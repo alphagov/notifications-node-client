@@ -18,23 +18,72 @@ function NotifyClient() {
 
 /**
  *
+ * @param {String} type
  * @param {String} templateId
  * @param {String} to
  * @param {Object} personalisation
+ * @param {String} reference
  *
  * @returns {Object}
  */
-function createNotificationPayload(templateId, to, personalisation) {
+function createNotificationPayload(type, templateId, to, personalisation, reference) {
+
   var payload = {
-    template: templateId,
-    to: to
+    template_id: templateId
   };
+
+  if (type == 'email') {
+    payload.email_address = to;
+  } else if (type == 'sms') {
+    payload.phone_number = to;
+  }
+
 
   if (!!personalisation) {
     payload.personalisation = personalisation;
   }
 
+  if (reference) {
+    payload.reference = reference;
+  }
+
   return payload;
+}
+
+/**
+ *
+ * @param {String} templateType
+ * @param {String} status
+ * @param {String} reference
+ * @param {String} olderThanId
+ *
+ * @returns {String}
+ */
+function buildGetAllNotificationsQuery(templateType, status, reference, olderThanId) {
+
+  payload = {}
+
+  if (templateType) {
+    payload.template_type = templateType;
+  }
+
+  if (status) {
+    payload.status = status;
+  }
+
+  if (reference) {
+    payload.reference = reference;
+  }
+
+  if (olderThanId) {
+    payload.older_than = olderThanId;
+  }
+
+  var queryString = Object.keys(payload).map(function(key) {
+    return [key, payload[key]].map(encodeURIComponent).join("=");
+  }).join("&");
+
+  return queryString ? '?' + queryString : '';
 }
 
 _.extend(NotifyClient.prototype, {
@@ -55,12 +104,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} templateId
    * @param {String} emailAddress
    * @param {Object} personalisation
+   * @param {String} reference
    *
    * @returns {Promise}
    */
-  sendEmail: function (templateId, emailAddress, personalisation) {
-    return this.apiClient.post('/notifications/email',
-      createNotificationPayload(templateId, emailAddress, personalisation));
+  sendEmail: function (templateId, emailAddress, personalisation, reference) {
+    return this.apiClient.post('/v2/notifications/email',
+      createNotificationPayload('email', templateId, emailAddress, personalisation, reference));
   },
 
   /**
@@ -68,12 +118,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} templateId
    * @param {String} phoneNumber
    * @param {Object} personalisation
+   * @param {String} reference
    *
    * @returns {Promise}
    */
-  sendSms: function (templateId, phoneNumber, personalisation) {
-    return this.apiClient.post('/notifications/sms',
-      createNotificationPayload(templateId, phoneNumber, personalisation));
+  sendSms: function (templateId, phoneNumber, personalisation, reference) {
+    return this.apiClient.post('/v2/notifications/sms',
+      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
   },
 
   /**
@@ -83,14 +134,22 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   getNotificationById: function(notificationId) {
-    return this.apiClient.get('/notifications/' + notificationId);
+    return this.apiClient.get('/v2/notifications/' + notificationId);
   },
 
   /**
    *
+   * @param {String} templateType
+   * @param {String} status
+   * @param {String} reference
+   * @param {String} olderThanId
+   *
    * @returns {Promise}
+   *
    */
-  getNotifications: function(){return this.apiClient.get('/notifications')}
+  getNotifications: function(templateType, status, reference, olderThanId) {
+    return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference, olderThanId));
+  }
 });
 
 module.exports = {

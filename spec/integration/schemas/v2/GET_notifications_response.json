@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "description": "GET list of notifications response schema",
+    "type": "object",
+    "properties": {
+        "notifications": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "notification.json"
+            }
+        },
+        "links": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "string"
+                },
+                "next": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["current"]
+        }
+    },
+    "additionalProperties": false,
+    "required": ["notifications", "links"]
+}

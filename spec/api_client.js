@@ -54,7 +54,6 @@ describe('api client', function () {
       apiKeyId = 'SECRET',
       apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
 
-
     nock(urlBase, {
       reqheaders: {
         'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),

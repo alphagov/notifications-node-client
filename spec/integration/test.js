@@ -17,82 +17,94 @@ describer('notification api with a live service', () => {
   let emailNotificationId;
   let smsNotificationId;
   const personalisation = { name: 'Foo' };
+  const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
 
   beforeEach(() => {
+
     const urlBase = process.env.NOTIFY_API_URL;
     const serviceId = process.env.SERVICE_ID;
     const apiKeyId = process.env.API_KEY;
     notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
-
-    var definitions_json = require('./schemas/v0/definitions.json');
-    var email_notification_json = require('./schemas/v0/email_notification.json');
-    var sms_notification_json = require('./schemas/v0/sms_notification.json');
-
+    var definitions_json = require('./schemas/v2/definitions.json');
     chai.tv4.addSchema('definitions.json', definitions_json);
-    chai.tv4.addSchema('email_notification.json', email_notification_json);
-    chai.tv4.addSchema('sms_notification.json', sms_notification_json);
 
   });
 
   describe('should send', () => {
-    var post_notification_return_email_json = require('./schemas/v0/POST_notification_return_email.json');
-    it('email', () => {
-      const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation).then((response) => {
-        expect(response.body).to.be.jsonSchema(post_notification_return_email_json);
-        response.statusCode.should.equal(201);
-        response.body.data.notification.should.have.property('id');
-        response.body.data.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
-        response.body.data.subject.should.equal('Functional Tests are good');
-        emailNotificationId = response.body.data.notification.id
 
+    it('email', () => {
+
+      var post_notification_return_email_json = require('./schemas/v2/POST_notification_email_response.json');
+      const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
+      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
+        response.statusCode.should.equal(201);
+        expect(response.body).to.be.jsonSchema(post_notification_return_email_json);
+        response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.content.subject.should.equal('Functional Tests are good');
+        response.body.reference.should.equal(clientRef);
+        emailNotificationId = response.body.id;
       });
+
     });
 
     it('sms', () => {
-      var post_notification_return_sms_json = require('./schemas/v0/POST_notification_return_sms.json');
+
+      var post_notification_return_sms_json = require('./schemas/v2/POST_notification_sms_response.json');
       const smsTemplateId = process.env.SMS_TEMPLATE_ID;
       return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation).then((response) => {
+        response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(post_notification_return_sms_json);
-        response.body.data.notification.should.have.property('id');
-        response.body.data.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
-        response.statusCode.should.equal(201)
-        smsNotificationId = response.body.data.notification.id;
+        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+        smsNotificationId = response.body.id;
       });
+
     });
+
   });
 
   describe('should retrieve', () => {
 
+    var notificationJson = require('./schemas/v2/GET_notification_response.json');
+
     it('email by id', () => {
+
       should.exist(emailNotificationId)
-      var email_notification_json = require('./schemas/v0/email_notification.json');
       return notifyClient.getNotificationById(emailNotificationId).then((response) => {
-        expect(response.body.data.notification).to.be.jsonSchema(email_notification_json);
-        response.body.data.notification.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
-        response.body.data.notification.subject.should.equal('Functional Tests are good');
-        response.should.have.property('statusCode', 200);
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(notificationJson);
+        response.body.type.should.equal('email');
+        response.body.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.subject.should.equal('Functional Tests are good');
       });
+
     });
 
     it('sms by id', () => {
+
       should.exist(smsNotificationId)
-      var sms_notification_json = require('./schemas/v0/sms_notification.json');
       return notifyClient.getNotificationById(smsNotificationId).then((response) => {
-        expect(response.body.data.notification).to.be.jsonSchema(sms_notification_json);
-        response.body.data.notification.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
-        response.should.have.property('statusCode', 200);
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(notificationJson);
+        response.body.type.should.equal('sms');
+        response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
       });
+
     });
 
     it('all notifications', () => {
-      var get_notifications_return_json = require('./schemas/v0/GET_notifications_return.json');
+
+      var notificationJson = require('./schemas/v2/GET_notification_response.json');
+      chai.tv4.addSchema('notification.json', notificationJson);
+      var get_notifications_return_json = require('./schemas/v2/GET_notifications_response.json');
       return notifyClient.getNotifications().then((response) => {
-        expect(response.body).to.be.jsonSchema(get_notifications_return_json);
         response.should.have.property('statusCode', 200);
+        expect(response.body).to.be.jsonSchema(get_notifications_return_json);
       });
+
     });
+
   });
+
 });

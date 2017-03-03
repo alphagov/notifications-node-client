@@ -106,7 +106,7 @@ Otherwise the client will raise a `StatusCodeError`:
 ### Email
 
 ```javascript
-notifyClient.sendEmail(templateId, emailAddress);
+notifyClient.sendEmail(templateId, emailAddress, personalisation, reference);
 ```
 
 <details>

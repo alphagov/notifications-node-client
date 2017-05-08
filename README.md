@@ -10,8 +10,7 @@ npm install notifications-node-client
 ## Getting started
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
-
-notifyClient = new NotifyClient(apiKey);
+	notifyClient = new NotifyClient(apiKey);
 ```
 
 Generate an API key by logging in to

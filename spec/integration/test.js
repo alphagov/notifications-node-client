@@ -170,7 +170,6 @@ describer('notification api with a live service', () => {
         expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
         response.body.type.should.equal('email');
         should.exist(response.body.subject);
-        console.log(response.body)
       });
     });
 

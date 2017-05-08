@@ -721,3 +721,19 @@ personalisation={
 ```
 
 Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+
+## Tests
+
+There are unit and integration tests that can be run to test functionality of the client. You will need to have the relevant environment variables sourced to run the tests.
+
+To run the unit tests:
+
+```sh
+npm test
+```
+
+To run the integration tests:
+
+```sh
+npm test --integration
+```

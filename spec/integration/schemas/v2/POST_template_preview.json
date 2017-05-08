@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "POST template preview schema response",
+    "type": "object",
+    "title": "reponse v2/template/{id}/preview",
+    "properties": {
+        "id": {"$ref": "definitions.json#/uuid"},
+        "type": {"enum": ["sms", "email", "letter"] },
+        "version": {"type": "integer"},
+        "body": {"type": "string"},
+        "subject": {"type": ["string", "null"]}
+    },
+    "required": ["id", "type", "version", "body"]
+}

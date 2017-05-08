@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "GET template by id schema response",
+    "type": "object",
+    "title": "reponse v2/template",
+    "properties": {
+        "id": {"$ref": "definitions.json#/uuid"},
+        "type": {"enum": ["sms", "email", "letter"] },
+        "created_at": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date+time created"
+        },
+        "updated_at": {
+            "format": "date-time",
+            "type": ["string", "null"],
+            "description": "Date+time updated"
+        },
+        "created_by": {"type": "string"},
+        "version": {"type": "integer"},
+        "body": {"type": "string"},
+        "subject": {"type": ["string", "null"]}
+    },
+    "required": ["id", "type", "created_at", "updated_at", "version", "created_by", "body"]
+}

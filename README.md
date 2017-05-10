@@ -10,8 +10,7 @@ npm install notifications-node-client
 ## Getting started
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
-
-notifyClient = new NotifyClient(apiKey);
+	notifyClient = new NotifyClient(apiKey);
 ```
 
 Generate an API key by logging in to
@@ -23,7 +22,11 @@ the _API integration_ page.
 ### Text message
 
 ```javascript
-notifyClient.sendSms(templateId, phoneNumber, personalisation, reference);
+notifyClient
+	.sendSms(templateId, phoneNumber, personalisation, reference)
+	.then((response) => { })
+	.catch((err) => {})
+;
 ```
 
 <details>
@@ -31,7 +34,7 @@ notifyClient.sendSms(templateId, phoneNumber, personalisation, reference);
 Response
 </summary>
 
-If the request is successful, `response` will be an `Object`:
+If the request is successful, `response` will be a `Dictionary`:
 
 ```javascript
 {
@@ -50,12 +53,12 @@ If the request is successful, `response` will be an `Object`:
 }
 ```
 
-Otherwise the client will raise a `StatusCodeError`:
+Otherwise the client will return an error `err`:
 <table>
 <thead>
 <tr>
-<th>`error.status_code`</th>
-<th>`error.message`</th>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
 </tr>
 </thead>
 <tbody>
@@ -119,7 +122,11 @@ Otherwise the client will raise a `StatusCodeError`:
 ### Email
 
 ```javascript
-notifyClient.sendEmail(templateId, emailAddress, personalisation, reference);
+notifyClient
+	.sendEmail(templateId, emailAddress, personalisation, reference);
+    .then((response) => { })
+    .catch((err) => {})
+;
 ```
 
 <details>
@@ -127,7 +134,7 @@ notifyClient.sendEmail(templateId, emailAddress, personalisation, reference);
 Response
 </summary>
 
-If the request is successful, `response` will be an `Object`:
+If the request is successful, `response` will be a `Dictionary`:
 
 ```javascript
 {
@@ -147,12 +154,12 @@ If the request is successful, `response` will be an `Object`:
 }
 ```
 
-Otherwise the client will raise a `StatusCodeError`:
+Otherwise the client will return an error `err`:
 <table>
 <thead>
 <tr>
-<th>`error.status_code`</th>
-<th>`error.message`</th>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
 </tr>
 </thead>
 <tbody>
@@ -240,7 +247,11 @@ An optional identifier you generate if you don’t want to use Notify’s `id`. 
 
 ## Get the status of one message
 ```javascript
-notifyClient.getNotificationById(notificationId)
+notifyClient
+	.getNotificationById(notificationId)
+	.then((response) => { })
+	.catch((err) => {})
+;
 ```
 
 <details>
@@ -248,7 +259,7 @@ notifyClient.getNotificationById(notificationId)
 Response
 </summary>
 
-If the request is successful, `response` will be an `Object`:
+If the request is successful, `response` will be a `Dictionary`:
 
 ```javascript
 {
@@ -277,12 +288,12 @@ If the request is successful, `response` will be an `Object`:
 }
 ```
 
-Otherwise the client will raise a `StatusCodeError`:
+Otherwise the client will return an error `err`:
 <table>
 <thead>
 <tr>
-<th>`error.status_code`</th>
-<th>`error.message`</th>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
 </tr>
 </thead>
 <tbody>
@@ -318,7 +329,11 @@ Otherwise the client will raise a `StatusCodeError`:
 
 ## Get the status of all messages
 ```javascript
-notifyClient.getNotifications(templateType, status, reference, olderThan)
+notifyClient
+	.getNotifications(templateType, status, reference, olderThan)
+	.then((response) => { })
+	.catch((err) => {})
+;
 ```
 
 <details>
@@ -326,7 +341,7 @@ notifyClient.getNotifications(templateType, status, reference, olderThan)
 Response
 </summary>
 
-If the request is successful, `response` will be an `Object`:
+If the request is successful, `response` will be a `Dictionary`:
 
 ```javascript
 { "notifications":
@@ -361,12 +376,12 @@ If the request is successful, `response` will be an `Object`:
 }
 ```
 
-Otherwise the client will raise a `StatusCodeError`:
+Otherwise the client will return an error `err`:
 <table>
 <thead>
 <tr>
-<th>`error.status_code`</th>
-<th>`error.message`</th>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
 </tr>
 </thead>
 <tbody>
@@ -430,3 +445,294 @@ This is the `reference` you gave at the time of sending the notification. This c
 #### `olderThan`
 
 If omitted all messages are returned. Otherwise you can filter to retrieve all notifications older than the given notification `id`.
+
+## Get a template by ID
+
+```javascript
+notifyClient
+    .getTemplateById(templateId)
+    .then((response) => { })
+    .catch((err) => {})
+;
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+If the request is successful, `response` will be a `Dictionary`:
+
+```javascript
+{
+    "id": "template_id",
+    "type": "sms|email|letter",
+    "created_at": "created at",
+    "updated_at": "updated at",
+    "version": "version",
+    "created_by": "someone@example.com",
+    "body": "body",
+    "subject": "null|email_subject"
+}
+```
+
+Otherwise the client will return an error `err`:
+<table>
+<thead>
+<tr>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<pre>404</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "NoResultFound",
+    "message": "No result found"
+]}
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+### Arguments
+
+
+#### `templateId`
+
+Find by clicking **API info** for the template you want to send.
+
+## Get a template by ID and version
+
+```javascript
+notifyClient
+    .getTemplateByIdAndVersion(templateId, version)
+    .then((response) => { })
+    .catch((err) => {})
+;
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+If the request is successful, `response` will be a `Dictionary`:
+
+```javascript
+{
+    "id": "template_id",
+    "type": "sms|email|letter",
+    "created_at": "created at",
+    "updated_at": "updated at",
+    "version": "version",
+    "created_by": "someone@example.com",
+    "body": "body",
+    "subject": "null|email_subject"
+}
+```
+
+Otherwise the client will return an error `err`:
+<table>
+<thead>
+<tr>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<pre>404</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "NoResultFound",
+    "message": "No result found"
+]}
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+### Arguments
+
+#### `templateId`
+
+Find by clicking **API info** for the template you want to send.
+
+#### `version`
+
+The version number of the template
+
+## Get all templates
+
+```javascript
+notifyClient
+    .getAllTemplates(templateType)
+    .then((response) => { })
+    .catch((err) => {})
+;
+```
+_This will return the latest version for each template_
+
+<details>
+<summary>
+Response
+</summary>
+
+If the request is successful, `response` will be a `Dictionary`:
+
+```javascript
+{
+    "templates" : [
+        {
+            "id": "template_id",
+            "type": "sms|email|letter",
+            "created_at": "created at",
+            "updated_at": "updated at",
+            "version": "version",
+            "created_by": "someone@example.com",
+            "body": "body",
+            "subject": "null|email_subject"
+        },
+        {
+            ... another template
+        }
+    ]
+}
+```
+
+If no templates exist for a template type or there no templates for a service, the `response` will be a `Dictionary` with an empty `templates` list element:
+
+```javascript
+{
+    "templates" : []
+}
+```
+
+</details>
+
+### Arguments
+
+#### `templateType`
+
+If omitted all messages are returned. Otherwise you can filter by:
+
+* `email`
+* `sms`
+* `letter`
+
+
+## Generate a preview template
+
+```javascript
+personalisation = { "foo": "bar" };
+notifyClient
+    .previewTemplateById(templateId, personalisation)
+    .then((response) => { })
+    .catch((err) => {})
+;
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+If the request is successful, `response` will be a `Dictionary`:
+
+```javascript
+{
+    "id": "notify_id",
+    "type": "sms|email|letter",
+    "version": "version",
+    "body": "Hello bar" // with substitution values,
+    "subject": "null|email_subject"
+}
+```
+
+Otherwise the client will return an error `err`:
+<table>
+<thead>
+<tr>
+<th>`err.error.status_code`</th>
+<th>`err.error.errors`</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<pre>400</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "BadRequestError",
+    "message": "Missing personalisation: [name]"
+]}
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre>404</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "NoResultFound",
+    "message": "No result found"
+]}
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+### Arguments
+
+
+#### `templateId`
+
+Find by clicking **API info** for the template you want to send.
+
+#### `personalisation`
+
+If a template has placeholders you need to provide their values. For example:
+
+```javascript
+personalisation={
+    'first_name': 'Amala',
+    'reference_number': '300241',
+}
+```
+
+Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+
+## Tests
+
+There are unit and integration tests that can be run to test functionality of the client. You will need to have the relevant environment variables sourced to run the tests.
+
+To run the unit tests:
+
+```sh
+npm test
+```
+
+To run the integration tests:
+
+```sh
+npm test --integration
+```

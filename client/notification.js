@@ -83,6 +83,14 @@ function buildGetAllNotificationsQuery(templateType, status, reference, olderTha
     return [key, payload[key]].map(encodeURIComponent).join("=");
   }).join("&");
 
+  return buildQueryStringFromDict(payload);
+}
+
+function buildQueryStringFromDict(dictionary) {
+  var queryString = Object.keys(dictionary).map(function(key) {
+    return [key, dictionary[key]].map(encodeURIComponent).join("=");
+  }).join("&");
+
   return queryString ? '?' + queryString : '';
 }
 
@@ -149,7 +157,64 @@ _.extend(NotifyClient.prototype, {
    */
   getNotifications: function(templateType, status, reference, olderThanId) {
     return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference, olderThanId));
+  },
+
+  /**
+   *
+   * @param {String} templateId
+   *
+   * @returns {Promise}
+   */
+  getTemplateById: function(templateId) {
+    return this.apiClient.get('/v2/template/' + templateId);
+  },
+
+  /**
+   *
+   * @param {String} templateId
+   * @param {Integer} version
+   *
+   * @returns {Promise}
+   */
+  getTemplateByIdAndVersion: function(templateId, version) {
+    return this.apiClient.get('/v2/template/' + templateId + '/version/' + version);
+  },
+
+  /**
+   *
+   * @param {String} type
+   *
+   * @returns {Promise}
+   */
+  getAllTemplates: function(templateType) {
+    templateQuery = ''
+
+    if (templateType) {
+      templateQuery = '?type=' + templateType;
+    }
+
+    return this.apiClient.get('/v2/templates' + templateQuery);
+  },
+
+  /**
+   *
+   * @param {String} templateId
+   * @param {Dictionary} personalisation
+   *
+   * @returns {Promise}
+   */
+  previewTemplateById: function(templateId, personalisation) {
+
+    payload = {}
+
+    if (!!personalisation) {
+      payload.personalisation = personalisation;
+    }
+
+    return this.apiClient.post('/v2/template/' + templateId +  '/preview', payload);
   }
+
+
 });
 
 module.exports = {

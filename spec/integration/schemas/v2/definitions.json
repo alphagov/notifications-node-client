@@ -17,7 +17,7 @@
         "version": {"type": "integer"},
         "uri": {"type": "string"}
     },
-    "required": ["id", "version", "uri"]
+    "required": ["id", "version"]
   },
   "email_content": {
     "type": "object",

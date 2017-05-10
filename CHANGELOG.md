@@ -1,5 +1,19 @@
-## [3.0.0] - 2016-12-16
+## [3.1.0] - 2017-05-10
+
 ### Changed
+
+* Added new methods for managing templates:
+    * `getTemplateById` - retrieve a single template
+    * `getTemplateByIdAndVersion` - retrieve a specific version for a desired template
+    * `getAllTemplates` - retrieve all templates (can filter by type)
+    * `previewTemplateById` - preview a template with personalisation applied
+
+* Update README to describe how to catch errors
+
+## [3.0.0] - 2016-12-16
+
+### Changed
+
 * Using v2 of the notification-api.
 
 * Update to `notifyClient.sendSms()`:

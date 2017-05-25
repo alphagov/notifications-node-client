@@ -7,7 +7,11 @@
       "reference": {"type": ["string", "null"]},
       "content": {"$ref": "definitions.json#/email_content"},
       "uri": {"type": "string"},
-      "template": {"$ref": "definitions.json#/template"}
+      "template": {"$ref": "definitions.json#/template"},
+      "scheduled_for": {"oneOf":[
+        {"$ref": "definitions.json#/datetime"},
+        {"type": "null"}
+      ]}
   },
   "additionalProperties": false,
   "required": ["id", "content", "uri", "template"]

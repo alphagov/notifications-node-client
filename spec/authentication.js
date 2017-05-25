@@ -21,7 +21,7 @@ describe('Authentication', function() {
       var token = createGovukNotifyToken("POST", "/v2/notifications/sms", "SECRET", 123),
           decoded = jwt.verify(token, 'SECRET');
 
-      expect(token).to.equal('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEyMywiaWF0IjoxMjM0NTY3ODkwfQ.R9-H_oV7d56Dal9jUAKThrZlo1_LNVqc3LCtY62WQd4');
+      expect(token).to.equal('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOjEyMywiaWF0IjoxMjM0NTY3ODkwfQ.18aBKSLffjbX_TLmosB_qYgW9EkWIQpBgWy7GpiKg6o');
       expect(decoded.iss).to.equal(123);
       expect(decoded.iat).to.equal(1234567890);
 

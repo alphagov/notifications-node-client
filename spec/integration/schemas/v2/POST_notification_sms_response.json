@@ -9,6 +9,6 @@
       "uri": {"type": "string"},
       "template": {"$ref": "definitions.json#/template"}
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": ["id", "content", "uri", "template"]
 }

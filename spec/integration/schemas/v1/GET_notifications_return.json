@@ -25,12 +25,12 @@
           "type" : "string"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "page_size": {"type": "number"},
     "total": {"type": "number"}
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
     "notifications", "links", "page_size", "total"
   ]

@@ -22,7 +22,11 @@
         "subject": {"type": ["string", "null"]},
         "created_at": {"type": "string"},
         "sent_at": {"type": ["string", "null"]},
-        "completed_at": {"type": ["string", "null"]}
+        "completed_at": {"type": ["string", "null"]},
+        "scheduled_for": {"oneOf":[
+          {"$ref": "definitions.json#/datetime"},
+          {"type": "null"}
+        ]}
     },
     "required": [
         "id", "reference", "email_address", "phone_number",

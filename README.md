@@ -123,7 +123,7 @@ Otherwise the client will return an error `err`:
 
 ```javascript
 notifyClient
-	.sendEmail(templateId, emailAddress, personalisation, reference);
+	.sendEmail(templateId, emailAddress, personalisation, reference)
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;

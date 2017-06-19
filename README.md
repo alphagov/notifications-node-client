@@ -4,7 +4,7 @@
 
 ## Installation
 ```shell
-npm install notifications-node-client
+npm install --save notifications-node-client
 ```
 
 ## Getting started

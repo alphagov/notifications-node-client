@@ -24,8 +24,8 @@ the _API integration_ page.
 ```javascript
 notifyClient
 	.sendSms(templateId, phoneNumber, personalisation, reference)
-	.then((response) => { })
-	.catch((err) => {})
+	.then(response => console.log(response))
+	.catch(err => console.error(err))
 ;
 ```
 
@@ -124,8 +124,8 @@ Otherwise the client will return an error `err`:
 ```javascript
 notifyClient
 	.sendEmail(templateId, emailAddress, personalisation, reference);
-    .then((response) => { })
-    .catch((err) => {})
+    .then(response => console.log(response))
+    .catch(err => console.error(err))
 ;
 ```
 

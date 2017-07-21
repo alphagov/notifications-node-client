@@ -11,7 +11,7 @@ function createGovukNotifyToken(request_method, request_path, secret, client_id)
     },
     secret,
     {
-      headers: {typ: "JWT", alg: "HS256"}
+      header: {typ: "JWT", alg: "HS256"}
     }
   );
 }

@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "crypto": "0.0.3",
-    "jsonwebtoken": "5.5.4",
+    "jsonwebtoken": "7.4.1",
     "request": "^2.73.0",
     "request-promise": "^4.0.1",
     "restler": "3.4.0",

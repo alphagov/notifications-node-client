@@ -106,6 +106,10 @@ _.extend(ApiClient.prototype, {
     return restClient(options);
   },
 
+  /**
+   *
+   * @param {String} url
+   */
   setProxy: function(url){
     this.proxy = url;
   }

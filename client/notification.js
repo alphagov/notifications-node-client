@@ -214,6 +214,10 @@ _.extend(NotifyClient.prototype, {
     return this.apiClient.post('/v2/template/' + templateId +  '/preview', payload);
   },
 
+  /**
+   *
+   * @param {String} url
+   */
   setProxy: function(url) {
     this.apiClient.setProxy(url);
   }

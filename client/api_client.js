@@ -13,6 +13,8 @@ var restClient = require('request-promise'),
  */
 function ApiClient() {
 
+  this.proxy = null;
+
   if (arguments.length === 1) {
     this.urlBase = notifyProductionAPI;
     this.apiKeyId = arguments[0].substring(arguments[0].length - 36, arguments[0].length);
@@ -74,6 +76,8 @@ _.extend(ApiClient.prototype, {
       }
     };
 
+    if(this.proxy !== null) options.proxy = this.proxy;
+
     return restClient(options);
   },
 
@@ -96,8 +100,14 @@ _.extend(ApiClient.prototype, {
         'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
+    
+    if(this.proxy !== null) options.proxy = this.proxy;
 
     return restClient(options);
+  },
+
+  setProxy: function(url){
+    this.proxy = url;
   }
 });
 

@@ -1,3 +1,10 @@
+## [3.2.0] - 2017-09-22
+
+### Changed
+
+* Added new method:
+    * `setProxy(proxyUrl)` - specify the URL of a proxy for the client to use (optional)
+    
 ## [3.1.0] - 2017-05-10
 
 ### Changed

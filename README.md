@@ -17,6 +17,11 @@ Generate an API key by logging in to
 [GOV.UK Notify](https://www.notifications.service.gov.uk) and going to
 the _API integration_ page.
 
+### Connect through a proxy (optional)
+```
+notifyClient.setProxy(proxyUrl);
+```
+
 ## Send messages
 
 ### Text message

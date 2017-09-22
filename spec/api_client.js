@@ -71,4 +71,41 @@ describe('api client', function () {
     });
   });
 
+  it('should direct get requests through the proxy when set', function (done) {
+    var urlBase = 'https://api.notifications.service.gov.uk',
+      proxyUrl = 'http://proxy.service.gov.uk:3030/',
+      path = '/email',
+      apiClient = new ApiClient(urlBase, 'apiKey');
+
+    nock(urlBase)
+      .get(path)
+      .reply(200, 'test');
+
+    apiClient.setProxy(proxyUrl);
+    apiClient.get(path)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+        expect(response.request.proxy.href).to.equal(proxyUrl);
+        done();
+    });
+  });
+
+  it('should direct post requests through the proxy when set', function (done) {
+    var urlBase = 'https://api.notifications.service.gov.uk',
+      proxyUrl = 'http://proxy.service.gov.uk:3030/',
+      path = '/email',
+      apiClient = new ApiClient(urlBase, 'apiKey');
+
+    nock(urlBase)
+      .post(path)
+      .reply(200, 'test');
+
+    apiClient.setProxy(proxyUrl);
+    apiClient.post(path)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+        expect(response.request.proxy.href).to.equal(proxyUrl);
+        done();
+    });
+  });
 });

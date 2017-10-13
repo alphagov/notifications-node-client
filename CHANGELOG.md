@@ -1,3 +1,10 @@
+## [3.3.0] - 2017-10-13
+
+### Changed
+
+* Updated `sendEmail` method with optional argument:
+    * `emailReplyToId` - specify the identifier of the email reply-to address (optional)
+
 ## [3.2.0] - 2017-09-22
 
 ### Changed

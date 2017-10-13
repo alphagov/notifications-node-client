@@ -11,6 +11,10 @@
       "scheduled_for": {"oneOf":[
         {"$ref": "definitions.json#/datetime"},
         {"type": "null"}
+      ]},
+      "email_reply_to_id": {"oneOf":[
+        {"$ref": "definitions.json#/uuid"},
+        {"type": "null"}
       ]}
   },
   "additionalProperties": false,

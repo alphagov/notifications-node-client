@@ -22,6 +22,7 @@ describer('notification api with a live service', () => {
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
   const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
+  const emailReplyToId = process.env.EMAIL_REPLY_TO_ID;
 
   beforeEach(() => {
 
@@ -39,6 +40,18 @@ describer('notification api with a live service', () => {
     it('send email notification', () => {
       var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
       return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
+        response.statusCode.should.equal(201);
+        expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
+        response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.content.subject.should.equal('Functional Tests are good');
+        response.body.reference.should.equal(clientRef);
+        emailNotificationId = response.body.id;
+      })
+    });
+
+    it('send email notification with email_reply_to_id', () => {
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
+      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef, emailReplyToId).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
@@ -132,10 +145,11 @@ describer('notification api with a live service', () => {
       });
     });
 
-    it('get all templates', () => {
+    it('get all templates', (done) => {
       return notifyClient.getAllTemplates().then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplatesJson);
+        done();
       });
     });
 

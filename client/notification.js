@@ -117,6 +117,7 @@ _.extend(NotifyClient.prototype, {
    * @param {String} emailAddress
    * @param {Object} personalisation
    * @param {String} reference
+   * @param {String} emailReplyToId
    *
    * @returns {Promise}
    */

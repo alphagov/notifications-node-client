@@ -36,10 +36,13 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
     payload.email_address = to;
   } else if (type == 'sms') {
     payload.phone_number = to;
+  } 
+
+  if (type == 'letter') {
+    // personalisation mandatory for letters
+    payload.personalisation = personalisation;
   }
-
-
-  if (!!personalisation) {
+  else if (!!personalisation) {
     payload.personalisation = personalisation;
   }
 
@@ -138,6 +141,19 @@ _.extend(NotifyClient.prototype, {
   sendSms: function (templateId, phoneNumber, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/sms',
       createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
+  },
+
+  /**
+   *
+   * @param {String} templateId
+   * @param {Object} personalisation
+   * @param {String} reference
+   *
+   * @returns {Promise}
+   */
+  sendLetter: function (templateId, personalisation, reference) {
+    return this.apiClient.post('/v2/notifications/letter',
+      createNotificationPayload('letter', templateId, '', personalisation, reference));
   },
 
   /**

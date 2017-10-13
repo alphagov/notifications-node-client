@@ -20,9 +20,15 @@ describer('notification api with a live service', () => {
   const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
+  const letterContact = { 
+    address_line_1: 'Foo',
+    address_line_2: 'Bar',
+    postcode: 'Goo',
+  };
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
   const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
   const emailReplyToId = process.env.EMAIL_REPLY_TO_ID;
+  const letterTemplateId = process.env.LETTER_TEMPLATE_ID;
 
   beforeEach(() => {
 
@@ -42,7 +48,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.body.content.subject.should.equal('Functional Tests are good');
         response.body.reference.should.equal(clientRef);
         emailNotificationId = response.body.id;
@@ -67,8 +73,18 @@ describer('notification api with a live service', () => {
       return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
         smsNotificationId = response.body.id;
+      });
+    });
+
+    it('send letter notification', () => {
+      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
+      return notifyClient.sendLetter(letterTemplateId, letterContact).then((response) => {
+        response.statusCode.should.equal(201);
+        expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
+        response.body.content.body.should.equal('Hello Foo');
+        letterNotificationId = response.body.id;
       });
     });
 
@@ -81,7 +97,7 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getNotificationJson);
         response.body.type.should.equal('email');
-        response.body.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.body.subject.should.equal('Functional Tests are good');
       });
     });
@@ -92,7 +108,7 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getNotificationJson);
         response.body.type.should.equal('sms');
-        response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+        response.body.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
       });
     });
 
@@ -124,7 +140,7 @@ describer('notification api with a live service', () => {
       return notifyClient.getTemplateById(emailTemplateId).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
-        response.body.body.should.equal('Hello ((name))\n\nFunctional test help make our world a better place');
+        response.body.body.should.equal('Hello ((name))\r\n\r\nFunctional test help make our world a better place');
         response.body.subject.should.equal('Functional Tests are good');
       });
     });

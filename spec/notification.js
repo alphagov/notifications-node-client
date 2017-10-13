@@ -97,6 +97,30 @@ describe('notification api', function() {
           });
     });
 
+    it('should send a letter', function(done) {
+      
+        var templateId = '123',
+          personalisation = {
+            address_line_1: 'Mr Tester',
+            address_line_2: '1 Test street',
+            postcode: 'NW1 2UN'
+          },
+          data = {
+              template_id: templateId,
+              personalisation: personalisation
+          };
+
+        notifyAuthNock
+          .post('/v2/notifications/letter', data)
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient.sendLetter(templateId, personalisation)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
     it('should get notification by id', function(done) {
 
         var baseUrl = 'http://localhost',

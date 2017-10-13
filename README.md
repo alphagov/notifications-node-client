@@ -259,8 +259,169 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
+### Letter
+
+```javascript
+notifyClient
+	.sendLetter(templateId, personalisation, reference)
+    .then(response => console.log(response))
+    .catch(err => console.error(err))
+;
+```
+
+where `personalisation` is
+
+```javascript
+personalisation={
+    'address_line_1': 'The Occupier',  # required
+    'address_line_2': '123 High Street', # required
+    'address_line_3': 'London',
+    'postcode': 'SW14 6BH',  # required
+
+    ... # any other optional address lines, or personalisation fields found in your template
+},
+```
+
+<details>
+<summary>
+Response
+</summary>
+
+If the request is successful, `response` will be a `Dictionary`:
+
+```javascript
+{
+  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+  "reference": None,
+  "content": {
+    "subject": "Licence renewal",
+    "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
+  },
+  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
+  "template": {
+    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
+    "version": 1,
+    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
+  }
+  "scheduled_for": None
+}
+```
+
+Otherwise the client will raise a `HTTPError`:
+<table>
+<thead>
+<tr>
+<th>`error.status_code`</th>
+<th>`error.message`</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<pre>429</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "RateLimitError",
+    "message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"
+}]
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre>429</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "TooManyRequestsError",
+    "message": "Exceeded send limits (50) for today"
+}]
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre>400</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "BadRequestError",
+    "message": "Cannot send letters with a team api key"
+]}
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre>400</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "BadRequestError",
+    "message": "Cannot send letters when service is in trial mode"
+}]
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre>400</pre>
+</td>
+<td>
+<pre>
+[{
+    "error": "ValidationError",
+    "message": "personalisation address_line_1 is a required property"
+}]
+</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</details>
+
 <details>
 <summary>Arguments</summary>
+
+
+#### `template_id`
+
+Find by clicking **API info** for the template you want to send.
+
+#### `reference`
+
+An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
+
+You can omit this argument if you do not require a reference for the notification.
+
+#### `personalisation`
+
+The letter must contain:
+
+- mandatory address fields
+- optional address fields if applicable
+- fields from template
+
+```javascript
+personalisation={
+    'address_line_1': 'The Occupier', 		# mandatory address field
+    'address_line_2': 'Flat 2', 		# mandatory address field
+    'address_line_3': '123 High Street', 	# optional address field
+    'address_line_4': 'Richmond upon Thames', 	# optional address field
+    'address_line_5': 'London', 		# optional address field
+    'address_line_6': 'Middlesex', 		# optional address field
+    'postcode': 'SW14 6BH', 			# mandatory address field
+    'application_id': '1234', 			# field from template
+    'application_date': '2017-01-01', 		# field from template
+}
+```
+
+</details>
 
 #### `emailAddress`
 The email address of the recipient, only required for email notifications.

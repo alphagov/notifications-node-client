@@ -12,18 +12,29 @@ const expect = chai.expect;
 // will not run unless flag provided `npm test --integration`
 const describer = process.env.npm_config_integration ? describe.only : describe.skip;
 
+function make_random_id() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 describer('notification api with a live service', () => {
   let notifyClient;
   let emailNotificationId;
   let smsNotificationId;
+  let letterNotificationId;
   const personalisation = { name: 'Foo' };
   const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
   const letterContact = { 
-    address_line_1: 'Foo',
-    address_line_2: 'Bar',
-    postcode: 'Goo',
+    address_line_1: make_random_id(),
+    address_line_2: 'Foo',
+    postcode: 'Bar',
   };
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
   const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
@@ -83,7 +94,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendLetter(letterTemplateId, letterContact).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo');
+        response.body.content.body.should.equal('Hello ' + letterContact.address_line_1);
         letterNotificationId = response.body.id;
       });
     });
@@ -109,6 +120,16 @@ describer('notification api with a live service', () => {
         expect(response.body).to.be.jsonSchema(getNotificationJson);
         response.body.type.should.equal('sms');
         response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+      });
+    });
+
+    it('get letter notification by id', () => {
+      should.exist(letterNotificationId)
+      return notifyClient.getNotificationById(letterNotificationId).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getNotificationJson);
+        response.body.type.should.equal('letter');
+        response.body.body.should.equal('Hello ' + letterContact.address_line_1);
       });
     });
 

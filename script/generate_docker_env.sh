@@ -17,6 +17,7 @@ env_vars=(
     FUNCTIONAL_TEST_NUMBER
     EMAIL_TEMPLATE_ID
     SMS_TEMPLATE_ID
+    EMAIL_REPLY_TO_ID
 )
 
 for env_var in "${env_vars[@]}"; do

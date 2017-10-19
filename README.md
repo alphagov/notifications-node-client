@@ -124,11 +124,45 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
+<details>
+<summary>
+Arguments
+</summary>
+
+#### `phoneNumber`
+
+The phone number of the recipient, only required for sms notifications.
+
+#### `templateId`
+
+Find by clicking **API info** for the template you want to send.
+
+#### `reference`
+
+An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
+
+You can omit this argument if you do not require a reference for the notification.
+
+
+#### `personalisation`
+
+If a template has placeholders, you need to provide their values, for example:
+
+```javascript
+personalisation={
+    'first_name': 'Amala',
+    'reference_number': '300241',
+}
+```
+
+Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+</details>
+
 ### Email
 
 ```javascript
 notifyClient
-	.sendEmail(templateId, emailAddress, personalisation, reference)
+	.sendEmail(templateId, emailAddress, personalisation, reference, emailReplyToId)
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;
@@ -225,30 +259,62 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
+<details>
+<summary>Arguments</summary>
 
-### Arguments
-
+#### `emailAddress`
+The email address of the recipient, only required for email notifications.
 
 #### `templateId`
 
 Find by clicking **API info** for the template you want to send.
 
+#### `reference`
+
+An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
+
+You can omit this argument if you do not require a reference for the notification.
+
+#### `emailReplyToId`
+
+Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'. 
+
+If you omit this argument your default email reply-to address will be set for the notification.
+
+If other optional arguments before `emailReplyToId` are not in use they need to be set to `null`.
+
+Example usage with optional reference -
+
+```
+sendEmail('123', 'test@gov.uk', null, 'your ref', '465')
+```
+
+Example usage with optional personalisation -
+
+```
+sendEmail('123', 'test@gov.uk', '{"name": "test"}', null, '465')
+```
+
+Example usage with only optional `emailReplyToId` set -
+
+```
+sendEmail('123', 'test@gov.uk', null, null, '465')
+```
+
 #### `personalisation`
 
-If a template has placeholders you need to provide their values. For example:
+If a template has placeholders, you need to provide their values, for example:
 
 ```javascript
 personalisation={
     'first_name': 'Amala',
-    'reference_number': '300241',
+    'application_number': '300241',
 }
 ```
 
 Otherwise the parameter can be omitted or `undefined` can be passed in its place.
 
-#### `reference`
-
-An optional identifier you generate if you don’t want to use Notify’s `id`. It can be used to identify a single  notification or a batch of notifications.
+</details>
 
 ## Get the status of one message
 ```javascript
@@ -420,7 +486,8 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
-### Arguments
+<details>
+<summary>Arguments</summary>
 
 #### `templateType`
 
@@ -450,6 +517,7 @@ This is the `reference` you gave at the time of sending the notification. This c
 #### `olderThan`
 
 If omitted all messages are returned. Otherwise you can filter to retrieve all notifications older than the given notification `id`.
+</details>
 
 ## Get a template by ID
 
@@ -507,12 +575,13 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
-### Arguments
-
+<details>
+<summary>Arguments</summary>
 
 #### `templateId`
 
 Find by clicking **API info** for the template you want to send.
+</details>
 
 ## Get a template by ID and version
 
@@ -570,7 +639,8 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
-### Arguments
+<details>
+<summary>Arguments</summary>
 
 #### `templateId`
 
@@ -579,6 +649,7 @@ Find by clicking **API info** for the template you want to send.
 #### `version`
 
 The version number of the template
+</details>
 
 ## Get all templates
 
@@ -628,7 +699,8 @@ If no templates exist for a template type or there no templates for a service, t
 
 </details>
 
-### Arguments
+<details>
+<summary>Arguments</summary>
 
 #### `templateType`
 
@@ -637,7 +709,7 @@ If omitted all messages are returned. Otherwise you can filter by:
 * `email`
 * `sms`
 * `letter`
-
+</details>
 
 ## Generate a preview template
 
@@ -649,7 +721,6 @@ notifyClient
     .catch((err) => {})
 ;
 ```
-
 <details>
 <summary>
 Response
@@ -706,8 +777,8 @@ Otherwise the client will return an error `err`:
 </table>
 </details>
 
-### Arguments
-
+<details>
+<summary>Arguments</summary>
 
 #### `templateId`
 
@@ -725,6 +796,7 @@ personalisation={
 ```
 
 Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+</details>
 
 ## Tests
 

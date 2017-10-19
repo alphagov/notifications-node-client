@@ -49,6 +49,32 @@ describe('notification api', function() {
 
     });
 
+    it('should send an email with email_reply_to_id', function(done) {
+      
+        var email = 'dom@example.com',
+          templateId = '123',
+          personalisation = {foo: 'bar'},
+          reference = '',
+          emailReplyToId = '456',          
+          data = {
+              template_id: templateId,
+              email_address: email,
+              personalisation: personalisation,
+              email_reply_to_id: emailReplyToId
+          };
+
+        notifyAuthNock
+          .post('/v2/notifications/email', data)
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient.sendEmail(templateId, email, personalisation, reference, emailReplyToId)
+          .then(function (response) {
+            expect(response.statusCode).to.equal(200);
+            done();
+        });
+
+    });
+
     it('should send an sms', function(done) {
 
         var phoneNo = '07525755555',

@@ -26,7 +26,7 @@ function NotifyClient() {
  *
  * @returns {Object}
  */
-function createNotificationPayload(type, templateId, to, personalisation, reference) {
+function createNotificationPayload(type, templateId, to, personalisation, reference, emailReplyToId) {
 
   var payload = {
     template_id: templateId
@@ -45,6 +45,10 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
 
   if (reference) {
     payload.reference = reference;
+  }
+
+  if (emailReplyToId) {
+    payload.email_reply_to_id = emailReplyToId;
   }
 
   return payload;
@@ -113,12 +117,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} emailAddress
    * @param {Object} personalisation
    * @param {String} reference
+   * @param {String} emailReplyToId
    *
    * @returns {Promise}
    */
-  sendEmail: function (templateId, emailAddress, personalisation, reference) {
+  sendEmail: function (templateId, emailAddress, personalisation, reference, emailReplyToId) {
     return this.apiClient.post('/v2/notifications/email',
-      createNotificationPayload('email', templateId, emailAddress, personalisation, reference));
+      createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId));
   },
 
   /**

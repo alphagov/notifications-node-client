@@ -4,7 +4,7 @@
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha \"spec/**/*.js\"",
+    "test": "./node_modules/.bin/mocha \"spec/**/*.js\"",
     "integration": "./node_modules/.bin/mocha spec/integration/test.js"
   },
   "author": "GDS developers",

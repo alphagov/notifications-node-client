@@ -41,8 +41,7 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
   if (type == 'letter') {
     // personalisation mandatory for letters
     payload.personalisation = personalisation;
-  }
-  else if (!!personalisation) {
+  } else if (!!personalisation) {
     payload.personalisation = personalisation;
   }
 
@@ -153,7 +152,7 @@ _.extend(NotifyClient.prototype, {
    */
   sendLetter: function (templateId, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/letter',
-      createNotificationPayload('letter', templateId, '', personalisation, reference));
+      createNotificationPayload('letter', templateId, undefined, personalisation, reference));
   },
 
   /**

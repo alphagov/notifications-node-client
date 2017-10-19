@@ -44,6 +44,16 @@ switch(type) {
       });
     break;
 
+  case 'letter':
+    notifyClient.sendLetter(templateId, personalisation)
+      .then(function(response) {
+        console.log('Notify response: ' + JSON.stringify(response));
+      })
+      .catch(function(error) {
+        console.log('Error ' + error);
+      });
+    break;
+
   default:
     console.log('Unrecognised notification type');
 }

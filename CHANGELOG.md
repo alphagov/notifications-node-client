@@ -1,3 +1,10 @@
+## [3.4.0] - 2017-10-19
+
+### Changed
+
+* Added new method:
+    * `sendLetter` - send a letter
+
 ## [3.3.0] - 2017-10-13
 
 ### Changed

@@ -281,24 +281,24 @@ Optional. Specifies the identifier of the email reply-to address to set for the 
 
 If you omit this argument your default email reply-to address will be set for the notification.
 
-If other optional arguments before `emailReplyToId` are not in use they need to be set to `null`.
+If other optional arguments before `emailReplyToId` are not in use they need to be set to `undefined`.
 
 Example usage with optional reference -
 
 ```
-sendEmail('123', 'test@gov.uk', null, 'your ref', '465')
+sendEmail('123', 'test@gov.uk', undefined, 'your ref', '465')
 ```
 
 Example usage with optional personalisation -
 
 ```
-sendEmail('123', 'test@gov.uk', '{"name": "test"}', null, '465')
+sendEmail('123', 'test@gov.uk', '{"name": "test"}', undefined, '465')
 ```
 
 Example usage with only optional `emailReplyToId` set -
 
 ```
-sendEmail('123', 'test@gov.uk', null, null, '465')
+sendEmail('123', 'test@gov.uk', undefined, undefined, '465')
 ```
 
 #### `personalisation`

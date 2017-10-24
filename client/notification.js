@@ -85,10 +85,6 @@ function buildGetAllNotificationsQuery(templateType, status, reference, olderTha
     payload.older_than = olderThanId;
   }
 
-  var queryString = Object.keys(payload).map(function(key) {
-    return [key, payload[key]].map(encodeURIComponent).join("=");
-  }).join("&");
-
   return buildQueryStringFromDict(payload);
 }
 
@@ -139,7 +135,7 @@ _.extend(NotifyClient.prototype, {
    */
   sendSms: function (templateId, phoneNumber, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/sms',
-      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
+      createNotificationPayload('sms', templateId, String(phoneNumber), personalisation, reference));
   },
 
   /**

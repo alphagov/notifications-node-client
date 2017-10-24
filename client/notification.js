@@ -135,7 +135,7 @@ _.extend(NotifyClient.prototype, {
    */
   sendSms: function (templateId, phoneNumber, personalisation, reference) {
     return this.apiClient.post('/v2/notifications/sms',
-      createNotificationPayload('sms', templateId, String(phoneNumber), personalisation, reference));
+      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
   },
 
   /**

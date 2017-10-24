@@ -33,7 +33,7 @@ switch(type) {
     break;
 
   case 'sms':
-    notifyClient.sendSms(templateId, destination, personalisation)
+    notifyClient.sendSms(templateId, String(destination), personalisation)
       .then(function(response) {
         console.log('Notify response: ' + JSON.stringify(response));
       })

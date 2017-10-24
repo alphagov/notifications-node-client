@@ -263,7 +263,7 @@ Otherwise the client will return an error `err`:
 
 ```javascript
 notifyClient
-	.sendLetter(templateId, personalisation, reference)
+    .sendLetter(templateId, personalisation, reference)
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;

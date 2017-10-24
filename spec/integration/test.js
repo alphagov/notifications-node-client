@@ -166,6 +166,15 @@ describer('notification api with a live service', () => {
       });
     });
 
+    it('get letter template by id', () => {
+      return notifyClient.getTemplateById(letterTemplateId).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.body.should.equal('Hello ((address_line_1))');
+        response.body.subject.should.equal('Main heading');
+      });
+    });
+
     it('get sms template by id and version', () => {
       return notifyClient.getTemplateByIdAndVersion(smsTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
@@ -177,6 +186,14 @@ describer('notification api with a live service', () => {
 
     it('get email template by id and version', () => {
       return notifyClient.getTemplateByIdAndVersion(emailTemplateId, 1).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.version.should.equal(1);
+      });
+    });
+
+    it('get letter template by id and version', () => {
+      return notifyClient.getTemplateByIdAndVersion(letterTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.version.should.equal(1);
@@ -205,6 +222,13 @@ describer('notification api with a live service', () => {
       });
     });
 
+    it('get letter templates', () => {
+      return notifyClient.getAllTemplates('letter').then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplatesJson);
+      });
+    });
+
     it('preview sms template', () => {
       var personalisation = { "name": "Foo" }
       return notifyClient.previewTemplateById(smsTemplateId, personalisation).then((response) => {
@@ -221,6 +245,16 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
         response.body.type.should.equal('email');
+        should.exist(response.body.subject);
+      });
+    });
+
+    it('preview letter template', () => {
+      var personalisation = { "address_line_1": "Foo", "address_line_2": "Bar", "postcode": "Zing" }
+      return notifyClient.previewTemplateById(letterTemplateId, personalisation).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
+        response.body.type.should.equal('letter');
         should.exist(response.body.subject);
       });
     });

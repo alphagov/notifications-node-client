@@ -1,12 +1,12 @@
 var argv = require('optimist')
     .usage('Usage: $0' +
       ' -b [baseUrl]' +
-      ' -s [notify secret] ' +
+      ' -s [notify secret]' +
       ' -i [serviceId]' +
-      ' -t [templateId] ' +
-      ' -d [destination (email address or phone number]' +
-      ' -p [personalisation]' +
-      ' -m [type (email or sms, default email)]')
+      ' -t [templateId]' +
+      ' -d [destination (email address or phone number, not needed for letters]' +
+      ' -p [personalisation (required for letter {"address_line_1": "mrs test", "address_line_2": "1 test street", "postcode": "N1"})]' +
+      ' -m [type (email, sms or letter, default email)]')
     .demand(['s', 'i', 't'])
     .argv,
   NotifyClient = require('../client/notification').NotifyClient,

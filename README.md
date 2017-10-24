@@ -39,12 +39,12 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
     "id": "bfb50d92-100d-4b8b-b559-14fa3b091cda",
-    "reference": None,
+    "reference": null,
     "content": {
         "body": "Some words",
         "from_number": "40604"
@@ -173,12 +173,12 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
     "id": "bfb50d92-100d-4b8b-b559-14fa3b091cda",
-    "reference": None,
+    "reference": null,
     "content": {
         "subject": "Licence renewal",
         "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
@@ -287,12 +287,12 @@ personalisation={
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
   "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": None,
+  "reference": null,
   "content": {
     "subject": "Licence renewal",
     "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
@@ -303,7 +303,7 @@ If the request is successful, `response` will be a `Dictionary`:
     "version": 1,
     "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
   }
-  "scheduled_for": None
+  "scheduled_for": null
 }
 ```
 
@@ -491,7 +491,7 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -573,7 +573,7 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 { "notifications":
@@ -695,7 +695,7 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -759,7 +759,7 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -828,7 +828,7 @@ _This will return the latest version for each template_
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an`object`:
 
 ```javascript
 {
@@ -850,7 +850,7 @@ If the request is successful, `response` will be a `Dictionary`:
 }
 ```
 
-If no templates exist for a template type or there no templates for a service, the `response` will be a `Dictionary` with an empty `templates` list element:
+If no templates exist for a template type or there no templates for a service, the `response` will be an `object` with an empty `templates` list element:
 
 ```javascript
 {
@@ -887,7 +887,7 @@ notifyClient
 Response
 </summary>
 
-If the request is successful, `response` will be a `Dictionary`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {

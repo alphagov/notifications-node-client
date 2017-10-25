@@ -1,10 +1,10 @@
 {
   "name": "notifications-node-client",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha \"spec/**/*.js\"",
+    "test": "./node_modules/.bin/mocha \"spec/**/*.js\"",
     "integration": "./node_modules/.bin/mocha spec/integration/test.js"
   },
   "author": "GDS developers",

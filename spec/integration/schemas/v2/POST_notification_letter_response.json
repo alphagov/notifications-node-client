@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "description": "POST notification letter response schema",
+    "type" : "object",
+    "properties": {
+        "id": {"$ref": "definitions.json#/uuid"},
+        "reference": {"type": ["string", "null"]},
+        "content": {"$ref": "definitions.json#/letter_content"},
+        "uri": {"type": "string"},
+        "template": {"$ref": "definitions.json#/template"},
+        "scheduled_for": {"oneOf":[
+          {"$ref": "definitions.json#/datetime"},
+          {"type": "null"}
+        ]}
+    },
+    "additionalProperties": false,
+    "required": ["id", "content", "uri", "template"]
+  }

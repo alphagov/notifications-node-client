@@ -12,17 +12,34 @@ const expect = chai.expect;
 // will not run unless flag provided `npm test --integration`
 const describer = process.env.npm_config_integration ? describe.only : describe.skip;
 
+function make_random_id() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 describer('notification api with a live service', () => {
   let notifyClient;
   let emailNotificationId;
   let smsNotificationId;
+  let letterNotificationId;
   const personalisation = { name: 'Foo' };
   const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
+  const letterContact = { 
+    address_line_1: make_random_id(),
+    address_line_2: 'Foo',
+    postcode: 'Bar',
+  };
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
   const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
   const emailReplyToId = process.env.EMAIL_REPLY_TO_ID;
+  const letterTemplateId = process.env.LETTER_TEMPLATE_ID;
 
   beforeEach(() => {
 
@@ -72,6 +89,16 @@ describer('notification api with a live service', () => {
       });
     });
 
+    it('send letter notification', () => {
+      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
+      return notifyClient.sendLetter(letterTemplateId, letterContact).then((response) => {
+        response.statusCode.should.equal(201);
+        expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
+        response.body.content.body.should.equal('Hello ' + letterContact.address_line_1);
+        letterNotificationId = response.body.id;
+      });
+    });
+
     var getNotificationJson = require('./schemas/v2/GET_notification_response.json');
     var getNotificationsJson = require('./schemas/v2/GET_notifications_response.json');
 
@@ -93,6 +120,16 @@ describer('notification api with a live service', () => {
         expect(response.body).to.be.jsonSchema(getNotificationJson);
         response.body.type.should.equal('sms');
         response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+      });
+    });
+
+    it('get letter notification by id', () => {
+      should.exist(letterNotificationId)
+      return notifyClient.getNotificationById(letterNotificationId).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getNotificationJson);
+        response.body.type.should.equal('letter');
+        response.body.body.should.equal('Hello ' + letterContact.address_line_1);
       });
     });
 
@@ -129,6 +166,15 @@ describer('notification api with a live service', () => {
       });
     });
 
+    it('get letter template by id', () => {
+      return notifyClient.getTemplateById(letterTemplateId).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.body.should.equal('Hello ((address_line_1))');
+        response.body.subject.should.equal('Main heading');
+      });
+    });
+
     it('get sms template by id and version', () => {
       return notifyClient.getTemplateByIdAndVersion(smsTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
@@ -140,6 +186,14 @@ describer('notification api with a live service', () => {
 
     it('get email template by id and version', () => {
       return notifyClient.getTemplateByIdAndVersion(emailTemplateId, 1).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.version.should.equal(1);
+      });
+    });
+
+    it('get letter template by id and version', () => {
+      return notifyClient.getTemplateByIdAndVersion(letterTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.version.should.equal(1);
@@ -168,6 +222,13 @@ describer('notification api with a live service', () => {
       });
     });
 
+    it('get letter templates', () => {
+      return notifyClient.getAllTemplates('letter').then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getTemplatesJson);
+      });
+    });
+
     it('preview sms template', () => {
       var personalisation = { "name": "Foo" }
       return notifyClient.previewTemplateById(smsTemplateId, personalisation).then((response) => {
@@ -184,6 +245,16 @@ describer('notification api with a live service', () => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
         response.body.type.should.equal('email');
+        should.exist(response.body.subject);
+      });
+    });
+
+    it('preview letter template', () => {
+      var personalisation = { "address_line_1": "Foo", "address_line_2": "Bar", "postcode": "Zing" }
+      return notifyClient.previewTemplateById(letterTemplateId, personalisation).then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
+        response.body.type.should.equal('letter');
         should.exist(response.body.subject);
       });
     });

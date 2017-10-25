@@ -37,5 +37,14 @@
         "from_number": {"type": "string"}
     },
     "required": ["body", "from_number"]
-  }
+  },
+  "letter_content": {
+    "type": "object",
+    "title": "notification letter content",
+    "properties": {
+        "body": {"type": "string"},
+        "subject": {"type": "string"}
+    },
+    "required": ["body", "subject"]
+  }  
 }

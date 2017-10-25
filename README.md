@@ -828,7 +828,7 @@ _This will return the latest version for each template_
 Response
 </summary>
 
-If the request is successful, `response` will be an`object`:
+If the request is successful, `response` will be an `object`:
 
 ```javascript
 {

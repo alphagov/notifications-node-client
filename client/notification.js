@@ -23,10 +23,11 @@ function NotifyClient() {
  * @param {String} to
  * @param {Object} personalisation
  * @param {String} reference
+ * @param {String} replyToId
  *
  * @returns {Object}
  */
-function createNotificationPayload(type, templateId, to, personalisation, reference, emailReplyToId) {
+function createNotificationPayload(type, templateId, to, personalisation, reference, replyToId) {
 
   var payload = {
     template_id: templateId
@@ -49,8 +50,10 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
     payload.reference = reference;
   }
 
-  if (emailReplyToId) {
-    payload.email_reply_to_id = emailReplyToId;
+  if (replyToId && type == 'email') {
+    payload.email_reply_to_id = replyToId;
+  } else if (replyToId && type == 'sms') {
+    payload.sms_sender_id = replyToId;
   }
 
   return payload;
@@ -130,12 +133,13 @@ _.extend(NotifyClient.prototype, {
    * @param {String} phoneNumber
    * @param {Object} personalisation
    * @param {String} reference
+   * @param {String} smsSenderId
    *
    * @returns {Promise}
    */
-  sendSms: function (templateId, phoneNumber, personalisation, reference) {
+  sendSms: function (templateId, phoneNumber, personalisation, reference, smsSenderId) {
     return this.apiClient.post('/v2/notifications/sms',
-      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference));
+      createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference, smsSenderId));
   },
 
   /**

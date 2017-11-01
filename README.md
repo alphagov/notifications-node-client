@@ -28,7 +28,7 @@ notifyClient.setProxy(proxyUrl);
 
 ```javascript
 notifyClient
-	.sendSms(templateId, phoneNumber, personalisation, reference)
+	.sendSms(templateId, phoneNumber, personalisation, reference, smsSenderId)
 	.then(response => console.log(response))
 	.catch(err => console.error(err))
 ;
@@ -155,7 +155,34 @@ personalisation={
 }
 ```
 
-Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+If you are not using the `smsSenderId` argument, this parameter can be omitted. Otherwise `undefined` should be passed in its place.
+
+#### `smsSenderId`
+
+Optional. Specifies the identifier of the sms sender to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Text message sender'.
+
+If you omit this argument your default sms sender will be set for the notification.
+
+If other optional arguments before `smsSenderId` are not in use they need to be set to `undefined`.
+
+Example usage with optional reference -
+
+```
+sendSms('123', '+447900900123', undefined, 'your ref', '465')
+```
+
+Example usage with optional personalisation -
+
+```
+sendSms('123', '+447900900123', '{"name": "test"}', undefined, '465')
+```
+
+Example usage with only optional `smsSenderId` set -
+
+```
+sendSms('123', '+447900900123', undefined, undefined, '465')
+```
+
 </details>
 
 ### Email

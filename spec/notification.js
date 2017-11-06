@@ -82,18 +82,20 @@ describe('notification api', function() {
 
         var phoneNo = '07525755555',
           templateId = '123',
-          personalisation = {foo: 'bar'},
+          options = {
+            personalisation: {foo: 'bar'},
+          },
           data = {
               template_id: templateId,
               phone_number: phoneNo,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendSms(templateId, phoneNo, personalisation)
+        notifyClient.sendSms(templateId, phoneNo, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();
@@ -104,21 +106,22 @@ describe('notification api', function() {
 
         var phoneNo = '07525755555',
           templateId = '123',
-          personalisation = {foo: 'bar'},
-          reference = '',
-          sms_sender_id = '456',
+          options = {
+            personalisation: {foo: 'bar'},
+            smsSenderId: '456',
+          },
           data = {
               template_id: templateId,
               phone_number: phoneNo,
-              personalisation: personalisation,
-              sms_sender_id: sms_sender_id
+              personalisation: options.personalisation,
+              sms_sender_id: options.smsSenderId,
           };
 
         notifyAuthNock
           .post('/v2/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendSms(templateId, phoneNo, personalisation, reference, sms_sender_id)
+        notifyClient.sendSms(templateId, phoneNo, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();

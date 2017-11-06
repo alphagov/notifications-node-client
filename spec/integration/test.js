@@ -85,8 +85,10 @@ describer('notification api with a live service', () => {
     });
 
     it('send sms notification', () => {
-      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json');
-      return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation).then((response) => {
+      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json'),
+        options = {personalisation: personalisation};
+
+      return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
@@ -95,9 +97,11 @@ describer('notification api with a live service', () => {
     });
 
     it('send sms notification with sms_sender_id', () => {
-      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json');
+      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json'),
+        options = {personalisation: personalisation, reference: clientRef, smsSenderId: smsSenderId};
+
       should.exist(smsSenderId);
-      return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation, clientRef, smsSenderId).then((response) => {
+      return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');

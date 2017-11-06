@@ -134,13 +134,16 @@ _.extend(NotifyClient.prototype, {
    *
    * @param {String} templateId
    * @param {String} phoneNumber
-   * @param {Object} personalisation
-   * @param {String} reference
-   * @param {String} smsSenderId
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendSms: function (templateId, phoneNumber, personalisation, reference, smsSenderId) {
+  sendSms: function (templateId, phoneNumber, options) {
+    var options = options || {};
+    var personalisation = options.personalisation || undefined;
+    var reference = options.reference || undefined;
+    var smsSenderId = options.smsSenderId || undefined;
+
     return this.apiClient.post('/v2/notifications/sms',
       createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference, smsSenderId));
   },

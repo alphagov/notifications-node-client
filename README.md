@@ -28,7 +28,7 @@ notifyClient.setProxy(proxyUrl);
 
 ```javascript
 notifyClient
-	.sendSms(templateId, phoneNumber, personalisation, reference, smsSenderId)
+	.sendSms(templateId, phoneNumber, options)
 	.then(response => console.log(response))
 	.catch(err => console.error(err))
 ;
@@ -137,7 +137,11 @@ The phone number of the recipient, only required for sms notifications.
 
 Find by clicking **API info** for the template you want to send.
 
-#### `reference`
+#### `options`
+
+An object which can contain `personalisation`, `reference` and `smsSenderId`. If none of these are needed, `options` can be omitted.
+
+##### `reference`
 
 An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
 
@@ -149,39 +153,19 @@ You can omit this argument if you do not require a reference for the notificatio
 If a template has placeholders, you need to provide their values, for example:
 
 ```javascript
-personalisation={
+personalisation: {
     'first_name': 'Amala',
     'reference_number': '300241',
 }
 ```
 
-If you are not using the `smsSenderId` argument, this parameter can be omitted. Otherwise `undefined` should be passed in its place.
+If you are not using the `smsSenderId` argument, this parameter can be omitted.
 
-#### `smsSenderId`
+##### `smsSenderId`
 
 Optional. Specifies the identifier of the sms sender to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Text message sender'.
 
 If you omit this argument your default sms sender will be set for the notification.
-
-If other optional arguments before `smsSenderId` are not in use they need to be set to `undefined`.
-
-Example usage with optional reference -
-
-```
-sendSms('123', '+447900900123', undefined, 'your ref', '465')
-```
-
-Example usage with optional personalisation -
-
-```
-sendSms('123', '+447900900123', '{"name": "test"}', undefined, '465')
-```
-
-Example usage with only optional `smsSenderId` set -
-
-```
-sendSms('123', '+447900900123', undefined, undefined, '465')
-```
 
 </details>
 

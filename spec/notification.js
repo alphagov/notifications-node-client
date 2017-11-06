@@ -97,6 +97,31 @@ describe('notification api', function() {
           });
     });
 
+    it('should send an sms with smsSenderId', function(done) {
+
+        var phoneNo = '07525755555',
+          templateId = '123',
+          personalisation = {foo: 'bar'},
+          reference = '',
+          sms_sender_id = '456',
+          data = {
+              template_id: templateId,
+              phone_number: phoneNo,
+              personalisation: personalisation,
+              sms_sender_id: sms_sender_id
+          };
+
+        notifyAuthNock
+          .post('/v2/notifications/sms', data)
+          .reply(200, {"hooray": "bkbbk"});
+
+        notifyClient.sendSms(templateId, phoneNo, personalisation, reference, sms_sender_id)
+          .then(function (response) {
+              expect(response.statusCode).to.equal(200);
+              done();
+          });
+    });
+
     it('should send a letter', function(done) {
       
         var templateId = '123',

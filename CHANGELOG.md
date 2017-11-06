@@ -1,3 +1,10 @@
+## [3.5.0] - 2017-11-01
+
+### Changed
+
+* Updated `sendSms` method with optional argument:
+    * `smsSenderId` - specify the identifier of the sms sender (optional)
+
 ## [3.4.0] - 2017-10-19
 
 ### Changed

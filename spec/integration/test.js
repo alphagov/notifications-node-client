@@ -37,9 +37,9 @@ describer('notification api with a live service', () => {
     postcode: 'Bar',
   };
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
-  const smsSenderId = process.env.SMS_SENDER_ID;
+  const smsSenderId = process.env.SMS_SENDER_ID || undefined;
   const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-  const emailReplyToId = process.env.EMAIL_REPLY_TO_ID;
+  const emailReplyToId = process.env.EMAIL_REPLY_TO_ID || undefined;
   const letterTemplateId = process.env.LETTER_TEMPLATE_ID;
 
   beforeEach(() => {

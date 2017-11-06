@@ -116,13 +116,16 @@ _.extend(NotifyClient.prototype, {
    *
    * @param {String} templateId
    * @param {String} emailAddress
-   * @param {Object} personalisation
-   * @param {String} reference
-   * @param {String} emailReplyToId
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendEmail: function (templateId, emailAddress, personalisation, reference, emailReplyToId) {
+  sendEmail: function (templateId, emailAddress, options) {
+    var options = options || {},
+      personalisation = options.personalisation || undefined,
+      reference = options.reference || undefined,
+      emailReplyToId = options.emailReplyToId || undefined;
+
     return this.apiClient.post('/v2/notifications/email',
       createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId));
   },

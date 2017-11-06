@@ -56,8 +56,10 @@ describer('notification api with a live service', () => {
   describe('notifications', () => {
 
     it('send email notification', () => {
-      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {personalisation: personalisation, reference: clientRef};
+
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
@@ -68,9 +70,11 @@ describer('notification api with a live service', () => {
     });
 
     it('send email notification with email_reply_to_id', () => {
-      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {personalisation: personalisation, reference: clientRef, emailReplyToId: emailReplyToId};
+
       should.exist(emailReplyToId);
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef, emailReplyToId).then((response) => {
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');

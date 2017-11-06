@@ -30,18 +30,20 @@ describe('notification api', function() {
 
         var email = 'dom@example.com',
           templateId = '123',
-          personalisation = {foo: 'bar'},
+          options = {
+            personalisation: {foo: 'bar'},
+          },
           data = {
               template_id: templateId,
               email_address: email,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/email', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendEmail(templateId, email, personalisation)
+        notifyClient.sendEmail(templateId, email, options)
           .then(function (response) {
             expect(response.statusCode).to.equal(200);
             done();
@@ -53,21 +55,22 @@ describe('notification api', function() {
       
         var email = 'dom@example.com',
           templateId = '123',
-          personalisation = {foo: 'bar'},
-          reference = '',
-          emailReplyToId = '456',          
+          options = {
+            personalisation: {foo: 'bar'},
+            emailReplyToId: '456',
+          },
           data = {
               template_id: templateId,
               email_address: email,
-              personalisation: personalisation,
-              email_reply_to_id: emailReplyToId
+              personalisation: options.personalisation,
+              email_reply_to_id: options.emailReplyToId
           };
 
         notifyAuthNock
           .post('/v2/notifications/email', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendEmail(templateId, email, personalisation, reference, emailReplyToId)
+        notifyClient.sendEmail(templateId, email, options)
           .then(function (response) {
             expect(response.statusCode).to.equal(200);
             done();

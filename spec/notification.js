@@ -131,21 +131,23 @@ describe('notification api', function() {
     it('should send a letter', function(done) {
       
         var templateId = '123',
-          personalisation = {
-            address_line_1: 'Mr Tester',
-            address_line_2: '1 Test street',
-            postcode: 'NW1 2UN'
+          options = {
+            personalisation: {
+              address_line_1: 'Mr Tester',
+              address_line_2: '1 Test street',
+              postcode: 'NW1 2UN'
+            },
           },
           data = {
               template_id: templateId,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/letter', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendLetter(templateId, personalisation)
+        notifyClient.sendLetter(templateId, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();

@@ -151,12 +151,15 @@ _.extend(NotifyClient.prototype, {
   /**
    *
    * @param {String} templateId
-   * @param {Object} personalisation
-   * @param {String} reference
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendLetter: function (templateId, personalisation, reference) {
+  sendLetter: function (templateId, options) {
+    var options = options || {};
+    var personalisation = options.personalisation || undefined;
+    var reference = options.reference || undefined;
+
     return this.apiClient.post('/v2/notifications/letter',
       createNotificationPayload('letter', templateId, undefined, personalisation, reference));
   },

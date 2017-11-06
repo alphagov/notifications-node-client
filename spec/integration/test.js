@@ -110,8 +110,10 @@ describer('notification api with a live service', () => {
     });
 
     it('send letter notification', () => {
-      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
-      return notifyClient.sendLetter(letterTemplateId, letterContact).then((response) => {
+      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json'),
+        options = {personalisation: letterContact};
+
+      return notifyClient.sendLetter(letterTemplateId, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
         response.body.content.body.should.equal('Hello ' + letterContact.address_line_1);

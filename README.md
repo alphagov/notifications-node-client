@@ -316,16 +316,15 @@ Otherwise the parameter can be omitted.
 
 ```javascript
 notifyClient
-    .sendLetter(templateId, personalisation, reference)
+    .sendLetter(templateId, options)
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;
 ```
-
-where `personalisation` is
+where `personalisation` inside the `options` object is
 
 ```javascript
-personalisation={
+personalisation: {
     'address_line_1': 'The Occupier',  # required
     'address_line_2': '123 High Street', # required
     'address_line_3': 'London',
@@ -446,13 +445,17 @@ Otherwise the client will raise a `HTTPError`:
 
 Find by clicking **API info** for the template you want to send.
 
-#### `reference`
+#### `options`
+
+An object which contains `personalisation` and can also contain an optional `reference`.
+
+##### `reference`
 
 An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
 
 You can omit this argument if you do not require a reference for the notification.
 
-#### `personalisation`
+##### `personalisation`
 
 The letter must contain:
 
@@ -461,7 +464,7 @@ The letter must contain:
 - fields from template
 
 ```javascript
-personalisation={
+personalisation: {
     'address_line_1': 'The Occupier', 		# mandatory address field
     'address_line_2': 'Flat 2', 		# mandatory address field
     'address_line_3': '123 High Street', 	# optional address field

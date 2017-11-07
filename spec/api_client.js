@@ -1,4 +1,5 @@
 var expect = require('chai').expect,
+  MockDate = require('mockdate'),
   ApiClient = require('../client/api_client.js'),
   nock = require('nock'),
   createGovukNotifyToken = require('../client/authentication.js'),
@@ -6,6 +7,14 @@ var expect = require('chai').expect,
 
 
 describe('api client', function () {
+
+  beforeEach(function() {
+    MockDate.set(1234567890000);
+  });
+
+  afterEach(function() {
+    MockDate.reset();
+  });
 
   it('should make a get request with correct headers', function (done) {
 

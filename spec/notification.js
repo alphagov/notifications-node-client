@@ -1,6 +1,9 @@
 var expect = require('chai').expect, NotifyClient = require('../client/notification.js').NotifyClient,
+    MockDate = require('mockdate'),
     nock = require('nock'),
     createGovukNotifyToken = require('../client/authentication.js');
+
+MockDate.set(1234567890000);
 
 const baseUrl = 'http://localhost';
 const serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1';
@@ -22,6 +25,14 @@ function getNotifyAuthNock() {
 }
 
 describe('notification api', function() {
+
+    beforeEach(function() {
+      MockDate.set(1234567890000);
+    });
+
+    afterEach(function() {
+      MockDate.reset();
+    });
 
     var notifyClient = getNotifyClient();
     var notifyAuthNock = getNotifyAuthNock();
@@ -357,3 +368,5 @@ describe('notification api', function() {
     });
 
 });
+
+MockDate.reset();

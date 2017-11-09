@@ -1,5 +1,4 @@
 var jwt = require('jsonwebtoken');
-var crypto = require('crypto');
 
 
 function createGovukNotifyToken(request_method, request_path, secret, client_id) {

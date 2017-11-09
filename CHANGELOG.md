@@ -4,6 +4,7 @@
 
 * Updated `sendSms`, `sendEmail` and `sendLetter` to take an `options` object as a parameter.
     * `personalisation`, `reference`, `smsSenderId` and `emailReplyToId` now need to be passed to these functions inside `options`.
+* Removed the unused `Crypto` dependency
 
 ## [3.5.0] - 2017-11-01
 

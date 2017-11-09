@@ -10,7 +10,6 @@
   "author": "GDS developers",
   "license": "MIT",
   "dependencies": {
-    "crypto": "0.0.3",
     "jsonwebtoken": "7.4.1",
     "request": "^2.73.0",
     "request-promise": "^4.0.1",

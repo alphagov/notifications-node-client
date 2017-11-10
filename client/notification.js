@@ -97,6 +97,17 @@ function buildQueryStringFromDict(dictionary) {
   return queryString ? '?' + queryString : '';
 }
 
+function checkOptionsKeys(allowedKeys, options) {
+  var invalidKeys = Object.keys(options).filter((key_name) =>
+    !allowedKeys.includes(key_name)
+  );
+
+  if (invalidKeys.length) {
+    return new Error('Options ' + JSON.stringify(invalidKeys) + ' not recognised');
+  }
+  return null;
+}
+
 _.extend(NotifyClient.prototype, {
   /**
    * Usage:
@@ -120,7 +131,10 @@ _.extend(NotifyClient.prototype, {
    */
   sendEmail: function (templateId, emailAddress, options) {
     options = options || {};
-    
+    var err = checkOptionsKeys(['personalisation', 'reference', 'emailReplyToId'], options)
+    if (err) {
+      return Promise.reject(err);
+    }
     var personalisation = options.personalisation || undefined,
       reference = options.reference || undefined,
       emailReplyToId = options.emailReplyToId || undefined;
@@ -139,7 +153,10 @@ _.extend(NotifyClient.prototype, {
    */
   sendSms: function (templateId, phoneNumber, options) {
     options = options || {};
-    
+    var err = checkOptionsKeys(['personalisation', 'reference', 'smsSenderId'], options)
+    if (err) {
+      return Promise.reject(err);
+    }
 
     var personalisation = options.personalisation || undefined;
     var reference = options.reference || undefined;
@@ -158,7 +175,10 @@ _.extend(NotifyClient.prototype, {
    */
   sendLetter: function (templateId, options) {
     options = options || {};
-    
+    var err = checkOptionsKeys(['personalisation', 'reference'], options)
+    if (err) {
+      return Promise.reject(err);
+    }
     var personalisation = options.personalisation || undefined;
     var reference = options.reference || undefined;
 

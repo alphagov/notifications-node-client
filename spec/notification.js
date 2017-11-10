@@ -90,7 +90,18 @@ describe('notification api', function() {
 
     });
 
-
+    it('should reject options dicts with unknown options', () => {
+      let email = 'foo@bar.com',
+        templateId = '123',
+        // old personalisation dict
+        options = {
+          firstname: 'Fred',
+          surname: 'Smith',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendEmail(templateId, email, options)
+        .catch((err) => expect(err.message).to.equal('Options ["firstname","surname"] not recognised'));
+    });
   });
 
   describe('sendSms', () => {
@@ -145,7 +156,18 @@ describe('notification api', function() {
       });
     });
 
-
+    it('should reject options dicts with unknown options', () => {
+      let phoneNumber = '07123456789',
+        templateId = '123',
+        // old personalisation dict
+        options = {
+          firstname: 'Fred',
+          surname: 'Smith',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendSms(templateId, phoneNumber, options)
+        .catch((err) => expect(err.message).to.equal('Options ["firstname","surname"] not recognised'));
+    });
   });
 
   describe('sendLetter', () => {
@@ -174,6 +196,19 @@ describe('notification api', function() {
         expect(response.statusCode).to.equal(200);
         done();
       });
+    });
+
+    it('should reject options dicts with unknown options', () => {
+      let templateId = '123',
+        // old personalisation dict
+        options = {
+          address_line_1: 'Mr Tester',
+          address_line_2: '1 Test street',
+          postcode: 'NW1 2UN',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendLetter(templateId, options)
+        .catch((err) => expect(err.message).to.equal('Options ["address_line_1","address_line_2","postcode"] not recognised'));
     });
 
   });
@@ -388,6 +423,7 @@ describe('notification api', function() {
       notifyClient.previewTemplateById(templateId)
       .then(function (response) {
         expect(response .statusCode).to.equal(200);
+        done();
       });
     });
   });

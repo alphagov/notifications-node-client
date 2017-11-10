@@ -116,13 +116,16 @@ _.extend(NotifyClient.prototype, {
    *
    * @param {String} templateId
    * @param {String} emailAddress
-   * @param {Object} personalisation
-   * @param {String} reference
-   * @param {String} emailReplyToId
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendEmail: function (templateId, emailAddress, personalisation, reference, emailReplyToId) {
+  sendEmail: function (templateId, emailAddress, options) {
+    var options = options || {},
+      personalisation = options.personalisation || undefined,
+      reference = options.reference || undefined,
+      emailReplyToId = options.emailReplyToId || undefined;
+
     return this.apiClient.post('/v2/notifications/email',
       createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId));
   },
@@ -131,13 +134,16 @@ _.extend(NotifyClient.prototype, {
    *
    * @param {String} templateId
    * @param {String} phoneNumber
-   * @param {Object} personalisation
-   * @param {String} reference
-   * @param {String} smsSenderId
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendSms: function (templateId, phoneNumber, personalisation, reference, smsSenderId) {
+  sendSms: function (templateId, phoneNumber, options) {
+    var options = options || {};
+    var personalisation = options.personalisation || undefined;
+    var reference = options.reference || undefined;
+    var smsSenderId = options.smsSenderId || undefined;
+
     return this.apiClient.post('/v2/notifications/sms',
       createNotificationPayload('sms', templateId, phoneNumber, personalisation, reference, smsSenderId));
   },
@@ -145,12 +151,15 @@ _.extend(NotifyClient.prototype, {
   /**
    *
    * @param {String} templateId
-   * @param {Object} personalisation
-   * @param {String} reference
+   * @param {Object} options
    *
    * @returns {Promise}
    */
-  sendLetter: function (templateId, personalisation, reference) {
+  sendLetter: function (templateId, options) {
+    var options = options || {};
+    var personalisation = options.personalisation || undefined;
+    var reference = options.reference || undefined;
+
     return this.apiClient.post('/v2/notifications/letter',
       createNotificationPayload('letter', templateId, undefined, personalisation, reference));
   },

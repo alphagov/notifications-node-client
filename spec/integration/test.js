@@ -56,8 +56,10 @@ describer('notification api with a live service', () => {
   describe('notifications', () => {
 
     it('send email notification', () => {
-      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef).then((response) => {
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {personalisation: personalisation, reference: clientRef};
+
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
@@ -68,9 +70,11 @@ describer('notification api with a live service', () => {
     });
 
     it('send email notification with email_reply_to_id', () => {
-      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json');
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {personalisation: personalisation, reference: clientRef, emailReplyToId: emailReplyToId};
+
       should.exist(emailReplyToId);
-      return notifyClient.sendEmail(emailTemplateId, email, personalisation, clientRef, emailReplyToId).then((response) => {
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
@@ -81,8 +85,10 @@ describer('notification api with a live service', () => {
     });
 
     it('send sms notification', () => {
-      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json');
-      return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation).then((response) => {
+      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json'),
+        options = {personalisation: personalisation};
+
+      return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
@@ -91,9 +97,11 @@ describer('notification api with a live service', () => {
     });
 
     it('send sms notification with sms_sender_id', () => {
-      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json');
+      var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json'),
+        options = {personalisation: personalisation, reference: clientRef, smsSenderId: smsSenderId};
+
       should.exist(smsSenderId);
-      return notifyClient.sendSms(smsTemplateId, phoneNumber, personalisation, clientRef, smsSenderId).then((response) => {
+      return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
@@ -102,8 +110,10 @@ describer('notification api with a live service', () => {
     });
 
     it('send letter notification', () => {
-      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
-      return notifyClient.sendLetter(letterTemplateId, letterContact).then((response) => {
+      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json'),
+        options = {personalisation: letterContact};
+
+      return notifyClient.sendLetter(letterTemplateId, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
         response.body.content.body.should.equal('Hello ' + letterContact.address_line_1);

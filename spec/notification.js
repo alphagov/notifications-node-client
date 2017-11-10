@@ -41,18 +41,20 @@ describe('notification api', function() {
 
         var email = 'dom@example.com',
           templateId = '123',
-          personalisation = {foo: 'bar'},
+          options = {
+            personalisation: {foo: 'bar'},
+          },
           data = {
               template_id: templateId,
               email_address: email,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/email', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendEmail(templateId, email, personalisation)
+        notifyClient.sendEmail(templateId, email, options)
           .then(function (response) {
             expect(response.statusCode).to.equal(200);
             done();
@@ -64,21 +66,22 @@ describe('notification api', function() {
       
         var email = 'dom@example.com',
           templateId = '123',
-          personalisation = {foo: 'bar'},
-          reference = '',
-          emailReplyToId = '456',          
+          options = {
+            personalisation: {foo: 'bar'},
+            emailReplyToId: '456',
+          },
           data = {
               template_id: templateId,
               email_address: email,
-              personalisation: personalisation,
-              email_reply_to_id: emailReplyToId
+              personalisation: options.personalisation,
+              email_reply_to_id: options.emailReplyToId
           };
 
         notifyAuthNock
           .post('/v2/notifications/email', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendEmail(templateId, email, personalisation, reference, emailReplyToId)
+        notifyClient.sendEmail(templateId, email, options)
           .then(function (response) {
             expect(response.statusCode).to.equal(200);
             done();
@@ -90,18 +93,20 @@ describe('notification api', function() {
 
         var phoneNo = '07525755555',
           templateId = '123',
-          personalisation = {foo: 'bar'},
+          options = {
+            personalisation: {foo: 'bar'},
+          },
           data = {
               template_id: templateId,
               phone_number: phoneNo,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendSms(templateId, phoneNo, personalisation)
+        notifyClient.sendSms(templateId, phoneNo, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();
@@ -112,21 +117,22 @@ describe('notification api', function() {
 
         var phoneNo = '07525755555',
           templateId = '123',
-          personalisation = {foo: 'bar'},
-          reference = '',
-          sms_sender_id = '456',
+          options = {
+            personalisation: {foo: 'bar'},
+            smsSenderId: '456',
+          },
           data = {
               template_id: templateId,
               phone_number: phoneNo,
-              personalisation: personalisation,
-              sms_sender_id: sms_sender_id
+              personalisation: options.personalisation,
+              sms_sender_id: options.smsSenderId,
           };
 
         notifyAuthNock
           .post('/v2/notifications/sms', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendSms(templateId, phoneNo, personalisation, reference, sms_sender_id)
+        notifyClient.sendSms(templateId, phoneNo, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();
@@ -136,21 +142,23 @@ describe('notification api', function() {
     it('should send a letter', function(done) {
       
         var templateId = '123',
-          personalisation = {
-            address_line_1: 'Mr Tester',
-            address_line_2: '1 Test street',
-            postcode: 'NW1 2UN'
+          options = {
+            personalisation: {
+              address_line_1: 'Mr Tester',
+              address_line_2: '1 Test street',
+              postcode: 'NW1 2UN'
+            },
           },
           data = {
               template_id: templateId,
-              personalisation: personalisation
+              personalisation: options.personalisation
           };
 
         notifyAuthNock
           .post('/v2/notifications/letter', data)
           .reply(200, {"hooray": "bkbbk"});
 
-        notifyClient.sendLetter(templateId, personalisation)
+        notifyClient.sendLetter(templateId, options)
           .then(function (response) {
               expect(response.statusCode).to.equal(200);
               done();

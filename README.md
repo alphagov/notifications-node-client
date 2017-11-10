@@ -40,7 +40,7 @@ notifyClient.setProxy(proxyUrl);
 
 ### Text message
 
-#### Method 
+#### Method
 
 <details>
 <summary>
@@ -236,6 +236,12 @@ An optional identifier you generate. The `reference` can be used as a unique ref
 
 You can omit this argument if you do not require a reference for the notification.
 
+##### `emailReplyToId`
+
+Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
+
+If you omit this argument your default email reply-to address will be set for the notification.
+
 ##### `personalisation`
 
 If a template has placeholders, you need to provide their values, for example:
@@ -249,7 +255,7 @@ personalisation={
 
 ##### `emailReplyToId`
 
-Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'. 
+Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
 If you omit this argument your default email reply-to address will be set for the notification.
 If other optional arguments before `emailReplyToId` are not in use they need to be set to `undefined`.
 
@@ -595,7 +601,7 @@ If omitted all messages are returned. Otherwise you can filter to retrieve all n
 
 ## Get a template by ID
 
-#### Method 
+#### Method
 
 <details>
 <summary>
@@ -896,7 +902,3 @@ To run the integration tests:
 ```sh
 npm test --integration
 ```
-
-
-
-

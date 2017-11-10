@@ -37,12 +37,10 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
     payload.email_address = to;
   } else if (type == 'sms') {
     payload.phone_number = to;
-  } 
+  }
 
-  if (type == 'letter') {
+  if (type == 'letter' || personalisation) {
     // personalisation mandatory for letters
-    payload.personalisation = personalisation;
-  } else if (!!personalisation) {
     payload.personalisation = personalisation;
   }
 
@@ -70,7 +68,7 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
  */
 function buildGetAllNotificationsQuery(templateType, status, reference, olderThanId) {
 
-  payload = {}
+  let payload = {}
 
   if (templateType) {
     payload.template_type = templateType;
@@ -94,7 +92,7 @@ function buildGetAllNotificationsQuery(templateType, status, reference, olderTha
 function buildQueryStringFromDict(dictionary) {
   var queryString = Object.keys(dictionary).map(function(key) {
     return [key, dictionary[key]].map(encodeURIComponent).join("=");
-  }).join("&");
+  }).join('&');
 
   return queryString ? '?' + queryString : '';
 }
@@ -121,8 +119,9 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   sendEmail: function (templateId, emailAddress, options) {
-    var options = options || {},
-      personalisation = options.personalisation || undefined,
+    options = options || {};
+    
+    var personalisation = options.personalisation || undefined,
       reference = options.reference || undefined,
       emailReplyToId = options.emailReplyToId || undefined;
 
@@ -139,7 +138,9 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   sendSms: function (templateId, phoneNumber, options) {
-    var options = options || {};
+    options = options || {};
+    
+
     var personalisation = options.personalisation || undefined;
     var reference = options.reference || undefined;
     var smsSenderId = options.smsSenderId || undefined;
@@ -156,7 +157,8 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   sendLetter: function (templateId, options) {
-    var options = options || {};
+    options = options || {};
+    
     var personalisation = options.personalisation || undefined;
     var reference = options.reference || undefined;
 
@@ -216,7 +218,7 @@ _.extend(NotifyClient.prototype, {
    * @returns {Promise}
    */
   getAllTemplates: function(templateType) {
-    templateQuery = ''
+    let templateQuery = ''
 
     if (templateType) {
       templateQuery = '?type=' + templateType;
@@ -234,9 +236,9 @@ _.extend(NotifyClient.prototype, {
    */
   previewTemplateById: function(templateId, personalisation) {
 
-    payload = {}
+    let payload = {}
 
-    if (!!personalisation) {
+    if (personalisation) {
       payload.personalisation = personalisation;
     }
 

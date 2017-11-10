@@ -25,13 +25,13 @@ function getNotifyAuthNock() {
   return notifyNock;
 }
 
-describe('notification api', function() {
+describe('notification api', () => {
 
-  beforeEach(function() {
+  beforeEach(() => {
     MockDate.set(1234567890000);
   });
 
-  afterEach(function() {
+  afterEach(() => {
     MockDate.reset();
   });
 
@@ -39,7 +39,7 @@ describe('notification api', function() {
   let notifyAuthNock = getNotifyAuthNock();
 
   describe('sendEmail', () => {
-    it('should send an email', function(done) {
+    it('should send an email', () => {
 
       let email = 'dom@example.com',
         templateId = '123',
@@ -56,15 +56,14 @@ describe('notification api', function() {
       .post('/v2/notifications/email', data)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.sendEmail(templateId, email, options)
+      return notifyClient.sendEmail(templateId, email, options)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should send an email with email_reply_to_id', function() {
+    it('should send an email with email_reply_to_id', () => {
 
       let email = 'dom@example.com',
         templateId = '123',
@@ -106,7 +105,7 @@ describe('notification api', function() {
 
   describe('sendSms', () => {
 
-    it('should send an sms', function(done) {
+    it('should send an sms', () => {
 
       let phoneNo = '07525755555',
         templateId = '123',
@@ -123,14 +122,13 @@ describe('notification api', function() {
       .post('/v2/notifications/sms', data)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.sendSms(templateId, phoneNo, options)
+      return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should send an sms with smsSenderId', function(done) {
+    it('should send an sms with smsSenderId', () => {
 
       let phoneNo = '07525755555',
         templateId = '123',
@@ -149,10 +147,9 @@ describe('notification api', function() {
       .post('/v2/notifications/sms', data)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.sendSms(templateId, phoneNo, options)
+      return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
@@ -172,7 +169,7 @@ describe('notification api', function() {
 
   describe('sendLetter', () => {
 
-    it('should send a letter', function(done) {
+    it('should send a letter', () => {
 
       let templateId = '123',
         options = {
@@ -191,10 +188,9 @@ describe('notification api', function() {
       .post('/v2/notifications/letter', data)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.sendLetter(templateId, options)
+      return notifyClient.sendLetter(templateId, options)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
@@ -213,7 +209,7 @@ describe('notification api', function() {
 
   });
 
-  it('should get notification by id', function(done) {
+  it('should get notification by id', () => {
 
     let notificationId = 'wfdfdgf';
 
@@ -221,29 +217,27 @@ describe('notification api', function() {
       .get('/v2/notifications/' + notificationId)
       .reply(200, {hooray: 'bkbbk'});
 
-    notifyClient.getNotificationById(notificationId)
+    return notifyClient.getNotificationById(notificationId)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
   });
 
   describe('getNotifications', () => {
 
-    it('should get all notifications', function(done) {
+    it('should get all notifications', () => {
 
       notifyAuthNock
       .get('/v2/notifications')
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications()
+      return notifyClient.getNotifications()
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should get all notifications with a reference', function(done) {
+    it('should get all notifications with a reference', () => {
 
       let reference = 'myref';
 
@@ -251,14 +245,13 @@ describe('notification api', function() {
       .get('/v2/notifications?reference=' + reference)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications(undefined, undefined, reference)
+      return notifyClient.getNotifications(undefined, undefined, reference)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should get all failed notifications', function(done) {
+    it('should get all failed notifications', () => {
 
       let status = 'failed';
 
@@ -266,14 +259,13 @@ describe('notification api', function() {
       .get('/v2/notifications?status=' + status)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications(undefined, 'failed')
+      return notifyClient.getNotifications(undefined, 'failed')
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should get all failed sms notifications', function(done) {
+    it('should get all failed sms notifications', () => {
 
       let templateType = 'sms';
       let status = 'failed';
@@ -282,14 +274,13 @@ describe('notification api', function() {
       .get('/v2/notifications?template_type=' + templateType + '&status=' + status)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications(templateType, status)
+      return notifyClient.getNotifications(templateType, status)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should get all delivered sms notifications with a reference', function(done) {
+    it('should get all delivered sms notifications with a reference', () => {
 
       let templateType = 'sms';
       let status = 'delivered';
@@ -299,14 +290,13 @@ describe('notification api', function() {
       .get('/v2/notifications?template_type=' + templateType + '&status=' + status + '&reference=' + reference)
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications(templateType, status, reference)
+      return notifyClient.getNotifications(templateType, status, reference)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
 
-    it('should get all failed email notifications with a reference older than a given notification', function(done) {
+    it('should get all failed email notifications with a reference older than a given notification', () => {
 
       let templateType = 'sms';
       let status = 'delivered';
@@ -321,17 +311,16 @@ describe('notification api', function() {
       )
       .reply(200, {hooray: 'bkbbk'});
 
-      notifyClient.getNotifications(templateType, status, reference, olderThanId)
+      return notifyClient.getNotifications(templateType, status, reference, olderThanId)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
     });
   });
 
   describe('template funtions', () => {
 
-    it('should get template by id', function(done) {
+    it('should get template by id', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
@@ -339,15 +328,14 @@ describe('notification api', function() {
       .get('/v2/template/' + templateId)
       .reply(200, {foo: 'bar'});
 
-      notifyClient.getTemplateById(templateId)
+      return notifyClient.getTemplateById(templateId)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should get template by id and version', function(done) {
+    it('should get template by id and version', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
       let version = 10;
@@ -356,29 +344,27 @@ describe('notification api', function() {
       .get('/v2/template/' + templateId + '/version/' + version)
       .reply(200, {foo: 'bar'});
 
-      notifyClient.getTemplateByIdAndVersion(templateId, version)
+      return notifyClient.getTemplateByIdAndVersion(templateId, version)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should get all templates with unspecified template type', function(done) {
+    it('should get all templates with unspecified template type', () => {
 
       notifyAuthNock
       .get('/v2/templates')
       .reply(200, {foo: 'bar'});
 
-      notifyClient.getAllTemplates()
+      return notifyClient.getAllTemplates()
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should get all templates with unspecified template type', function(done) {
+    it('should get all templates with unspecified template type', () => {
 
       let templateType = 'sms'
 
@@ -386,15 +372,14 @@ describe('notification api', function() {
       .get('/v2/templates?type=' + templateType)
       .reply(200, {foo: 'bar'});
 
-      notifyClient.getAllTemplates(templateType)
+      return notifyClient.getAllTemplates(templateType)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should preview template by id with personalisation', function(done) {
+    it('should preview template by id with personalisation', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
       let payload = {name: 'Foo' }
@@ -404,15 +389,14 @@ describe('notification api', function() {
         .post('/v2/template/' + templateId + '/preview', expectedPersonalisation)
         .reply(200, {foo: 'bar'});
 
-      notifyClient.previewTemplateById(templateId, payload)
+      return notifyClient.previewTemplateById(templateId, payload)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
-        done();
       });
 
     });
 
-    it('should preview template by id without personalisation', function(done) {
+    it('should preview template by id without personalisation', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
@@ -420,10 +404,9 @@ describe('notification api', function() {
       .post('/v2/template/' + templateId + '/preview')
       .reply(200, {foo: 'bar'});
 
-      notifyClient.previewTemplateById(templateId)
+      return notifyClient.previewTemplateById(templateId)
       .then(function (response) {
         expect(response .statusCode).to.equal(200);
-        done();
       });
     });
   });

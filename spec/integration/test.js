@@ -62,7 +62,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.body.content.subject.should.equal('Functional Tests are good');
         response.body.reference.should.equal(clientRef);
         emailNotificationId = response.body.id;
@@ -77,7 +77,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional test help make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.body.content.subject.should.equal('Functional Tests are good');
         response.body.reference.should.equal(clientRef);
         emailNotificationId = response.body.id;
@@ -91,7 +91,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
         smsNotificationId = response.body.id;
       });
     });
@@ -104,7 +104,7 @@ describer('notification api with a live service', () => {
       return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
         smsNotificationId = response.body.id;
       });
     });

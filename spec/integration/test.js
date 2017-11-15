@@ -183,7 +183,7 @@ describer('notification api with a live service', () => {
       return notifyClient.getTemplateById(emailTemplateId).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
-        response.body.body.should.equal('Hello ((name))\n\nFunctional test help make our world a better place');
+        response.body.body.should.equal('Hello ((name))\r\n\r\nFunctional test help make our world a better place');
         response.body.subject.should.equal('Functional Tests are good');
       });
     });

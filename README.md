@@ -60,6 +60,7 @@ notifyClient
 #### Response
 
 If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
 Click here to expand for more information.
@@ -303,6 +304,7 @@ personalisation={
 #### Response
 
 If the request is successful, `response` will be an `object`:
+
 <details>
 <summary>
 Click here to expand for more information.
@@ -481,6 +483,7 @@ notifyClient
 #### Response
 
 If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
 Click here to expand for more information.
@@ -544,14 +547,40 @@ If omitted all messages are returned. Otherwise you can filter by:
 
 ##### `status`
 
-If omitted all messages are returned. Otherwise you can filter by:
+__email__
+
+You can filter by:
 
 * `sending` - the message is queued to be sent by the provider.
 * `delivered` - the message was successfully delivered.
 * `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
-* `permanent-failure` - the provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list.
-* `temporary-failure` - the provider was unable to deliver message, email box was full or the phone was turned off; you can try to send the message again.
+* `permanent-failure` - the provider was unable to deliver message, email does not exist; remove this recipient from your list.
+* `temporary-failure` - the provider was unable to deliver message, email box was full; you can try to send the message again.
 * `technical-failure` - Notify had a technical failure; you can try to send the message again.
+
+You can omit this argument to ignore this filter.
+
+__text message__
+
+You can filter by:
+
+* `sending` - the message is queued to be sent by the provider.
+* `delivered` - the message was successfully delivered.
+* `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
+* `permanent-failure` - the provider was unable to deliver message, phone number does not exist; remove this recipient from your list.
+* `temporary-failure` - the provider was unable to deliver message, the phone was turned off; you can try to send the message again.
+* `technical-failure` - Notify had a technical failure; you can try to send the message again.
+
+You can omit this argument to ignore this filter.
+
+__letter__
+
+You can filter by:
+
+* `accepted` - Notify is in the process of printing and posting the letter
+* `technical-failure` - Notify had an unexpected error while sending to our printing provider
+
+You can omit this argument to ignore this filter.
 
 ##### `reference`
 
@@ -693,10 +722,8 @@ Find by clicking **API info** for the template you want to send.
 ##### `version`
 
 The version number of the template
-</details>
 
 </details>
-
 
 ## Get all templates
 
@@ -722,6 +749,7 @@ This will return the latest version for each template.
 #### Response
 
 If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
 Click here to expand for more information.

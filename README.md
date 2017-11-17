@@ -1,23 +1,37 @@
-[![Dependency Status](https://david-dm.org/alphagov/notifications-node-client.svg)](https://david-dm.org/alphagov/notifications-node-client)
-
 # GOV.UK Notify Node.js client
 
+This documentation is for developers interested in using this Node.js client to integrate their government service with GOV.UK Notify.
+
+## Table of Contents
+
+* [Installation](#installation)
+* [Getting started](#getting-started)
+* [Send messages](#send-messages)
+* [Get the status of one message](#get-the-status-of-one-message)
+* [Get the status of all messages](#get-the-status-of-all-messages)
+* [Get a template by ID](#get-a-template-by-id)
+* [Get a template by ID and version](#get-a-template-by-id-and-version)
+* [Get all templates](#get-all-templates)
+* [Generate a preview template](#generate-a-preview-template)
+* [Tests](#tests)
+
 ## Installation
+
 ```shell
 npm install --save notifications-node-client
 ```
 
 ## Getting started
+
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
 	notifyClient = new NotifyClient(apiKey);
 ```
 
-Generate an API key by logging in to
-[GOV.UK Notify](https://www.notifications.service.gov.uk) and going to
-the _API integration_ page.
+Generate an API key by logging in to [GOV.UK Notify](https://www.notifications.service.gov.uk) and going to the _API integration_ page.
 
 ### Connect through a proxy (optional)
+
 ```
 notifyClient.setProxy(proxyUrl);
 ```
@@ -26,20 +40,31 @@ notifyClient.setProxy(proxyUrl);
 
 ### Text message
 
+#### Method 
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 ```javascript
 notifyClient
-	.sendSms(templateId, phoneNumber, options)
+	.sendSms(templateId, phoneNumber, personalisation, reference, smsSenderId)
 	.then(response => console.log(response))
 	.catch(err => console.error(err))
 ;
 ```
 
+</details>
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -59,87 +84,30 @@ If the request is successful, `response` will be an `object`:
 ```
 
 Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "RateLimitError",
-    "message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "TooManyRequestsError",
-    "message": "Exceeded send limits (50) for today"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Can"t send to this recipient using a team-only API key"
-]}
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Can"t send to this recipient when service is in trial mode
-                - see https://www.notifications.service.gov.uk/trial-mode"
-}]
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+
+|`err.error.status_code`|`err.error.errors`|
+|:---|:---|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"`<br>`}]`|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient using a team-only API key"`<br>`]}`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
+
 </details>
+
+#### Arguments
 
 <details>
 <summary>
-Arguments
+Click here to expand for more information.
 </summary>
 
-#### `phoneNumber`
+##### `phoneNumber`
 
 The phone number of the recipient, only required for sms notifications.
 
-#### `templateId`
+##### `templateId`
 
 Find by clicking **API info** for the template you want to send.
-
-#### `options`
-
-An object which can contain `personalisation`, `reference` and `smsSenderId`. If none of these are needed, `options` can be omitted.
 
 ##### `reference`
 
@@ -147,19 +115,18 @@ An optional identifier you generate. The `reference` can be used as a unique ref
 
 You can omit this argument if you do not require a reference for the notification.
 
-
-#### `personalisation`
+##### `personalisation`
 
 If a template has placeholders, you need to provide their values, for example:
 
 ```javascript
-personalisation: {
+personalisation={
     'first_name': 'Amala',
     'reference_number': '300241',
 }
 ```
 
-If you are not using the `smsSenderId` argument, this parameter can be omitted.
+If you are not using the `smsSenderId` argument, this parameter can be omitted. Otherwise `undefined` should be passed in its place.
 
 ##### `smsSenderId`
 
@@ -167,24 +134,57 @@ Optional. Specifies the identifier of the sms sender to set for the notification
 
 If you omit this argument your default sms sender will be set for the notification.
 
+If other optional arguments before `smsSenderId` are not in use they need to be set to `undefined`.
+
+Example usage with optional reference -
+
+```
+sendSms('123', '+447900900123', undefined, 'your ref', '465')
+```
+
+Example usage with optional personalisation -
+
+```
+sendSms('123', '+447900900123', '{"name": "test"}', undefined, '465')
+```
+
+Example usage with only optional `smsSenderId` set -
+
+```
+sendSms('123', '+447900900123', undefined, undefined, '465')
+```
+
 </details>
+
 
 ### Email
 
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 ```javascript
 notifyClient
-    .sendEmail(templateId, emailAddress, options)
+	.sendEmail(templateId, emailAddress, personalisation, reference, emailReplyToId)
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;
 ```
 
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -203,87 +203,32 @@ If the request is successful, `response` will be an `object`:
     }
 }
 ```
+Otherwise the client will return an error `error object`:
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "RateLimitError",
-    "message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "TooManyRequestsError",
-    "message": "Exceeded send limits (50) for today"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Can"t send to this recipient using a team-only API key"
-]}
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Can"t send to this recipient when service is in trial mode
-                - see https://www.notifications.service.gov.uk/trial-mode"
-}]
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+|`status_code`|`errors`|
+|:---|:---|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"`<br>`}]`|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient using a team-only API key"`<br>`]}`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
+
 </details>
 
+
+#### Arguments
+
 <details>
-<summary>Arguments</summary>
+<summary>
+Click here to expand for more information.
+</summary>
 
-#### `templateId`
-
-Find by clicking **API info** for the template you want to send.
-
-#### `emailAddress`
+##### `emailAddress`
 
 The email address of the recipient, only required for email notifications.
 
-#### `options`
+##### `templateId`
 
-An object which can contain `personalisation`, `reference` and `emailReplyToId`. If none of these are needed, `options` can be omitted.
+Find by clicking **API info** for the template you want to send.
 
 ##### `reference`
 
@@ -291,40 +236,60 @@ An optional identifier you generate. The `reference` can be used as a unique ref
 
 You can omit this argument if you do not require a reference for the notification.
 
-##### `emailReplyToId`
-
-Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'. 
-
-If you omit this argument your default email reply-to address will be set for the notification.
-
 ##### `personalisation`
 
 If a template has placeholders, you need to provide their values, for example:
 
 ```javascript
-personalisation: {
+personalisation={
     'first_name': 'Amala',
     'application_number': '300241',
 }
 ```
 
-Otherwise the parameter can be omitted.
+##### `emailReplyToId`
+
+Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'. 
+If you omit this argument your default email reply-to address will be set for the notification.
+If other optional arguments before `emailReplyToId` are not in use they need to be set to `undefined`.
+
+Example usage with optional reference -
+```
+sendEmail('123', 'test@gov.uk', undefined, 'your ref', '465')
+```
+Example usage with optional personalisation -
+```
+sendEmail('123', 'test@gov.uk', '{"name": "test"}', undefined, '465')
+```
+Example usage with only optional `emailReplyToId` set -
+```
+sendEmail('123', 'test@gov.uk', undefined, undefined, '465')
+```
 
 </details>
 
+
 ### Letter
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 notifyClient
-    .sendLetter(templateId, options)
+    .sendLetter(templateId, personalisation, reference)
     .then(response => console.log(response))
-    .catch(err => console.error(err))
+    .catch(err => console.error object)
 ;
 ```
-where `personalisation` inside the `options` object is
+
+where `personalisation` is
 
 ```javascript
-personalisation: {
+personalisation={
     'address_line_1': 'The Occupier',  # required
     'address_line_2': '123 High Street', # required
     'address_line_3': 'London',
@@ -333,13 +298,17 @@ personalisation: {
     ... # any other optional address lines, or personalisation fields found in your template
 },
 ```
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`:
 
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -360,94 +329,28 @@ If the request is successful, `response` will be an `object`:
 ```
 
 Otherwise the client will raise a `HTTPError`:
-<table>
-<thead>
-<tr>
-<th>`error.status_code`</th>
-<th>`error.message`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "RateLimitError",
-    "message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>429</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "TooManyRequestsError",
-    "message": "Exceeded send limits (50) for today"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Cannot send letters with a team api key"
-]}
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Cannot send letters when service is in trial mode"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "ValidationError",
-    "message": "personalisation address_line_1 is a required property"
-}]
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+
+|`status_code`|`errors`|
+|:---|:---|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"`<br>`}]`|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "personalisation address_line_1 is a required property"`<br>`}]`|
+
 </details>
 
+
+#### Arguments
+
 <details>
-<summary>Arguments</summary>
+<summary>
+Click here to expand for more information.
+</summary>
 
-
-#### `template_id`
+##### `template_id`
 
 Find by clicking **API info** for the template you want to send.
-
-#### `options`
-
-An object which contains `personalisation` and can also contain an optional `reference`.
 
 ##### `reference`
 
@@ -464,7 +367,7 @@ The letter must contain:
 - fields from template
 
 ```javascript
-personalisation: {
+personalisation={
     'address_line_1': 'The Occupier', 		# mandatory address field
     'address_line_2': 'Flat 2', 		# mandatory address field
     'address_line_3': '123 High Street', 	# optional address field
@@ -479,7 +382,16 @@ personalisation: {
 
 </details>
 
+
 ## Get the status of one message
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 ```javascript
 notifyClient
 	.getNotificationById(notificationId)
@@ -488,9 +400,14 @@ notifyClient
 ;
 ```
 
+</details>
+
+
+#### Response
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
 
 If the request is successful, `response` will be an `object`:
@@ -522,46 +439,37 @@ If the request is successful, `response` will be an `object`:
 }
 ```
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>404</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "NoResultFound",
-    "message": "No result found"
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "ValidationError",
-    "message": "id is not a valid UUID"
-}]
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+Otherwise the client will return an error `error object`:
+
+|`status_code`|`errors`|
+|:---|:---|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|
+
+</details>
+
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `notificationId`
+
+The ID of the notification.
+
 </details>
 
 ## Get the status of all messages
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 ```javascript
 notifyClient
 	.getNotifications(templateType, status, reference, olderThan)
@@ -569,13 +477,17 @@ notifyClient
 	.catch((err) => {})
 ;
 ```
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
 
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 { "notifications":
@@ -610,49 +522,22 @@ If the request is successful, `response` will be an `object`:
 }
 ```
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    'error': 'ValidationError',
-    'message': 'bad status is not one of [created, sending, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure]'
-}]
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "ValidationError",
-    "message": "Apple is not one of [sms, email, letter]"
-}]
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+|`status_code`|`errors`|
+|:---|:---|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "bad status is not one of [created, sending, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure]"`<br>`}]`|
+|`400`|`[{`<br>`"error": "Apple is not one of [sms, email, letter]"`<br>`}]`|
+
 </details>
 
-<details>
-<summary>Arguments</summary>
 
-#### `templateType`
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `templateType`
 
 If omitted all messages are returned. Otherwise you can filter by:
 
@@ -660,29 +545,62 @@ If omitted all messages are returned. Otherwise you can filter by:
 * `sms`
 * `letter`
 
+##### `status`
 
-#### `status`
+__email__
 
-If omitted all messages are returned. Otherwise you can filter by:
+You can filter by:
 
 * `sending` - the message is queued to be sent by the provider.
 * `delivered` - the message was successfully delivered.
 * `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
-* `permanent-failure` - the provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list.
-* `temporary-failure` - the provider was unable to deliver message, email box was full or the phone was turned off; you can try to send the message again.
+* `permanent-failure` - the provider was unable to deliver message, email does not exist; remove this recipient from your list.
+* `temporary-failure` - the provider was unable to deliver message, email box was full; you can try to send the message again.
 * `technical-failure` - Notify had a technical failure; you can try to send the message again.
 
-#### `reference`
+You can omit this argument to ignore this filter.
 
+__text message__
+
+You can filter by:
+
+* `sending` - the message is queued to be sent by the provider.
+* `delivered` - the message was successfully delivered.
+* `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
+* `permanent-failure` - the provider was unable to deliver message, phone number does not exist; remove this recipient from your list.
+* `temporary-failure` - the provider was unable to deliver message, the phone was turned off; you can try to send the message again.
+* `technical-failure` - Notify had a technical failure; you can try to send the message again.
+
+You can omit this argument to ignore this filter.
+
+__letter__
+
+You can filter by:
+
+* `accepted` - Notify is in the process of printing and posting the letter
+* `technical-failure` - Notify had an unexpected error while sending to our printing provider
+
+You can omit this argument to ignore this filter.
+
+##### `reference`
 
 This is the `reference` you gave at the time of sending the notification. This can be omitted to ignore the filter.
 
-#### `olderThan`
+##### `olderThan`
 
 If omitted all messages are returned. Otherwise you can filter to retrieve all notifications older than the given notification `id`.
+
 </details>
 
+
 ## Get a template by ID
+
+#### Method 
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 notifyClient
@@ -692,12 +610,17 @@ notifyClient
 ;
 ```
 
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -712,41 +635,37 @@ If the request is successful, `response` will be an `object`:
 }
 ```
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>404</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "NoResultFound",
-    "message": "No result found"
-]}
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+Otherwise the client will return an error `error object`:
+
+|`status_code`|`errors`|
+|:---|:---|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|
+
 </details>
+
+
+#### Arguments
 
 <details>
-<summary>Arguments</summary>
+<summary>
+Click here to expand for more information.
+</summary>
 
-#### `templateId`
+##### `templateId`
 
 Find by clicking **API info** for the template you want to send.
+
 </details>
 
+
 ## Get a template by ID and version
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 notifyClient
@@ -756,12 +675,17 @@ notifyClient
 ;
 ```
 
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -775,46 +699,40 @@ If the request is successful, `response` will be an `object`:
     "subject": "null|email_subject"
 }
 ```
+Otherwise the client will return an error `error object`:
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>404</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "NoResultFound",
-    "message": "No result found"
-]}
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+|`status_code`|`errors`|
+|:---|:---|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"No result found"`<br>`}]`|
+
 </details>
 
-<details>
-<summary>Arguments</summary>
 
-#### `templateId`
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `templateId`
 
 Find by clicking **API info** for the template you want to send.
 
-#### `version`
+##### `version`
 
 The version number of the template
+
 </details>
 
 ## Get all templates
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 notifyClient
@@ -823,14 +741,19 @@ notifyClient
     .catch((err) => {})
 ;
 ```
-_This will return the latest version for each template_
+This will return the latest version for each template.
+
+</details>
+
+
+#### Response
+
+If the request is successful, `response` will be an `object`.
 
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
-
-If the request is successful, `response` will be an `object`:
 
 ```javascript
 {
@@ -862,19 +785,33 @@ If no templates exist for a template type or there no templates for a service, t
 
 </details>
 
-<details>
-<summary>Arguments</summary>
 
-#### `templateType`
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `templateType`
 
 If omitted all messages are returned. Otherwise you can filter by:
 
 * `email`
 * `sms`
 * `letter`
+
 </details>
 
+
 ## Generate a preview template
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 personalisation = { "foo": "bar" };
@@ -884,9 +821,15 @@ notifyClient
     .catch((err) => {})
 ;
 ```
+
+</details>
+
+
+#### Response
+
 <details>
 <summary>
-Response
+Click here to expand for more information.
 </summary>
 
 If the request is successful, `response` will be an `object`:
@@ -901,53 +844,28 @@ If the request is successful, `response` will be an `object`:
 }
 ```
 
-Otherwise the client will return an error `err`:
-<table>
-<thead>
-<tr>
-<th>`err.error.status_code`</th>
-<th>`err.error.errors`</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<pre>400</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "BadRequestError",
-    "message": "Missing personalisation: [name]"
-]}
-</pre>
-</td>
-</tr>
-<tr>
-<td>
-<pre>404</pre>
-</td>
-<td>
-<pre>
-[{
-    "error": "NoResultFound",
-    "message": "No result found"
-]}
-</pre>
-</td>
-</tr>
-</tbody>
-</table>
+Otherwise the client will return an error `error object`:
+
+|`status_code`|`errors`|
+|:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"Missing personalisation: [name]"`<br>`}]`|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"No result found"`<br>`}]`|
+
 </details>
 
-<details>
-<summary>Arguments</summary>
 
-#### `templateId`
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `templateId`
 
 Find by clicking **API info** for the template you want to send.
 
-#### `personalisation`
+##### `personalisation`
 
 If a template has placeholders you need to provide their values. For example:
 
@@ -959,7 +877,9 @@ personalisation={
 ```
 
 Otherwise the parameter can be omitted or `undefined` can be passed in its place.
+
 </details>
+
 
 ## Tests
 
@@ -976,3 +896,7 @@ To run the integration tests:
 ```sh
 npm test --integration
 ```
+
+
+
+

@@ -411,13 +411,28 @@ describe('notification api', () => {
     });
   });
 
-    it('should get all received texts', function(done) {
+    it('should get latest 250 received texts', function(done) {
 
       notifyAuthNock
         .get('/v2/received-text-messages')
         .reply(200, {"foo":"bar"});
 
       notifyClient.getReceivedTexts()
+        .then(function(response){
+          expect(response.statusCode).to.equal(200);
+          done();
+        });
+    });
+
+    it('should get up to next 250 received texts with a reference older than a given message id', function(done) {
+
+        var olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+
+        notifyAuthNock
+        .get('/v2/received-text-messages?older_than=' + olderThanId)
+        .reply(200, {"foo":"bar"});
+
+        notifyClient.getReceivedTexts(olderThanId)
         .then(function(response){
           expect(response.statusCode).to.equal(200);
           done();

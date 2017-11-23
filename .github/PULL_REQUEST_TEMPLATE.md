@@ -15,3 +15,4 @@
   - `package.json`
 - [ ] I've added new environment variables in
   - `CONTRIBUTING.md`
+  - `notifications-node-client/scripts/generate_docker_env.sh`

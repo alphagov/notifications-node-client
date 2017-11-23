@@ -866,7 +866,7 @@ Otherwise the parameter can be omitted or `undefined` can be passed in its place
 
 ## Get received text messages with pagination
 
-This will return one page of text messages (250) per call. Use the get_received_texts_iterator to retrieve all received texts unpaginated.
+This will return one page of text messages (250) per call.
 
 #### Method
 
@@ -928,7 +928,7 @@ Click here to expand for more information.
 
 ##### `olderThan`
 
-If omitted first 250 received text messages are returned. Otherwise the next 250 received text messages older than the given id are returned.
+If omitted, returns 250 of the latest received text messages. Otherwise the next 250 received text messages older than the given id are returned.
 
 </details>
 

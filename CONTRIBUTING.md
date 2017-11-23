@@ -12,7 +12,7 @@ There are unit and integration tests that can be run to test functionality of th
 
 To run the unit tests:
 
-`Make test`
+`make test`
 
 ## Integration Tests
 
@@ -29,13 +29,13 @@ SMS_TEMPLATE_ID "valid sms_template_id"
 LETTER_TEMPLATE_ID "valid letter_template_id"
 EMAIL_REPLY_TO_ID "valid email reply to id"
 SMS_SENDER_ID "valid sms_sender_id - to test sending to a receiving number, so needs to be a valid number"
-API_SENDING_KEY "API_whitelist_key for sending an SMS to a receiving number"
+API_SENDING_KEY "API_whitelist_key for sending a SMS to a receiving number"
 INBOUND_SMS_QUERY_KEY "API_test_key to get received text messages - leave blank for local development as cannot test locally"
 ```
 
 
 To run the integration tests:
 
-`Make integration-test`
+`make integration-test`
 
-The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-python-client.
+The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.

@@ -270,6 +270,22 @@ _.extend(NotifyClient.prototype, {
   },
 
   /**
+  *
+  * @param {String} olderThan
+  *
+  * @returns {Promise}
+  */
+  getReceivedTexts: function(olderThan){
+    if (olderThan) {
+      queryString = '?older_than=' + olderThan;
+    } else {
+      queryString = '';
+    }
+
+    return this.apiClient.get('/v2/received-text-messages' + queryString);
+  },
+
+  /**
    *
    * @param {String} url
    */

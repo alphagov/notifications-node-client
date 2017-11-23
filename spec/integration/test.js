@@ -24,6 +24,7 @@ function make_random_id() {
 
 describer('notification api with a live service', () => {
   let notifyClient;
+  let whitelistNotifyClient;
   let emailNotificationId;
   let smsNotificationId;
   let letterNotificationId;
@@ -45,9 +46,10 @@ describer('notification api with a live service', () => {
   beforeEach(() => {
 
     const urlBase = process.env.NOTIFY_API_URL;
-    const serviceId = process.env.SERVICE_ID;
-    const apiKeyId = process.env.API_KEY;
-    notifyClient = new NotifyClient(urlBase, serviceId, apiKeyId);
+    const apiKeyId = process.env.API_KEY
+    const whitelistApiKeyId = process.env.API_SENDING_KEY;
+    notifyClient = new NotifyClient(urlBase, apiKeyId);
+    whitelistNotifyClient = new NotifyClient(urlBase, whitelistApiKeyId);
     var definitions_json = require('./schemas/v2/definitions.json');
     chai.tv4.addSchema('definitions.json', definitions_json);
 
@@ -101,7 +103,7 @@ describer('notification api with a live service', () => {
         options = {personalisation: personalisation, reference: clientRef, smsSenderId: smsSenderId};
 
       should.exist(smsSenderId);
-      return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
+      return whitelistNotifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
@@ -170,6 +172,8 @@ describer('notification api with a live service', () => {
     var getTemplateJson = require('./schemas/v2/GET_template_by_id.json');
     var getTemplatesJson = require('./schemas/v2/GET_templates_response.json');
     var postTemplatePreviewJson = require('./schemas/v2/POST_template_preview.json');
+    var getReceivedTextJson = require('./schemas/v2/GET_received_text_response.json');
+    var getReceivedTextsJson = require('./schemas/v2/GET_received_texts_response.json');
 
     it('get sms template by id', () => {
       return notifyClient.getTemplateById(smsTemplateId).then((response) => {
@@ -278,6 +282,16 @@ describer('notification api with a live service', () => {
         expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);
         response.body.type.should.equal('letter');
         should.exist(response.body.subject);
+      });
+    });
+
+    it('get all received texts', (done) => {
+      chai.tv4.addSchema('receivedText.json', getReceivedTextJson);
+      return notifyClient.getReceivedTexts().then((response) => {
+        response.statusCode.should.equal(200);
+        expect(response.body).to.be.jsonSchema(getReceivedTextsJson);
+        expect(response.body["received_text_messages"]).to.be.an('array').that.is.not.empty;
+        done();
       });
     });
 

@@ -411,6 +411,19 @@ describe('notification api', () => {
     });
   });
 
+    it('should get all received texts', function(done) {
+
+      notifyAuthNock
+        .get('/v2/received-text-messages')
+        .reply(200, {"foo":"bar"});
+
+      notifyClient.getReceivedTexts()
+        .then(function(response){
+          expect(response.statusCode).to.equal(200);
+          done();
+        });
+    });
+
 });
 
 MockDate.reset();

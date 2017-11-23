@@ -864,6 +864,73 @@ Otherwise the parameter can be omitted or `undefined` can be passed in its place
 
 </details>
 
+## Get received text messages with pagination
+
+This will return one page of text messages (250) per call. Use the get_received_texts_iterator to retrieve all received texts unpaginated.
+
+#### Method
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+```javascript
+notifyClient
+    .getReceivedTexts(olderThan)
+    .then((response) => { })
+    .catch((err) => {})
+;
+```
+
+</details>
+
+
+#### Response
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+If the request is successful, `response` will be a `json object`:
+
+```javascript
+{
+  "received_text_messages":
+    [
+      {
+        "id": "notify_id", // required
+        "user_number": "user number", // required user number
+        "notify_number": "notify number", // receiving number
+        "created_at": "created at", // required
+        "service_id": "service id", // required service id
+        "content": "text content" // required text content
+      },
+      …
+    ],
+  "links": {
+    "current": "/received-test-messages",
+    "next": "/received-text-messages?older_than=last_id_in_list"
+  }
+}
+```
+
+</details>
+
+
+#### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
+##### `olderThan`
+
+If omitted first 250 received text messages are returned. Otherwise the next 250 received text messages older than the given id are returned.
+
+</details>
 
 ## Tests
 

@@ -1,3 +1,10 @@
+## [4.1.0] - 2017-11-23
+
+### Changed
+
+* Added new method:
+    * `getReceivedTexts` - get one page of text messages (250) per call
+
 ## [4.0.0] - 2017-11-07
 
 ### Changed

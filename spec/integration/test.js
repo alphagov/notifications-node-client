@@ -32,7 +32,7 @@ describer('notification api with a live service', () => {
   const clientRef = 'client-ref';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
-  const letterContact = { 
+  const letterContact = {
     address_line_1: make_random_id(),
     address_line_2: 'Foo',
     postcode: 'Bar',
@@ -47,9 +47,11 @@ describer('notification api with a live service', () => {
 
     const urlBase = process.env.NOTIFY_API_URL;
     const apiKeyId = process.env.API_KEY
+    const inboundSmsKeyId = process.env.INBOUND_SMS_QUERY_KEY;
     const whitelistApiKeyId = process.env.API_SENDING_KEY;
     notifyClient = new NotifyClient(urlBase, apiKeyId);
     whitelistNotifyClient = new NotifyClient(urlBase, whitelistApiKeyId);
+    receivedTextClient = new NotifyClient(urlBase, inboundSmsKeyId);
     var definitions_json = require('./schemas/v2/definitions.json');
     chai.tv4.addSchema('definitions.json', definitions_json);
 
@@ -285,13 +287,12 @@ describer('notification api with a live service', () => {
       });
     });
 
-    it('get all received texts', (done) => {
+    it('get all received texts', () => {
       chai.tv4.addSchema('receivedText.json', getReceivedTextJson);
-      return notifyClient.getReceivedTexts().then((response) => {
+      return receivedTextClient.getReceivedTexts().then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getReceivedTextsJson);
         expect(response.body["received_text_messages"]).to.be.an('array').that.is.not.empty;
-        done();
       });
     });
 

@@ -99,7 +99,7 @@ describe('notification api', () => {
           reference: 'ABC123'
         };
       return notifyClient.sendEmail(templateId, email, options)
-        .catch((err) => expect(err.message).to.equal('Options ["firstname","surname"] not recognised'));
+        .catch((err) => expect(err.message).to.include('["firstname","surname"]'));
     });
   });
 
@@ -163,7 +163,7 @@ describe('notification api', () => {
           reference: 'ABC123'
         };
       return notifyClient.sendSms(templateId, phoneNumber, options)
-        .catch((err) => expect(err.message).to.equal('Options ["firstname","surname"] not recognised'));
+        .catch((err) => expect(err.message).to.include('["firstname","surname"]'));
     });
   });
 
@@ -204,7 +204,7 @@ describe('notification api', () => {
           reference: 'ABC123'
         };
       return notifyClient.sendLetter(templateId, options)
-        .catch((err) => expect(err.message).to.equal('Options ["address_line_1","address_line_2","postcode"] not recognised'));
+        .catch((err) => expect(err.message).to.include('["address_line_1","address_line_2","postcode"]'));
     });
 
   });

@@ -98,12 +98,16 @@ function buildQueryStringFromDict(dictionary) {
 }
 
 function checkOptionsKeys(allowedKeys, options) {
-  var invalidKeys = Object.keys(options).filter((key_name) =>
+  let invalidKeys = Object.keys(options).filter((key_name) =>
     !allowedKeys.includes(key_name)
   );
 
   if (invalidKeys.length) {
-    return new Error('Options ' + JSON.stringify(invalidKeys) + ' not recognised');
+    let err_msg = (
+      'NotifyClient now uses an options configuration object. Options ' + JSON.stringify(invalidKeys) +
+      ' not recognised. Please refer to the README.md for more information'
+    )
+    return new Error(err_msg);
   }
   return null;
 }

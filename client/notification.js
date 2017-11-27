@@ -105,7 +105,7 @@ function checkOptionsKeys(allowedKeys, options) {
   if (invalidKeys.length) {
     let err_msg = (
       'NotifyClient now uses an options configuration object. Options ' + JSON.stringify(invalidKeys) +
-      ' not recognised. Please refer to the README.md for more information'
+      ' not recognised. Please refer to the README.md for more information on method signatures.'
     )
     return new Error(err_msg);
   }

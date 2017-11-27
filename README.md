@@ -49,7 +49,10 @@ Click here to expand for more information.
 
 ```javascript
 notifyClient
-	.sendSms(templateId, phoneNumber, personalisation, reference, smsSenderId)
+	.sendSms(templateId, phoneNumber, {
+			personalisation: personalisation,
+			reference: reference,
+			smsSenderId: smsSenderId})
 	.then(response => console.log(response))
 	.catch(err => console.error(err))
 ;
@@ -109,7 +112,8 @@ The phone number of the recipient, only required for sms notifications.
 
 Find by clicking **API info** for the template you want to send.
 
-##### `reference`
+##### `options`
+###### `reference`
 
 An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
 
@@ -126,7 +130,7 @@ personalisation={
 }
 ```
 
-If you are not using the `smsSenderId` argument, this parameter can be omitted. Otherwise `undefined` should be passed in its place.
+This does not need to be provided if your template does not contain placeholders.
 
 ##### `smsSenderId`
 
@@ -134,25 +138,7 @@ Optional. Specifies the identifier of the sms sender to set for the notification
 
 If you omit this argument your default sms sender will be set for the notification.
 
-If other optional arguments before `smsSenderId` are not in use they need to be set to `undefined`.
-
 Example usage with optional reference -
-
-```
-sendSms('123', '+447900900123', undefined, 'your ref', '465')
-```
-
-Example usage with optional personalisation -
-
-```
-sendSms('123', '+447900900123', '{"name": "test"}', undefined, '465')
-```
-
-Example usage with only optional `smsSenderId` set -
-
-```
-sendSms('123', '+447900900123', undefined, undefined, '465')
-```
 
 </details>
 
@@ -168,7 +154,10 @@ Click here to expand for more information.
 
 ```javascript
 notifyClient
-	.sendEmail(templateId, emailAddress, personalisation, reference, emailReplyToId)
+	.sendEmail(templateId, emailAddress, {
+			personalisation: personalisation,
+			reference: reference,
+			emailReplyToId: emailReplyToId})
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;
@@ -230,19 +219,20 @@ The email address of the recipient, only required for email notifications.
 
 Find by clicking **API info** for the template you want to send.
 
-##### `reference`
+##### `options`
+###### `reference`
 
 An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
 
 You can omit this argument if you do not require a reference for the notification.
 
-##### `emailReplyToId`
+###### `emailReplyToId`
 
 Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
 
 If you omit this argument your default email reply-to address will be set for the notification.
 
-##### `personalisation`
+###### `personalisation`
 
 If a template has placeholders, you need to provide their values, for example:
 
@@ -257,20 +247,6 @@ personalisation={
 
 Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
 If you omit this argument your default email reply-to address will be set for the notification.
-If other optional arguments before `emailReplyToId` are not in use they need to be set to `undefined`.
-
-Example usage with optional reference -
-```
-sendEmail('123', 'test@gov.uk', undefined, 'your ref', '465')
-```
-Example usage with optional personalisation -
-```
-sendEmail('123', 'test@gov.uk', '{"name": "test"}', undefined, '465')
-```
-Example usage with only optional `emailReplyToId` set -
-```
-sendEmail('123', 'test@gov.uk', undefined, undefined, '465')
-```
 
 </details>
 
@@ -286,7 +262,9 @@ Click here to expand for more information.
 
 ```javascript
 notifyClient
-    .sendLetter(templateId, personalisation, reference)
+    .sendLetter(templateId, {
+				personalisation: personalisation,
+				reference: reference})
     .then(response => console.log(response))
     .catch(err => console.error object)
 ;
@@ -296,12 +274,12 @@ where `personalisation` is
 
 ```javascript
 personalisation={
-    'address_line_1': 'The Occupier',  # required
-    'address_line_2': '123 High Street', # required
-    'address_line_3': 'London',
-    'postcode': 'SW14 6BH',  # required
+    address_line_1: 'The Occupier',  // required
+    address_line_2: '123 High Street', // required
+    address_line_3: 'London',
+    postcode: 'SW14 6BH',  // required
 
-    ... # any other optional address lines, or personalisation fields found in your template
+    // ... any other optional address lines, or personalisation fields found in your template
 },
 ```
 </details>
@@ -374,15 +352,15 @@ The letter must contain:
 
 ```javascript
 personalisation={
-    'address_line_1': 'The Occupier', 		# mandatory address field
-    'address_line_2': 'Flat 2', 		# mandatory address field
-    'address_line_3': '123 High Street', 	# optional address field
-    'address_line_4': 'Richmond upon Thames', 	# optional address field
-    'address_line_5': 'London', 		# optional address field
-    'address_line_6': 'Middlesex', 		# optional address field
-    'postcode': 'SW14 6BH', 			# mandatory address field
-    'application_id': '1234', 			# field from template
-    'application_date': '2017-01-01', 		# field from template
+  address_line_1: 'The Occupier',  // mandatory address field
+  address_line_2: 'Flat 2',  // mandatory address field
+  address_line_3: '123 High Street',  // optional address field
+  address_line_4: 'Richmond upon Thames',  // optional address field
+  address_line_5: 'London',  // optional address field
+  address_line_6: 'Middlesex',  // optional address field
+  postcode: 'SW14 6BH',  // mandatory address field
+  application_id: '1234',  // field from template
+  application_date: '2017-01-01',  // field from template
 }
 ```
 

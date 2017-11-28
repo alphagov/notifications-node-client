@@ -1,7 +1,8 @@
-var expect = require('chai').expect, NotifyClient = require('../client/notification.js').NotifyClient,
-    MockDate = require('mockdate'),
-    nock = require('nock'),
-    createGovukNotifyToken = require('../client/authentication.js');
+let expect = require('chai').expect,
+  NotifyClient = require('../client/notification.js').NotifyClient,
+  MockDate = require('mockdate'),
+  nock = require('nock'),
+  createGovukNotifyToken = require('../client/authentication.js');
 
 MockDate.set(1234567890000);
 
@@ -10,370 +11,405 @@ const serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1';
 const apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
 function getNotifyClient() {
-    var baseUrl = 'http://localhost';
-    var notifyClient = new NotifyClient(baseUrl, serviceId, apiKeyId);
-    return notifyClient;
+  let baseUrl = 'http://localhost';
+  let notifyClient = new NotifyClient(baseUrl, serviceId, apiKeyId);
+  return notifyClient;
 }
 
 function getNotifyAuthNock() {
-    var notifyNock = nock(baseUrl, {
-        reqheaders: {
-            'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
-        }
-    })
-    return notifyNock;
+  let notifyNock = nock(baseUrl, {
+    reqheaders: {
+      'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+    }
+  })
+  return notifyNock;
 }
 
-describe('notification api', function() {
+describe('notification api', () => {
 
-    beforeEach(function() {
-      MockDate.set(1234567890000);
+  beforeEach(() => {
+    MockDate.set(1234567890000);
+  });
+
+  afterEach(() => {
+    MockDate.reset();
+  });
+
+  let notifyClient = getNotifyClient();
+  let notifyAuthNock = getNotifyAuthNock();
+
+  describe('sendEmail', () => {
+    it('should send an email', () => {
+
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {foo: 'bar'},
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+
     });
 
-    afterEach(function() {
-      MockDate.reset();
+    it('should send an email with email_reply_to_id', () => {
+
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {foo: 'bar'},
+          emailReplyToId: '456',
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation,
+          email_reply_to_id: options.emailReplyToId
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+      });
+
     });
 
-    var notifyClient = getNotifyClient();
-    var notifyAuthNock = getNotifyAuthNock();
+    it('should reject options dicts with unknown options', () => {
+      let email = 'foo@bar.com',
+        templateId = '123',
+        // old personalisation dict
+        options = {
+          firstname: 'Fred',
+          surname: 'Smith',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendEmail(templateId, email, options)
+        .catch((err) => expect(err.message).to.include('["firstname","surname"]'));
+    });
+  });
 
-    it('should send an email', function(done) {
+  describe('sendSms', () => {
 
-        var email = 'dom@example.com',
-          templateId = '123',
-          options = {
-            personalisation: {foo: 'bar'},
+    it('should send an sms', () => {
+
+      let phoneNo = '07525755555',
+        templateId = '123',
+        options = {
+          personalisation: {foo: 'bar'},
+        },
+        data = {
+          template_id: templateId,
+          phone_number: phoneNo,
+          personalisation: options.personalisation
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/sms', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendSms(templateId, phoneNo, options)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should send an sms with smsSenderId', () => {
+
+      let phoneNo = '07525755555',
+        templateId = '123',
+        options = {
+          personalisation: {foo: 'bar'},
+          smsSenderId: '456',
+        },
+        data = {
+          template_id: templateId,
+          phone_number: phoneNo,
+          personalisation: options.personalisation,
+          sms_sender_id: options.smsSenderId,
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/sms', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendSms(templateId, phoneNo, options)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should reject options dicts with unknown options', () => {
+      let phoneNumber = '07123456789',
+        templateId = '123',
+        // old personalisation dict
+        options = {
+          firstname: 'Fred',
+          surname: 'Smith',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendSms(templateId, phoneNumber, options)
+        .catch((err) => expect(err.message).to.include('["firstname","surname"]'));
+    });
+  });
+
+  describe('sendLetter', () => {
+
+    it('should send a letter', () => {
+
+      let templateId = '123',
+        options = {
+          personalisation: {
+            address_line_1: 'Mr Tester',
+            address_line_2: '1 Test street',
+            postcode: 'NW1 2UN'
           },
-          data = {
-              template_id: templateId,
-              email_address: email,
-              personalisation: options.personalisation
-          };
+        },
+        data = {
+          template_id: templateId,
+          personalisation: options.personalisation
+        };
 
-        notifyAuthNock
-          .post('/v2/notifications/email', data)
-          .reply(200, {"hooray": "bkbbk"});
+      notifyAuthNock
+      .post('/v2/notifications/letter', data)
+      .reply(200, {hooray: 'bkbbk'});
 
-        notifyClient.sendEmail(templateId, email, options)
-          .then(function (response) {
-            expect(response.statusCode).to.equal(200);
-            done();
-        });
+      return notifyClient.sendLetter(templateId, options)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should reject options dicts with unknown options', () => {
+      let templateId = '123',
+        // old personalisation dict
+        options = {
+          address_line_1: 'Mr Tester',
+          address_line_2: '1 Test street',
+          postcode: 'NW1 2UN',
+          reference: 'ABC123'
+        };
+      return notifyClient.sendLetter(templateId, options)
+        .catch((err) => expect(err.message).to.include('["address_line_1","address_line_2","postcode"]'));
+    });
+
+  });
+
+  it('should get notification by id', () => {
+
+    let notificationId = 'wfdfdgf';
+
+    notifyAuthNock
+      .get('/v2/notifications/' + notificationId)
+      .reply(200, {hooray: 'bkbbk'});
+
+    return notifyClient.getNotificationById(notificationId)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+  });
+
+  describe('getNotifications', () => {
+
+    it('should get all notifications', () => {
+
+      notifyAuthNock
+      .get('/v2/notifications')
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications()
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should get all notifications with a reference', () => {
+
+      let reference = 'myref';
+
+      notifyAuthNock
+      .get('/v2/notifications?reference=' + reference)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications(undefined, undefined, reference)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should get all failed notifications', () => {
+
+      let status = 'failed';
+
+      notifyAuthNock
+      .get('/v2/notifications?status=' + status)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications(undefined, 'failed')
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should get all failed sms notifications', () => {
+
+      let templateType = 'sms';
+      let status = 'failed';
+
+      notifyAuthNock
+      .get('/v2/notifications?template_type=' + templateType + '&status=' + status)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications(templateType, status)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should get all delivered sms notifications with a reference', () => {
+
+      let templateType = 'sms';
+      let status = 'delivered';
+      let reference = 'myref';
+
+      notifyAuthNock
+      .get('/v2/notifications?template_type=' + templateType + '&status=' + status + '&reference=' + reference)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications(templateType, status, reference)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should get all failed email notifications with a reference older than a given notification', () => {
+
+      let templateType = 'sms';
+      let status = 'delivered';
+      let reference = 'myref';
+      let olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+
+      notifyAuthNock
+      .get('/v2/notifications?template_type=' + templateType +
+        '&status=' + status +
+        '&reference=' + reference +
+        '&older_than=' + olderThanId
+      )
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.getNotifications(templateType, status, reference, olderThanId)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+  });
+
+  describe('template funtions', () => {
+
+    it('should get template by id', () => {
+
+      let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+
+      notifyAuthNock
+      .get('/v2/template/' + templateId)
+      .reply(200, {foo: 'bar'});
+
+      return notifyClient.getTemplateById(templateId)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
 
     });
 
-    it('should send an email with email_reply_to_id', function(done) {
-      
-        var email = 'dom@example.com',
-          templateId = '123',
-          options = {
-            personalisation: {foo: 'bar'},
-            emailReplyToId: '456',
-          },
-          data = {
-              template_id: templateId,
-              email_address: email,
-              personalisation: options.personalisation,
-              email_reply_to_id: options.emailReplyToId
-          };
+    it('should get template by id and version', () => {
 
-        notifyAuthNock
-          .post('/v2/notifications/email', data)
-          .reply(200, {"hooray": "bkbbk"});
+      let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+      let version = 10;
 
-        notifyClient.sendEmail(templateId, email, options)
-          .then(function (response) {
-            expect(response.statusCode).to.equal(200);
-            done();
-        });
+      notifyAuthNock
+      .get('/v2/template/' + templateId + '/version/' + version)
+      .reply(200, {foo: 'bar'});
+
+      return notifyClient.getTemplateByIdAndVersion(templateId, version)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
 
     });
 
-    it('should send an sms', function(done) {
+    it('should get all templates with unspecified template type', () => {
 
-        var phoneNo = '07525755555',
-          templateId = '123',
-          options = {
-            personalisation: {foo: 'bar'},
-          },
-          data = {
-              template_id: templateId,
-              phone_number: phoneNo,
-              personalisation: options.personalisation
-          };
+      notifyAuthNock
+      .get('/v2/templates')
+      .reply(200, {foo: 'bar'});
 
-        notifyAuthNock
-          .post('/v2/notifications/sms', data)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.sendSms(templateId, phoneNo, options)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should send an sms with smsSenderId', function(done) {
-
-        var phoneNo = '07525755555',
-          templateId = '123',
-          options = {
-            personalisation: {foo: 'bar'},
-            smsSenderId: '456',
-          },
-          data = {
-              template_id: templateId,
-              phone_number: phoneNo,
-              personalisation: options.personalisation,
-              sms_sender_id: options.smsSenderId,
-          };
-
-        notifyAuthNock
-          .post('/v2/notifications/sms', data)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.sendSms(templateId, phoneNo, options)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should send a letter', function(done) {
-      
-        var templateId = '123',
-          options = {
-            personalisation: {
-              address_line_1: 'Mr Tester',
-              address_line_2: '1 Test street',
-              postcode: 'NW1 2UN'
-            },
-          },
-          data = {
-              template_id: templateId,
-              personalisation: options.personalisation
-          };
-
-        notifyAuthNock
-          .post('/v2/notifications/letter', data)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.sendLetter(templateId, options)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get notification by id', function(done) {
-
-        var baseUrl = 'http://localhost',
-          notificationId = 'wfdfdgf';
-
-        notifyAuthNock
-          .get('/v2/notifications/' + notificationId)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotificationById(notificationId)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all notifications', function(done) {
-
-        notifyAuthNock
-          .get('/v2/notifications')
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications()
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all notifications with a reference', function(done) {
-
-        var reference = 'myref'
-
-        notifyAuthNock
-          .get('/v2/notifications?reference=' + reference)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications(undefined, undefined, reference)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all failed notifications', function(done) {
-
-        var status = 'failed';
-
-        notifyAuthNock
-          .get('/v2/notifications?status=' + status)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications(undefined, 'failed')
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all failed sms notifications', function(done) {
-
-        var templateType = 'sms'
-          status = 'failed';
-
-        notifyAuthNock
-          .get('/v2/notifications?template_type=' + templateType + '&status=' + status)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications(templateType, status)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all delivered sms notifications with a reference', function(done) {
-
-        var templateType = 'sms'
-          status = 'delivered';
-          reference = 'myref'
-
-        notifyAuthNock
-          .get('/v2/notifications?template_type=' + templateType + '&status=' + status + '&reference=' + reference)
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications(templateType, status, reference)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get all failed email notifications with a reference older than a given notification', function(done) {
-
-        var templateType = 'sms';
-          status = 'delivered';
-          reference = 'myref';
-          olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
-
-        notifyAuthNock
-          .get('/v2/notifications?template_type=' + templateType +
-               '&status=' + status +
-               '&reference=' + reference +
-               '&older_than=' + olderThanId
-              )
-          .reply(200, {"hooray": "bkbbk"});
-
-        notifyClient.getNotifications(templateType, status, reference, olderThanId)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
-
-    it('should get template by id', function(done) {
-
-        var templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
-
-        notifyAuthNock
-          .get('/v2/template/' + templateId)
-          .reply(200, {"foo": "bar"});
-
-        notifyClient.getTemplateById(templateId)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
+      return notifyClient.getAllTemplates()
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
 
     });
 
-    it('should get template by id and version', function(done) {
+    it('should get all templates with unspecified template type', () => {
 
-        var templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
-          version = 10;
+      let templateType = 'sms'
 
-        notifyAuthNock
-          .get('/v2/template/' + templateId + '/version/' + version)
-          .reply(200, {"foo": "bar"});
+      notifyAuthNock
+      .get('/v2/templates?type=' + templateType)
+      .reply(200, {foo: 'bar'});
 
-        notifyClient.getTemplateByIdAndVersion(templateId, version)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
+      return notifyClient.getAllTemplates(templateType)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
 
     });
 
-    it('should get all templates with unspecified template type', function(done) {
+    it('should preview template by id with personalisation', () => {
 
-        notifyAuthNock
-          .get('/v2/templates')
-          .reply(200, {"foo": "bar"});
+      let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
+      let payload = {name: 'Foo' }
+      let expectedPersonalisation = {personalisation: payload };
 
-        notifyClient.getAllTemplates()
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
+      notifyAuthNock
+        .post('/v2/template/' + templateId + '/preview', expectedPersonalisation)
+        .reply(200, {foo: 'bar'});
 
-    });
-
-    it('should get all templates with unspecified template type', function(done) {
-
-        var templateType = 'sms'
-
-        notifyAuthNock
-          .get('/v2/templates?type=' + templateType)
-          .reply(200, {"foo": "bar"});
-
-        notifyClient.getAllTemplates(templateType)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
+      return notifyClient.previewTemplateById(templateId, payload)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
 
     });
 
-    it('should preview template by id with personalisation', function(done) {
+    it('should preview template by id without personalisation', () => {
 
-        var templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
-          payload = { "name": "Foo" }
-          expectedPersonalisation = { "personalisation" : payload };
+      let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-        notifyAuthNock
-          .post('/v2/template/' + templateId + '/preview', expectedPersonalisation)
-          .reply(200, {"foo": "bar"});
+      notifyAuthNock
+      .post('/v2/template/' + templateId + '/preview')
+      .reply(200, {foo: 'bar'});
 
-        notifyClient.previewTemplateById(templateId, payload)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-
+      return notifyClient.previewTemplateById(templateId)
+      .then(function (response) {
+        expect(response .statusCode).to.equal(200);
+      });
     });
-
-    it('should preview template by id without personalisation', function(done) {
-
-        var templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
-
-        notifyAuthNock
-          .post('/v2/template/' + templateId + '/preview')
-          .reply(200, {"foo": "bar"});
-
-        notifyClient.previewTemplateById(templateId)
-          .then(function (response) {
-              expect(response.statusCode).to.equal(200);
-              done();
-          });
-    });
+  });
 
 });
 

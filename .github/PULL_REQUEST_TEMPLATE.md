@@ -8,5 +8,11 @@
 <!--- All of the following are normally needed. Don’t worry if you haven’t done them or don’t know how – someone from the Notify team will be able to help. -->
 - [x] I’ve used the pull request template
 - [ ] I’ve written unit tests for these changes
-- [ ] I’ve update the documentation (in `README.md`)
-- [ ] I’ve bumped the version number (in `package.json`)
+- [ ] I’ve updated the documentation in
+  - `README.md`
+  - `CHANGELOG.md`
+- [ ] I’ve bumped the version number in
+  - `package.json`
+- [ ] I've added new environment variables in
+  - `CONTRIBUTING.md`
+  - `notifications-node-client/scripts/generate_docker_env.sh`

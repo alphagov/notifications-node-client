@@ -22,7 +22,10 @@ function make_random_id() {
   return text;
 }
 
-describer('notification api with a live service', () => {
+describer('notification api with a live service', function () {
+  // default is 2000 (ms) - api is sometimes slower than this :(
+  this.timeout(10000)
+
   let notifyClient;
   let whitelistNotifyClient;
   let emailNotificationId;

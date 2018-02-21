@@ -100,7 +100,7 @@ _.extend(ApiClient.prototype, {
         'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
-    
+
     if(this.proxy !== null) options.proxy = this.proxy;
 
     return restClient(options);

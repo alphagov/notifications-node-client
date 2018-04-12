@@ -98,7 +98,7 @@ describer('notification api with a live service', function () {
       return notifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
         smsNotificationId = response.body.id;
       });
     });
@@ -111,7 +111,7 @@ describer('notification api with a live service', function () {
       return whitelistNotifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
-        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
+        response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
         smsNotificationId = response.body.id;
       });
     });
@@ -148,7 +148,7 @@ describer('notification api with a live service', function () {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getNotificationJson);
         response.body.type.should.equal('sms');
-        response.body.body.should.equal('Hello Foo\r\n\r\nFunctional Tests make our world a better place');
+        response.body.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');
       });
     });
 

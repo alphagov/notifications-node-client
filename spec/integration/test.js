@@ -231,11 +231,10 @@ describer('notification api with a live service', function () {
       });
     });
 
-    it('get all templates', (done) => {
+    it('get all templates', () => {
       return notifyClient.getAllTemplates().then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplatesJson);
-        done();
       });
     });
 

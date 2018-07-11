@@ -3,6 +3,7 @@
   "version": "4.1.1",
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/mocha \"spec/**/*.js\"",
     "integration": "./node_modules/.bin/mocha spec/integration/test.js"

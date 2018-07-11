@@ -1,3 +1,9 @@
+## [4.1.2] - 2018-07-11
+
+### Changed
+
+* Added types definitions for those of use TypeScript <3
+
 ## [4.1.0] - 2017-11-23
 
 ### Changed

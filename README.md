@@ -418,6 +418,7 @@ If the request is successful, `response` will be an `object`:
         "id": 1,
         "uri": "/template/{id}/{version}"
      },
+    "created_by_name": "name of the person who sent the notification if sent manually",
     "created_at": "created at",
     "sent_at": "sent to provider at",
 }
@@ -494,6 +495,7 @@ Click here to expand for more information.
           "id": 1,
           "uri": "/template/{id}/{version}"
        },
+       "created_by_name": "name of the person who sent the notification if sent manually",
        "created_at": "created at",
        "sent_at": "sent to provider at",
     },

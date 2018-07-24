@@ -21,6 +21,7 @@
         "body": {"type": "string"},
         "subject": {"type": ["string", "null"]},
         "created_at": {"type": "string"},
+        "created_by_name": {"type": ["string", "null"]},
         "sent_at": {"type": ["string", "null"]},
         "completed_at": {"type": ["string", "null"]},
         "scheduled_for": {"oneOf":[
@@ -31,6 +32,6 @@
     "required": [
         "id", "reference", "email_address", "phone_number",
         "line_1", "line_2", "line_3", "line_4", "line_5", "line_6", "postcode",
-        "type", "status", "template", "created_at", "sent_at", "completed_at"
+        "type", "status", "template", "created_at", "created_by_name", "sent_at", "completed_at"
     ]
 }

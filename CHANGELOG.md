@@ -1,3 +1,10 @@
+## [4.2.0] - 2018-07-24
+
+### Changed
+
+* Added `created_by_name` to the response for `.getNotificationById()` and `.getNotifications()`:
+    * If the notification was sent manually this will be the name of the sender. If the notification was sent through the API this will be `null`.
+
 ## [4.1.0] - 2017-11-23
 
 ### Changed

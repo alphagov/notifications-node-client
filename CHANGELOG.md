@@ -1,8 +1,15 @@
-## [4.1.2] - 2018-07-11
+## [4.2.1] - 2018-07-11
 
 ### Changed
 
 * Added types definitions for those of use TypeScript <3
+
+## [4.2.0] - 2018-07-24
+
+### Changed
+
+* Added `created_by_name` to the response for `.getNotificationById()` and `.getNotifications()`:
+    * If the notification was sent manually this will be the name of the sender. If the notification was sent through the API this will be `null`.
 
 ## [4.1.0] - 2017-11-23
 

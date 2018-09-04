@@ -184,6 +184,7 @@ describer('notification api with a live service', function () {
       return notifyClient.getTemplateById(smsTemplateId).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.name.should.equal('Client Functional test sms template');
         should.not.exist(response.body.subject);
       });
     });
@@ -193,6 +194,7 @@ describer('notification api with a live service', function () {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.body.should.equal('Hello ((name))\r\n\r\nFunctional test help make our world a better place');
+        response.body.name.should.equal('Client Functional test email template');
         response.body.subject.should.equal('Functional Tests are good');
       });
     });
@@ -202,6 +204,7 @@ describer('notification api with a live service', function () {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.body.should.equal('Hello ((address_line_1))');
+        response.body.name.should.equal('Client functional letter template');
         response.body.subject.should.equal('Main heading');
       });
     });
@@ -210,6 +213,7 @@ describer('notification api with a live service', function () {
       return notifyClient.getTemplateByIdAndVersion(smsTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.name.should.equal('Example text message template');
         should.not.exist(response.body.subject);
         response.body.version.should.equal(1);
       });
@@ -219,6 +223,7 @@ describer('notification api with a live service', function () {
       return notifyClient.getTemplateByIdAndVersion(emailTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.name.should.equal('Client Functional test email template');
         response.body.version.should.equal(1);
       });
     });
@@ -227,6 +232,7 @@ describer('notification api with a live service', function () {
       return notifyClient.getTemplateByIdAndVersion(letterTemplateId, 1).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(getTemplateJson);
+        response.body.name.should.equal('Untitled');
         response.body.version.should.equal(1);
       });
     });

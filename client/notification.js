@@ -291,7 +291,11 @@ _.extend(NotifyClient.prototype, {
    */
   setProxy: function(url) {
     this.apiClient.setProxy(url);
-  }
+  },
+
+  prepareUpload: function(pdf_data) {
+    return {'my_template_placeholder': pdf_data.toString('base64')}
+  },
 });
 
 module.exports = {

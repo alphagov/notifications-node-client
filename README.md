@@ -250,6 +250,78 @@ If you omit this argument your default email reply-to address will be set for th
 
 </details>
 
+### Send a document by email
+Send files without the need for email attachments.
+
+To send a document by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the document.
+
+[Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
+
+#### Add a placeholder field to the template
+
+In Notify, use double brackets to add a placeholder field to the email template. For example:
+
+"Download your document at: ((link_to_document))"
+
+#### Upload your document
+˜
+The document you upload must be a PDF file smaller than 2MB.
+
+Pass the file object as a value into the personalisation argument. For example:
+
+```javascript
+var fs = require('fs');
+
+fs.readFile('path/to/document.pdf', function(err, document) {
+	console.log(err);
+	notifyClient.sendEmail(templateId, emailAddress, {
+    personalisation: {
+        first_name: 'Amala',
+        application_date: '2018-01-01',
+        link_to_document: notifyClient.prepareUpload(document)
+    }
+	}).then(response => console.log(response.body)).catch(err => console.error(err))
+});
+```
+
+#### Response
+
+If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
+
+```javascript
+{
+  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+  "reference": "STRING",
+  "content": {
+    "subject": "SUBJECT TEXT",
+    "body": "MESSAGE TEXT",
+    "from_email": "SENDER EMAIL"
+  },
+  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
+  "template": {
+    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
+    "version": INTEGER,
+    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
+  }
+}
+```
+
+#### Error codes
+
+If the request is not successful, the client returns an error `error object`:
+
+|error.status_code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Unsupported document type '{}'. Supported types are: {}"`<br>`}]`|The document you upload must be a PDF file|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Document didn't pass the virus scan"`<br>`}]`|The document you upload must be virus free|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct type of [API key](#api-keys)|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
+
 
 ### Letter
 

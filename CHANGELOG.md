@@ -1,3 +1,10 @@
+## [4.4.0] - 2018-09-05
+
+### Changed
+
+* Added instructions for uploading a document to be linked to from an email notification.
+    * Created a helper function `prepareUpload` as a part of this development. This function encodes the document that is to be uploaded with base64 and returns a dictionary with prepared document as a value (the way our API is prepared to receive it).
+
 ## [4.3.0] - 2018-09-04
 
 * Added `name` to the response for `getTemplateById()` and `getTemplateByIdAndVersion()`
@@ -52,7 +59,7 @@
 
 * Added new method:
     * `setProxy(proxyUrl)` - specify the URL of a proxy for the client to use (optional)
-    
+
 ## [3.1.0] - 2017-05-10
 
 ### Changed

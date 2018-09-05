@@ -63,12 +63,14 @@ describe('notification api', () => {
 
     });
 
-    it('should send an email with email_reply_to_id', () => {
+    it('should send an email with document upload', () => {
 
       let email = 'dom@example.com',
         templateId = '123',
         options = {
-          personalisation: {foo: 'bar'},
+          personalisation: {foo: {
+            file: notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
+          }},
           emailReplyToId: '456',
         },
         data = {
@@ -86,7 +88,6 @@ describe('notification api', () => {
       .then((response) => {
         expect(response.statusCode).to.equal(200);
       });
-
     });
 
     it('should reject options dicts with unknown options', () => {

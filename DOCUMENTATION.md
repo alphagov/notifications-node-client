@@ -611,6 +611,7 @@ Click here to expand for more information.
 ```javascript
 {
     "id": "template_id",
+    "name": "template name",
     "type": "sms|email|letter",
     "created_at": "created at",
     "updated_at": "updated at",
@@ -676,6 +677,7 @@ Click here to expand for more information.
 ```javascript
 {
     "id": "template_id",
+    "name": "template name",
     "type": "sms|email|letter",
     "created_at": "created at",
     "updated_at": "updated at",
@@ -746,6 +748,7 @@ Click here to expand for more information.
     "templates" : [
         {
             "id": "template_id",
+            "name": "template name",
             "type": "sms|email|letter",
             "created_at": "created at",
             "updated_at": "updated at",

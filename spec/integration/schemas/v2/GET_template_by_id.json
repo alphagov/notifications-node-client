@@ -5,6 +5,7 @@
     "title": "reponse v2/template",
     "properties": {
         "id": {"$ref": "definitions.json#/uuid"},
+        "name": {"type": "string"},
         "type": {"enum": ["sms", "email", "letter"] },
         "created_at": {
             "format": "date-time",
@@ -21,5 +22,5 @@
         "body": {"type": "string"},
         "subject": {"type": ["string", "null"]}
     },
-    "required": ["id", "type", "created_at", "updated_at", "version", "created_by", "body"]
+    "required": ["id", "name", "type", "created_at", "updated_at", "version", "created_by", "body"]
 }

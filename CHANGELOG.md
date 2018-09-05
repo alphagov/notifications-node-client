@@ -1,3 +1,8 @@
+## [4.3.0] - 2018-09-04
+
+* Added `name` to the response for `getTemplateById()` and `getTemplateByIdAndVersion()`
+    * These functions now return the name of the template as set in Notify
+
 ## [4.2.0] - 2018-07-24
 
 ### Changed

@@ -322,6 +322,7 @@ If the request is not successful, the client returns an error `error object`:
 |`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
+|`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 2MB."`<br>`}]`|The file you tried to upload was above the 2MB limit. Send a file that weighs less than 2MB.|
 
 
 ### Letter

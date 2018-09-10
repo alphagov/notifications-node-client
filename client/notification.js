@@ -294,7 +294,8 @@ _.extend(NotifyClient.prototype, {
   },
 
   prepareUpload: function(pdf_data) {
-    return {'my_template_placeholder': pdf_data.toString('base64')}
+    if (pdf_data.length > 2 * 1024 * 1024) { throw "Document is larger than 2MB."; }
+    return {'file': pdf_data.toString('base64')}
   },
 });
 

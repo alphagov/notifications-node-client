@@ -63,6 +63,31 @@ describe('notification api', () => {
 
     });
 
+    it('should send an email with email_reply_to_id', () => {
+
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {foo: 'bar'},
+          emailReplyToId: '456',
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation,
+          email_reply_to_id: options.emailReplyToId
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
     it('should send an email with document upload', () => {
 
       let email = 'dom@example.com',
@@ -101,6 +126,16 @@ describe('notification api', () => {
         };
       return notifyClient.sendEmail(templateId, email, options)
         .catch((err) => expect(err.message).to.include('["firstname","surname"]'));
+    });
+  });
+
+  describe('prepareUpload', () => {
+    it('should throw error when file bigger than 2MB is supplied', () => {
+
+      let file = Buffer.alloc(3*1024*1024)
+      expect(function(){
+        notifyClient.prepareUpload(file);
+      }).to.throw("Document is larger than 2MB.")
     });
   });
 

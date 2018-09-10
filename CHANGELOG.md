@@ -3,7 +3,7 @@
 ### Changed
 
 * Added instructions for uploading a document to be linked to from an email notification.
-    * Created a helper function `prepareUpload` as a part of this development. This function encodes the document that is to be uploaded with base64 and returns a dictionary with prepared document as a value (the way our API is prepared to receive it).
+    * Created a helper function `prepareUpload` as a part of this development. This function encodes the document that is to be uploaded with base64 and returns a dictionary with prepared document as a value (the way our API is prepared to receive it). It also checks if the provided file is not larger than 2MB. The function throws an error if the file is too big.
 
 ## [4.3.0] - 2018-09-04
 

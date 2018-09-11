@@ -190,6 +190,15 @@ _.extend(NotifyClient.prototype, {
       createNotificationPayload('letter', templateId, undefined, personalisation, reference));
   },
 
+  sendPrecompiledLetter: function(reference, pdf_file) {
+    content = pdf_file.toString('base64')
+    notification = {
+      "reference": reference,
+      "content": content
+    }
+    return this.apiClient.post('/v2/notifications/letter', notification);
+  },
+
   /**
    *
    * @param {String} notificationId

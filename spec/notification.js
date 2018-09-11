@@ -259,6 +259,26 @@ describe('notification api', () => {
       });
   });
 
+
+  describe('sendPrecompiledLetter', () => {
+
+    it('should send a precompiled letter', () => {
+      let pdf_file = Buffer.from("%PDF-1.5 testpdf"),
+      reference = "HORK",
+      data = {"reference": reference, "content": pdf_file.toString('base64')}
+
+      notifyAuthNock
+      .post('/v2/notifications/letter', data)
+      .reply(200, {hiphip: 'hooray'});
+
+      return notifyClient.sendPrecompiledLetter(reference, pdf_file)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+  });
+
+
   describe('getNotifications', () => {
 
     it('should get all notifications', () => {

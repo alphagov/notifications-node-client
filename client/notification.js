@@ -291,7 +291,12 @@ _.extend(NotifyClient.prototype, {
    */
   setProxy: function(url) {
     this.apiClient.setProxy(url);
-  }
+  },
+
+  prepareUpload: function(pdf_data) {
+    if (pdf_data.length > 2 * 1024 * 1024) { throw "Document is larger than 2MB."; }
+    return {'file': pdf_data.toString('base64')}
+  },
 });
 
 module.exports = {

@@ -440,6 +440,65 @@ personalisation={
 </details>
 
 
+### Send a precompiled Letter
+
+This is an invitation-only feature. Contact the GOV.UK Notify team on the [support page](https://www.notifications.service.gov.uk/support) or through the [Slack channel](https://ukgovernmentdigital.slack.com/messages/govuk-notify) for more information.
+
+#### Method
+
+```javascript
+var response = notifyClient.sendPrecompiledLetter(
+    reference,      // Reference to identify the notification
+    pdf_file        // PDF File object
+)
+```
+
+#### Arguments
+
+##### `reference` (required)
+
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
+
+##### `pdf_file` (required)
+
+The precompiled letter must be a PDF file.
+
+```javascript
+var fs = require('fs');
+
+fs.readFile('path/to/document.pdf', function(err, pdf_data) {
+    var notification = notifyClient.sendPrecompiledLetter(
+        reference="your reference", pdf_file=pdf_data
+    )
+	});
+```
+
+#### Response
+
+If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
+
+```javascript
+{
+  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+  "reference": "your-letter-reference"
+}
+```
+
+#### Error codes
+
+If the request is not successful, the client returns an HTTPError containing the relevant error code.
+
+|error.status_code|error.message|How to fix|
+|:---|:---|:---|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send precompiled letters"`<br>`]}`|This is an invitation-only feature. Contact the GOV.UK Notify team on the [support page](https://www.notifications.service.gov.uk/support) or through the [Slack channel](https://ukgovernmentdigital.slack.com/messages/govuk-notify) for more information|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Letter content is not a valid PDF"`<br>`]}`|PDF file format is required|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "reference is a required property"`<br>`}]`|Add a `reference` argument to the method call|
+
+
 ## Get the status of one message
 
 #### Method

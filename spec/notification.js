@@ -131,7 +131,6 @@ describe('notification api', () => {
 
   describe('prepareUpload', () => {
     it('should throw error when file bigger than 2MB is supplied', () => {
-
       let file = Buffer.alloc(3*1024*1024)
       expect(function(){
         notifyClient.prepareUpload(file);

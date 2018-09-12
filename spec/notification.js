@@ -93,9 +93,9 @@ describe('notification api', () => {
       let email = 'dom@example.com',
         templateId = '123',
         options = {
-          personalisation: {foo: {
-            file: notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
-          }},
+          personalisation: {documents:
+            notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
+          },
           emailReplyToId: '456',
         },
         data = {

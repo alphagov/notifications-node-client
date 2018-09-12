@@ -91,6 +91,22 @@ describer('notification api with a live service', function () {
       })
     });
 
+    it('sends email notification with document upload', () => {
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {personalisation: { name: 'Foo', documents:
+          notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
+        }, reference: clientRef};
+
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
+        response.statusCode.should.equal(201);
+        expect(response.body).to.be.jsonSchema(postEmailNotificationResponseJson);
+        response.body.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
+        response.body.content.subject.should.equal('Functional Tests are good');
+        response.body.reference.should.equal(clientRef);
+        emailNotificationId = response.body.id;
+      })
+    });
+
     it('send sms notification', () => {
       var postSmsNotificationResponseJson = require('./schemas/v2/POST_notification_sms_response.json'),
         options = {personalisation: personalisation};

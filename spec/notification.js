@@ -89,20 +89,17 @@ describe('notification api', () => {
     });
 
     it('should send an email with document upload', () => {
-
       let email = 'dom@example.com',
         templateId = '123',
         options = {
           personalisation: {documents:
             notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
           },
-          emailReplyToId: '456',
         },
         data = {
           template_id: templateId,
           email_address: email,
           personalisation: options.personalisation,
-          email_reply_to_id: options.emailReplyToId
         };
 
       notifyAuthNock

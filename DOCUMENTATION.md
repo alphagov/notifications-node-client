@@ -265,7 +265,7 @@ In Notify, use double brackets to add a placeholder field to the email template.
 
 
 #### Upload your document
-˜
+
 The document you upload must be a PDF file smaller than 2MB.
 
 Pass the file object as a value into the personalisation argument. For example:
@@ -273,13 +273,13 @@ Pass the file object as a value into the personalisation argument. For example:
 ```javascript
 var fs = require('fs');
 
-fs.readFile('path/to/document.pdf', function(err, document) {
+fs.readFile('path/to/document.pdf', function(err, pdf_file) {
 	console.log(err);
 	notifyClient.sendEmail(templateId, emailAddress, {
     personalisation: {
         first_name: 'Amala',
         application_date: '2018-01-01',
-        link_to_document: notifyClient.prepareUpload(document)
+        link_to_document: notifyClient.prepareUpload(pdf_file)
     }
 	}).then(response => console.log(response.body)).catch(err => console.error(err))
 });
@@ -467,9 +467,9 @@ The precompiled letter must be a PDF file.
 ```javascript
 var fs = require('fs');
 
-fs.readFile('path/to/document.pdf', function(err, pdf_data) {
+fs.readFile('path/to/document.pdf', function(err, pdf_file) {
     var notification = notifyClient.sendPrecompiledLetter(
-        reference="your reference", pdf_file=pdf_data
+        reference="your reference", pdf_file=pdf_file
     )
 	});
 ```

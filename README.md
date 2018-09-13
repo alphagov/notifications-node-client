@@ -497,6 +497,7 @@ If the request is not successful, the client returns an HTTPError containing the
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Letter content is not a valid PDF"`<br>`]}`|PDF file format is required|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "reference is a required property"`<br>`}]`|Add a `reference` argument to the method call|
+|`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 5MB."`<br>`}]`|The file you tried to upload was above the 5MB limit. Send a file that weighs less than 5MB.|
 
 
 ## Get the status of one message

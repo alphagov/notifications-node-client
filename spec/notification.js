@@ -272,6 +272,14 @@ describe('notification api', () => {
         expect(response.statusCode).to.equal(200);
       });
     });
+
+    it('should throw error when file bigger than 5MB is supplied', () => {
+      let file = Buffer.alloc(6*1024*1024),
+      reference = "HORK"
+      expect(function(){
+        notifyClient.sendPrecompiledLetter(reference, file);
+      }).to.throw("Document is larger than 5MB.")
+    });
   });
 
 

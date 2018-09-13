@@ -112,6 +112,13 @@ function checkOptionsKeys(allowedKeys, options) {
   return null;
 }
 
+function _check_and_encode_file(file, size_limit) {
+  if (file.length > size_limit * 1024 * 1024) {
+    throw "Document is larger than " + String(size_limit) + "MB.";
+  }
+  return file.toString('base64')
+}
+
 _.extend(NotifyClient.prototype, {
   /**
    * Usage:
@@ -191,7 +198,7 @@ _.extend(NotifyClient.prototype, {
   },
 
   sendPrecompiledLetter: function(reference, pdf_file) {
-    content = pdf_file.toString('base64')
+    content = _check_and_encode_file(pdf_file, 5)
     notification = {
       "reference": reference,
       "content": content
@@ -303,9 +310,9 @@ _.extend(NotifyClient.prototype, {
   },
 
   prepareUpload: function(pdf_data) {
-    if (pdf_data.length > 2 * 1024 * 1024) { throw "Document is larger than 2MB."; }
-    return {'file': pdf_data.toString('base64')}
+    return {'file': _check_and_encode_file(pdf_data, 2)}
   },
+
 });
 
 module.exports = {

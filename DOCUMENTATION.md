@@ -253,9 +253,16 @@ If you omit this argument your default email reply-to address will be set for th
 ### Send a document by email
 Send files without the need for email attachments.
 
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 To send a document by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the document.
 
 [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
+
+</details>
 
 #### Add a placeholder field to the template
 
@@ -263,12 +270,16 @@ In Notify, use double brackets to add a placeholder field to the email template.
 
 "Download your document at: ((link_to_document))"
 
-
 #### Upload your document
 
 The document you upload must be a PDF file smaller than 2MB.
 
 Pass the file object as a value into the personalisation argument. For example:
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 var fs = require('fs');
@@ -284,10 +295,16 @@ fs.readFile('path/to/document.pdf', function(err, pdf_file) {
 	}).then(response => console.log(response.body)).catch(err => console.error(err))
 });
 ```
+</details>
 
 #### Response
 
 If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ```javascript
 {
@@ -306,10 +323,16 @@ If the request to the client is successful, the client returns a response `objec
   }
 }
 ```
+</details>
 
 #### Error codes
 
 If the request is not successful, the client returns an error `error object`:
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 |error.status_code|error.message|How to fix|
 |:---|:---|:---|
@@ -323,6 +346,8 @@ If the request is not successful, the client returns an error `error object`:
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
 |`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 2MB."`<br>`}]`|The file you tried to upload was above the 2MB limit. Send a file that weighs less than 2MB.|
+
+</details>
 
 
 ### Letter
@@ -447,6 +472,11 @@ This is an invitation-only feature. Contact the GOV.UK Notify team on the [suppo
 
 #### Method
 
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
+
 ```javascript
 var response = notifyClient.sendPrecompiledLetter(
     reference,      // Reference to identify the notification
@@ -454,7 +484,14 @@ var response = notifyClient.sendPrecompiledLetter(
 )
 ```
 
+</details>
+
 #### Arguments
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 ##### `reference` (required)
 
@@ -473,8 +510,14 @@ fs.readFile('path/to/document.pdf', function(err, pdf_file) {
     )
 	});
 ```
+</details>
 
 #### Response
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
 
@@ -484,10 +527,16 @@ If the request to the client is successful, the client returns a response `objec
   "reference": "your-letter-reference"
 }
 ```
+</details>
 
 #### Error codes
 
 If the request is not successful, the client returns an HTTPError containing the relevant error code.
+
+<details>
+<summary>
+Click here to expand for more information.
+</summary>
 
 |error.status_code|error.message|How to fix|
 |:---|:---|:---|
@@ -499,6 +548,8 @@ If the request is not successful, the client returns an HTTPError containing the
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "reference is a required property"`<br>`}]`|Add a `reference` argument to the method call|
 |`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 5MB."`<br>`}]`|The file you tried to upload was above the 5MB limit. Send a file that weighs less than 5MB.|
+
+</details>
 
 
 ## Get the status of one message

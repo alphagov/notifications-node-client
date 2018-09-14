@@ -457,7 +457,7 @@ var response = notifyClient.sendPrecompiledLetter(
 
 ##### `reference` (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
+This reference can identify a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
 
 ##### `pdf_file` (required)
 

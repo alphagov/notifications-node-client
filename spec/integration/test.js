@@ -91,7 +91,7 @@ describer('notification api with a live service', function () {
       })
     });
 
-    it('sends email notification with document upload', () => {
+    it('send email notification with document upload', () => {
       var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
         options = {personalisation: { name: 'Foo', documents:
           notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
@@ -141,6 +141,20 @@ describer('notification api with a live service', function () {
         expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
         response.body.content.body.should.equal('Hello ' + letterContact.address_line_1);
         letterNotificationId = response.body.id;
+      });
+    });
+
+    it('send a precompiled letter notification', () => {
+      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
+      var fs = require('fs');
+      fs.readFile('./spec/integration/test_files/one_page_pdf.pdf', function(err, pdf_file) {
+        console.log(err);
+        return notifyClient.sendPrecompiledLetter("my_reference", pdf_file)
+        .then((response) => {
+          response.statusCode.should.equal(201);
+          expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
+          letterNotificationId = response.body.id;
+        })
       });
     });
 

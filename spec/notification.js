@@ -89,20 +89,17 @@ describe('notification api', () => {
     });
 
     it('should send an email with document upload', () => {
-
       let email = 'dom@example.com',
         templateId = '123',
         options = {
           personalisation: {documents:
             notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"))
           },
-          emailReplyToId: '456',
         },
         data = {
           template_id: templateId,
           email_address: email,
           personalisation: options.personalisation,
-          email_reply_to_id: options.emailReplyToId
         };
 
       notifyAuthNock
@@ -131,7 +128,6 @@ describe('notification api', () => {
 
   describe('prepareUpload', () => {
     it('should throw error when file bigger than 2MB is supplied', () => {
-
       let file = Buffer.alloc(3*1024*1024)
       expect(function(){
         notifyClient.prepareUpload(file);
@@ -258,6 +254,34 @@ describe('notification api', () => {
         expect(response.statusCode).to.equal(200);
       });
   });
+
+
+  describe('sendPrecompiledLetter', () => {
+
+    it('should send a precompiled letter', () => {
+      let pdf_file = Buffer.from("%PDF-1.5 testpdf"),
+      reference = "HORK",
+      data = {"reference": reference, "content": pdf_file.toString('base64')}
+
+      notifyAuthNock
+      .post('/v2/notifications/letter', data)
+      .reply(200, {hiphip: 'hooray'});
+
+      return notifyClient.sendPrecompiledLetter(reference, pdf_file)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
+    it('should throw error when file bigger than 5MB is supplied', () => {
+      let file = Buffer.alloc(6*1024*1024),
+      reference = "HORK"
+      expect(function(){
+        notifyClient.sendPrecompiledLetter(reference, file);
+      }).to.throw("Document is larger than 5MB.")
+    });
+  });
+
 
   describe('getNotifications', () => {
 

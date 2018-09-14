@@ -1,3 +1,11 @@
+## [4.5.0] - 2018-09-13
+
+### Changed
+
+* Added a function to send precompiled letter through the client.
+    * the new function uses a helper function to check if the file size is within the 5MB limit and to encode the file using base64. Then a POST request to our API is made with the file data and user reference.
+    * instructions for the new functionality added to the documentation.
+
 ## [4.4.0] - 2018-09-05
 
 ### Changed

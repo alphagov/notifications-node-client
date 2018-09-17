@@ -1,3 +1,9 @@
+## [4.5.1] - 2018-09-14
+
+### Changed
+
+* Made formatting consistent across documentation.
+
 ## [4.5.0] - 2018-09-13
 
 ### Changed

@@ -188,7 +188,7 @@ Click here to expand for more information.
     "template": {
         "id": "ceb50d92-100d-4b8b-b559-14fa3b091cda",
         "version": 1,
-        "uri": "https://api.notificaitons.service.gov.uk/service/your_service_id/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda"
+        "uri": "https://api.notifications.service.gov.uk/service/your_service_id/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda"
     }
 }
 ```

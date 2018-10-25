@@ -1,51 +1,44 @@
-# GOV.UK Notify Node.js client
+# Node.js client documentation
 
-This documentation is for developers interested in using this Node.js client to integrate their government service with GOV.UK Notify.
+This documentation is for developers interested in using the GOV.UK Notify Node.js client to send emails, text messages or letters.
 
-## Table of Contents
+# Set up the client
 
-* [Installation](#installation)
-* [Getting started](#getting-started)
-* [Send messages](#send-messages)
-* [Get the status of one message](#get-the-status-of-one-message)
-* [Get the status of all messages](#get-the-status-of-all-messages)
-* [Get a template by ID](#get-a-template-by-id)
-* [Get a template by ID and version](#get-a-template-by-id-and-version)
-* [Get all templates](#get-all-templates)
-* [Generate a preview template](#generate-a-preview-template)
-* [Tests](#tests)
+## Install the client
 
-## Installation
+Run the following in the command line:
 
 ```shell
 npm install --save notifications-node-client
 ```
 
-## Getting started
+## Create a new instance of the client
+
+Add this code to your application:
 
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
 	notifyClient = new NotifyClient(apiKey);
 ```
 
-Generate an API key by logging in to [GOV.UK Notify](https://www.notifications.service.gov.uk) and going to the _API integration_ page.
+To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __API integration__ page. Refer to the [API keys](#api-keys) section of this documentation for more information.
 
 ### Connect through a proxy (optional)
 
 ```
 notifyClient.setProxy(proxyUrl);
 ```
+_why would you use a proxy?_
+_what do you do with this code?_
+_any supporting information?_
 
-## Send messages
+# Send a message
 
-### Text message
+You can use GOV.UK Notify to send text messages, emails and letters.
 
-#### Method
+## Send a text message
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+### Method
 
 ```javascript
 notifyClient
@@ -58,16 +51,71 @@ notifyClient
 ;
 ```
 
-</details>
+### Arguments
 
-#### Response
+#### phoneNumber (required)
 
-If the request is successful, `response` will be an `object`.
+The phone number of the recipient of the text message. This can be a UK or international number.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+```csharp
+string mobileNumber: "+447900900123";
+```
+
+#### templateId (required)
+
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+
+#### personalisation (optional)
+
+If a template has placeholder fields for personalised information such as name or reference number, you need to provide their values in a `Dictionary`. For example:
+
+```javascript
+personalisation={
+    'first_name': 'Amala',
+    'reference_number': '300241',
+}
+```
+
+You can leave out this argument if a template does not have any placeholder fields for personalised information.
+
+#### reference (optional)
+
+A unique identifier you can create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
+
+```csharp
+string reference: "STRING";
+```
+You can leave out this argument if you do not have a reference.
+
+#### smsSenderId (optional)
+
+A unique identifier of the sender of the text message notification. You can find this information on the __Text Message sender__ settings screen.
+
+1. Sign in to your GOV.UK Notify account.
+1. Go to __Settings__.
+1. If you need to change to another service, select __Switch service__ in the top right corner of the screen and select the correct one.
+1. Go to the __Text Messages__ section and select __Manage__ on the __Text Message sender__ row.
+
+You can then either:
+
+  - copy the sender ID that you want to use and paste it into the method
+  - select __Change__ to change the default sender that the service uses, and select __Save__
+
+For example:
+
+```csharp
+string smsSenderId: "8e222534-7f05-4972-86e3-17c5d9f894e2";
+```
+
+You can leave out this argument if your service only has one text message sender, or if you want to use the default sender.
+
+### Response
+
+If the request to the client is successful, the client returns an `object`:
 
 ```javascript
 {
@@ -86,187 +134,155 @@ Click here to expand for more information.
 }
 ```
 
-Otherwise the client will return an error `err`:
+If you are using the [test API key](/ruby.html#test), all your messages come back with a `delivered` status.
 
-|`err.error.status_code`|`err.error.errors`|
-|:---|:---|
-|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"`<br>`}]`|
-|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient using a team-only API key"`<br>`]}`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
+All messages sent using the [team and whitelist](#team-and-whitelist) or [live](#live) keys appear on your dashboard.
 
-</details>
+### Error codes
 
-#### Arguments
+If the request is not successful, the client returns an error `err`.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+|err.error.status_code|err.error.errors|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](/ruby.html#api-keys)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification|
 
-##### `phoneNumber`
+## Send an email
 
-The phone number of the recipient, only required for sms notifications.
+### Method
 
-##### `templateId`
-
-Find by clicking **API info** for the template you want to send.
-
-##### `options`
-###### `reference`
-
-An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
-
-You can omit this argument if you do not require a reference for the notification.
-
-##### `personalisation`
-
-If a template has placeholders, you need to provide their values, for example:
-
-```javascript
-personalisation={
-    'first_name': 'Amala',
-    'reference_number': '300241',
-}
+```csharp
+EmailNotificationResponse response = client.SendEmail(emailAddress, templateId, personalisation, reference, emailReplyToId);
 ```
 
-This does not need to be provided if your template does not contain placeholders.
-
-##### `smsSenderId`
-
-Optional. Specifies the identifier of the sms sender to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Text message sender'.
-
-If you omit this argument your default sms sender will be set for the notification.
-
-Example usage with optional reference -
-
-</details>
-
-
-### Email
-
-#### Method
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-notifyClient
-	.sendEmail(templateId, emailAddress, {
-			personalisation: personalisation,
-			reference: reference,
-			emailReplyToId: emailReplyToId})
-    .then(response => console.log(response))
-    .catch(err => console.error(err))
-;
+```csharp
+client.SendSms(
+    emailAddress: "sender@something.com",
+    templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a"
+);
 ```
 
-</details>
+### Arguments
+
+#### emailAddress (required)
+
+The email address of the recipient. For example:
+
+```csharp
+string emailAddress: "sender@something.com";
+```
+
+#### templateId (required)
+
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
+
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+
+#### personalisation (optional)
+
+If a template has placeholder fields for personalised information such as name or reference number, you need to provide their values in a `Dictionary`. For example:
 
 
-#### Response
-
-If the request is successful, `response` will be an `object`.
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
+```csharp
+Dictionary<String, dynamic> personalisation: new Dictionary<String, dynamic>
 {
-    "id": "bfb50d92-100d-4b8b-b559-14fa3b091cda",
-    "reference": null,
-    "content": {
-        "subject": "Licence renewal",
-        "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
-        "from_email": "the_service@gov.uk"
-    },
-    "uri": "https://api.notifications.service.gov.uk/v2/notifications/ceb50d92-100d-4b8b-b559-14fa3b091cd",
-    "template": {
-        "id": "ceb50d92-100d-4b8b-b559-14fa3b091cda",
-        "version": 1,
-        "uri": "https://api.notifications.service.gov.uk/service/your_service_id/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda"
+    { "first_name", "Amala"
+      "application_date", "2018-01-01"
     }
-}
-```
-Otherwise the client will return an error `error object`:
-
-|`status_code`|`errors`|
-|:---|:---|
-|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM of 10 requests per 10 seconds"`<br>`}]`|
-|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient using a team-only API key"`<br>`]}`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can"t send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
-
-</details>
-
-
-#### Arguments
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-##### `emailAddress`
-
-The email address of the recipient, only required for email notifications.
-
-##### `templateId`
-
-Find by clicking **API info** for the template you want to send.
-
-##### `options`
-###### `reference`
-
-An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
-
-You can omit this argument if you do not require a reference for the notification.
-
-###### `emailReplyToId`
-
-Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
-
-If you omit this argument your default email reply-to address will be set for the notification.
-
-###### `personalisation`
-
-If a template has placeholders, you need to provide their values, for example:
-
-```javascript
-personalisation={
-    'first_name': 'Amala',
-    'application_number': '300241',
-}
+};
 ```
 
-##### `emailReplyToId`
+You can leave out this argument if a template does not have any placeholder fields for personalised information.
 
-Optional. Specifies the identifier of the email reply-to address to set for the notification. The identifiers are found in your service Settings, when you 'Manage' your 'Email reply to addresses'.
-If you omit this argument your default email reply-to address will be set for the notification.
+#### reference (optional)
 
-</details>
+A unique identifier you can create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
 
-### Send a document by email
+```csharp
+string reference: "STRING";
+```
+You can leave out this argument if you do not have a reference.
+
+#### emailReplyToId (optional)
+
+This is an email reply-to address specified by you to receive replies from your users. Your service cannot go live until you set up at least one of these email addresses.
+
+1. Sign into your GOV.UK Notify account.
+1. Go to __Settings__.
+1. If you need to change to another service, select __Switch service__ in the top right corner of the screen and select the correct one.
+1. Go to the __Email__ section and select __Manage__ on the __Email reply to addresses__ row.
+1. Select __Change__ to specify the email address to receive replies, and select __Save__.
+
+For example:
+
+```csharp
+string emailReplyToId: "8e222534-7f05-4972-86e3-17c5d9f894e2";
+```
+
+You can leave out this argument if your service only has one email reply to address, or you want to use the default email address.
+
+### Response
+
+If the request to the client is successful, the client returns an `EmailNotificationResponse`:
+
+```csharp
+public String fromEmail;
+public String body;
+public String subject;
+public String id;
+public String reference;
+public String uri;
+public Template template;
+
+public class Template
+{
+    public String id;
+    public String uri;
+    public Int32 version;
+}
+```
+
+### Error codes
+
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code.
+
+|error.status_code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct type of [API key](#api-keys)|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
+
+_Exclude these error code as document upload is not implemented for this client yet?_
+
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Unsupported document type '{}'. Supported types are: {}"`<br>`}]`|The attached document must be a PDF file|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Document didn't pass the virus scan"`<br>`}]`|The attached document must be virus free|
+
+
+
+## Send a document by email
+
 Send files without the need for email attachments.
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
 
 To send a document by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the document.
 
 [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
 
-</details>
-
 #### Add a placeholder field to the template
 
-In Notify, use double brackets to add a placeholder field to the email template. For example:
+1. Sign into your GOV.UK Notify account.
+1. Go to the Templates page.
+1. Add a placeholder field to the email template using double brackets. For example:
 
 "Download your document at: ((link_to_document))"
 
@@ -274,65 +290,22 @@ In Notify, use double brackets to add a placeholder field to the email template.
 
 The document you upload must be a PDF file smaller than 2MB.
 
-Pass the file object as a value into the personalisation argument. For example:
+Convert the PDF to a `byte[]` and pass that to the the personalisation argument, then call the [sendEmail method](#send-an-email) as usual. For example:
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+```csharp
 
-```javascript
-var fs = require('fs');
+byte[] documentContents = File.ReadAllBytes("<document file path>");
 
-fs.readFile('path/to/document.pdf', function(err, pdf_file) {
-	console.log(err);
-	notifyClient.sendEmail(templateId, emailAddress, {
-    personalisation: {
-        first_name: 'Amala',
-        application_date: '2018-01-01',
-        link_to_document: notifyClient.prepareUpload(pdf_file)
-    }
-	}).then(response => console.log(response.body)).catch(err => console.error(err))
-});
-```
-</details>
-
-#### Response
-
-If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
+Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
 {
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": "STRING",
-  "content": {
-    "subject": "SUBJECT TEXT",
-    "body": "MESSAGE TEXT",
-    "from_email": "SENDER EMAIL"
-  },
-  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-  "template": {
-    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
-    "version": INTEGER,
-    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
-  }
-}
+    { "name", "Foo" },
+    { "link_to_document", NotificationClient.PrepareUpload(documentContents)}
+};
 ```
-</details>
 
-#### Error codes
+### Error codes
 
-If the request is not successful, the client returns an error `error object`:
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+If the request is not successful, the client returns an `HTTPError` containing the relevant error code.
 
 |error.status_code|error.message|How to fix|
 |:---|:---|:---|
@@ -345,795 +318,610 @@ Click here to expand for more information.
 |`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
-|`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 2MB."`<br>`}]`|The file you tried to upload was above the 2MB limit. Send a file that weighs less than 2MB.|
+|`N\A`|`Document is larger than 2MB`|Document size was too large, upload a smaller file|
 
-</details>
+## Send a letter
 
+When your service first signs up to GOV.UK Notify, you’ll start in trial mode. You can only send letters in live mode. You must ask GOV.UK Notify to make your service live.
 
-### Letter
+1. Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/).
+1. Select __Using Notify__.
+1. Select __requesting to go live__.
 
-#### Method
+### Method
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-notifyClient
-    .sendLetter(templateId, {
-				personalisation: personalisation,
-				reference: reference})
-    .then(response => console.log(response))
-    .catch(err => console.error object)
-;
-```
-
-where `personalisation` is
-
-```javascript
-personalisation={
-    address_line_1: 'The Occupier',  // required
-    address_line_2: '123 High Street', // required
-    address_line_3: 'London',
-    postcode: 'SW14 6BH',  // required
-
-    // ... any other optional address lines, or personalisation fields found in your template
-},
-```
-</details>
-
-
-#### Response
-
-If the request is successful, `response` will be an `object`:
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
+```csharp
+Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
 {
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": null,
-  "content": {
-    "subject": "Licence renewal",
-    "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
-  },
-  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-  "template": {
-    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
-    "version": 1,
-    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
-  }
-  "scheduled_for": null
+    { "address_line_1", "The Occupier" },  # required
+    { "address_line_2", "123 High Street" }, # required
+    { "address_line_3", "London" },
+    { "postcode", "SW14 6BF" } # required
+      ... # any other optional address lines, or personalisation fields found in your template
+};
+
+LetterNotificationResponse response = client.SendLetter(templateId, personalisation, reference);
+```
+
+### Arguments
+
+#### templateId (required)
+
+Sign in to GOV.UK Notify and go to the __Templates__ page to find the template ID. For example:
+
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+
+#### personalisation (required)
+
+The personalisation argument always contains the following required parameters for the letter recipient's address:
+
+- `address_line_1`
+- `address_line_2`
+- `postcode`
+
+Any other placeholder fields included in the letter template also count as required parameters. You need to provide their values in a `Dictionary`. For example:
+
+```python
+personalisation: {
+  "address_line_1": "The Occupier",
+  "address_line_2": "123 High Street",
+  "postcode": "SW14 6BF",
+  "name": "John Smith",
+  "application_id": "4134325"
 }
 ```
 
-Otherwise the client will raise a `HTTPError`:
+#### reference (optional)
 
-|`status_code`|`errors`|
-|:---|:---|
-|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"`<br>`}]`|
-|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|
-|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "personalisation address_line_1 is a required property"`<br>`}]`|
+A unique identifier you can create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
 
-</details>
+```csharp
+string reference: "STRING";
+```
+You can leave out this argument if you don't have a reference.
 
+#### personalisation (optional)
 
-#### Arguments
+The following parameters in the letter recipient's address are optional:
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+```csharp
+Dictionary<String, dynamic> personalisation: new Dictionary<String, dynamic>
+{
+{ "address_line_1", "23 Foo Road" }, # required
+{ "address_line_2", "Bar Town" }, # required
+{ "address_line_3", "London" },
+{ "postcode", "BAX S1P" } # required
+... # any other optional address lines, or personalisation fields found in your template
+};
+```
 
-##### `template_id`
+### Response
 
-Find by clicking **API info** for the template you want to send.
+If the request to the client is successful, the client returns a `LetterNotificationResponse`:
 
-##### `reference`
+```csharp
+public String id;
+public String body;
+public String subject;
+public String reference;
+public String uri;
+public Template template;
 
-An optional identifier you generate. The `reference` can be used as a unique reference for the notification. Because Notify does not require this reference to be unique you could also use this reference to identify a batch or group of notifications.
-
-You can omit this argument if you do not require a reference for the notification.
-
-##### `personalisation`
-
-The letter must contain:
-
-- mandatory address fields
-- optional address fields if applicable
-- fields from template
-
-```javascript
-personalisation={
-  address_line_1: 'The Occupier',  // mandatory address field
-  address_line_2: 'Flat 2',  // mandatory address field
-  address_line_3: '123 High Street',  // optional address field
-  address_line_4: 'Richmond upon Thames',  // optional address field
-  address_line_5: 'London',  // optional address field
-  address_line_6: 'Middlesex',  // optional address field
-  postcode: 'SW14 6BH',  // mandatory address field
-  application_id: '1234',  // field from template
-  application_date: '2017-01-01',  // field from template
+public class Template
+{
+    public String id;
+    public String uri;
+    public Int32 version;
 }
 ```
 
-</details>
+### Error codes
 
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code.
 
-### Send a precompiled Letter
+|error.code|error.message|How to fix|
+|:--- |:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "personalisation address_line_1 is a required property"`<br>`}]`|Ensure that your template has a field for the first line of the address, refer to [personalisation](#personalisation-required) for more information|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification|
+
+## Send a precompiled letter
 
 This is an invitation-only feature. Contact the GOV.UK Notify team on the [support page](https://www.notifications.service.gov.uk/support) or through the [Slack channel](https://ukgovernmentdigital.slack.com/messages/govuk-notify) for more information.
 
-#### Method
+### Method
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-var response = notifyClient.sendPrecompiledLetter(
-    reference,      // Reference to identify the notification
-    pdf_file        // PDF File object
-)
+```csharp
+LetterNotificationsResponse response = client.SendPrecompiledLetter(
+    clientReference,
+    pdfContents
+    );
 ```
 
-</details>
+### Arguments
 
-#### Arguments
+#### clientReference (required)
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
 
-##### `reference` (required)
+#### pdfContents (required for the SendPrecompiledLetter method)
 
-This reference can identify a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
+The precompiled letter must be a PDF file. The method sends the contents of the file to GOV.UK Notify.
 
-##### `pdf_file` (required)
-
-The precompiled letter must be a PDF file.
-
-```javascript
-var fs = require('fs');
-
-fs.readFile('path/to/document.pdf', function(err, pdf_file) {
-    var notification = notifyClient.sendPrecompiledLetter(
-        reference="your reference", pdf_file=pdf_file
-    )
-	});
+```csharp
+byte[] pdfContents = File.ReadAllBytes("<PDF file path>");
 ```
-</details>
+### Response
 
-#### Response
+If the request to the client is successful, the client returns a `LetterNotificationResponse` with the `id` and `reference` set:
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-If the request to the client is successful, the client returns a response `object`, with a following `body` attribute:
-
-```javascript
-{
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": "your-letter-reference"
-}
+```csharp
+public String id;
+public String reference;
 ```
-</details>
 
-#### Error codes
+### Error codes
 
-If the request is not successful, the client returns an HTTPError containing the relevant error code.
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` containing the relevant error code:
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-|error.status_code|error.message|How to fix|
-|:---|:---|:---|
-|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type live of 10 requests per 20 seconds"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
-|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (50) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|httpResult|Message|How to fix|
+|:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send precompiled letters"`<br>`]}`|This is an invitation-only feature. Contact the GOV.UK Notify team on the [support page](https://www.notifications.service.gov.uk/support) or through the [Slack channel](https://ukgovernmentdigital.slack.com/messages/govuk-notify) for more information|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Letter content is not a valid PDF"`<br>`]}`|PDF file format is required|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
-|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "reference is a required property"`<br>`}]`|Add a `reference` argument to the method call|
-|`N/A`|`[{`<br>`"error": "Exception",`<br>`"message": "Document is larger than 5MB."`<br>`}]`|The file you tried to upload was above the 5MB limit. Send a file that weighs less than 5MB.|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "personalisation address_line_1 is a required property"`<br>`}]`|Send a valid PDF file|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`429`|`[{`<br>`"error": "RateLimitError",`<br>`"message": "Exceeded rate limit for key type TEAM/TEST/LIVE of 3000 requests per 60 seconds"`<br>`}]`|Refer to [API rate limits](#api-rate-limits) for more information|
+|`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
+|N/A|`"message":"precompiledPDF must be a valid PDF file"`|Send a valid PDF file|
+|N/A|`"message":"reference cannot be null or empty"`|Populate the reference parameter|
+|N/A|`"message":"precompiledPDF cannot be null or empty"`|Send a PDF file with data in it|
 
-</details>
+# Get message status
 
+Message status depends on the type of message that you have sent.
+
+You can only get the status of messages that are 7 days old or less.
+
+## Status - text and email
+
+|Status|Information|
+|:---|:---|
+|Created|The message is queued to be sent to the provider. The notification usually remains in this state for a few seconds.|
+|Sending|The message is queued to be sent by the provider to the recipient, and GOV.UK Notify is waiting for delivery information.|
+|Delivered|The message was successfully delivered.|
+|Failed|This covers all failure statuses:<br>- `permanent-failure` - "The provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list"<br>- `temporary-failure` - "The provider was unable to deliver message, email inbox was full or phone was turned off; you can try to send the message again"<br>- `technical-failure` - "Notify had a technical failure; you can try to send the message again"|
+
+## Status - text only
+
+|Status|Information|
+|:---|:---|
+|Pending|GOV.UK Notify received a callback from the provider but the device has not yet responded. Another callback from the provider determines the final status of the notification.|
+|Sent|The text message was delivered internationally. This only applies to text messages sent to non-UK phone numbers. GOV.UK Notify may not receive additional status updates depending on the recipient's country and telecoms provider.|
+
+## Status - letter
+
+|Status|information|
+|:---|:---|
+|Failed|The only failure status that applies to letters is `technical-failure`. GOV.UK Notify had an unexpected error while sending to our printing provider.|
+|Accepted|GOV.UK Notify is printing and posting the letter.|
+|Received|The provider has received the letter to deliver.|
 
 ## Get the status of one message
 
-#### Method
+You can only get the status of messages that are 7 days old or less.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+### Method
 
-```javascript
-notifyClient
-	.getNotificationById(notificationId)
-	.then((response) => { })
-	.catch((err) => {})
-;
+```csharp
+Notification notification = client.GetNotificationById(notificationId);
 ```
 
-</details>
+### Arguments
 
+#### notificationId (required)
 
-#### Response
+The ID of the notification. You can find the notification ID in the response to the [original notification method call](#response).
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+You can also find it in your [GOV.UK Notify Dashboard](https://www.notifications.service.gov.uk).
 
-If the request is successful, `response` will be an `object`:
+1. Sign into GOV.UK Notify and select __Dashboard__.
+1. Select either __emails sent__, __text messages sent__, or __letters sent__.
+1. Select the relevant notification.
+1. Copy the notification ID from the end of the page URL, for example `https://www.notifications.service.gov.uk/services/af90d4cb-ae88-4a7c-a197-5c30c7db423b/notification/ID`.
 
-```javascript
-{
-    "id": "notify_id",
-    "body": "Hello Foo",
-    "subject": "null|email_subject",
-    "reference": "client reference",
-    "email_address": "email address",
-    "phone_number": "phone number",
-    "line_1": "full name of a person or company",
-    "line_2": "123 The Street",
-    "line_3": "Some Area",
-    "line_4": "Some Town",
-    "line_5": "Some county",
-    "line_6": "Something else",
-    "postcode": "postcode",
-    "type": "sms|letter|email",
-    "status": "current status",
-    "template": {
-        "version": 1,
-        "id": 1,
-        "uri": "/template/{id}/{version}"
-     },
-    "created_by_name": "name of the person who sent the notification if sent manually",
-    "created_at": "created at",
-    "sent_at": "sent to provider at",
-}
+### Response
+
+If the request to the client is successful, the client returns a `Notification`.
+
+```csharp
+public String id;
+public String completedAt;
+public String createdAt;
+public String emailAddress;
+public String body;
+public String subject;
+public String line1;
+public String line2;
+public String line3;
+public String line4;
+public String line5;
+public String line6;
+public String phoneNumber;
+public String postcode;
+public String reference;
+public String sentAt;
+public String status;
+public Template template;
+public String type;
 ```
 
-Otherwise the client will return an error `error object`:
+### Error codes
 
-|`status_code`|`errors`|
-|:---|:---|
-|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|
-|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code:
 
-</details>
+|error.status_code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the notification ID|
 
-#### Arguments
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+## Get the status of multiple messages
 
-##### `notificationId`
+This API call returns the status of multiple messages. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the `olderThanId` argument.
 
-The ID of the notification.
+You can only get messages that are 7 days old or less.
 
-</details>
+### Method
 
-## Get the status of all messages
-
-#### Method
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-notifyClient
-	.getNotifications(templateType, status, reference, olderThan)
-	.then((response) => { })
-	.catch((err) => {})
-;
+```csharp
+NotificationList notifications = client.GetNotifications(templateType, status, reference, olderThanId);
 ```
-</details>
+You can leave out the `olderThanId` argument to get the 250 most recent messages.
 
+To get older messages, pass the ID of an older notification into the `olderThanId` argument. This returns the next 250 oldest messages from the specified notification ID.
 
-#### Response
+### Arguments
 
-If the request is successful, `response` will be an `object`.
+You can leave out these arguments to ignore these filters.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+#### templateType (optional)
 
-```javascript
-{ "notifications":
-    [{
-        "id": "notify_id",
-        "reference": "client reference",
-        "email_address": "email address",
-        "phone_number": "phone number",
-        "line_1": "full name of a person or company",
-        "line_2": "123 The Street",
-        "line_3": "Some Area",
-        "line_4": "Some Town",
-        "line_5": "Some county",
-        "line_6": "Something else",
-        "postcode": "postcode",
-        "type": "sms | letter | email",
-        "status": sending | delivered | permanent-failure | temporary-failure | technical-failure
-        "template": {
-            "version": 1,
-          "id": 1,
-          "uri": "/template/{id}/{version}"
-       },
-       "created_by_name": "name of the person who sent the notification if sent manually",
-       "created_at": "created at",
-       "sent_at": "sent to provider at",
-    },
-    …
-  ],
-  "links": {
-     "current": "/notifications?template_type=sms&status=delivered",
-     "next": "/notifications?other_than=last_id_in_list&template_type=sms&status=delivered"
-  }
-}
-```
-
-|`status_code`|`errors`|
-|:---|:---|
-|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "bad status is not one of [created, sending, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure]"`<br>`}]`|
-|`400`|`[{`<br>`"error": "Apple is not one of [sms, email, letter]"`<br>`}]`|
-
-</details>
-
-
-#### Arguments
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-##### `templateType`
-
-If omitted all messages are returned. Otherwise you can filter by:
+You can filter by:
 
 * `email`
 * `sms`
 * `letter`
 
-##### `status`
+#### status (optional)
 
-__email__
+| status | description | text | email | letter |
+|:--- |:--- |:--- |:--- |:--- |
+|`created` |The message is queued to be sent to the provider|Yes|Yes||
+|`sending` |The message is queued to be sent by the provider to the recipient|Yes|Yes||
+|`delivered`|The message was successfully delivered|Yes|Yes||
+|`pending`|GOV.UK Notify received a callback from the provider but the device has not yet responded|Yes|||
+|`sent`|The text message was delivered internationally|Yes|Yes||
+|`failed`|This returns all failure statuses:<br>- `permanent-failure`<br>- `temporary-failure`<br>- `technical-failure`|Yes|Yes||
+|`permanent-failure`|The provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list|Yes|Yes||
+|`temporary-failure`|The provider was unable to deliver message, email inbox was full or phone was turned off; you can try to send the message again|Yes|Yes||
+|`technical-failure`|Email / Text: Notify had a technical failure; you can try to send the message again. <br><br>Letter: Notify had an unexpected error while sending to our printing provider. <br><br>You can leave out this argument to ignore this filter.|Yes|Yes||
+|`accepted`|Notify is printing and posting the letter|||Yes|
+|`received`|The provider has received the letter to deliver|||Yes|
 
-You can filter by:
+#### reference (optional)
 
-* `sending` - the message is queued to be sent by the provider.
-* `delivered` - the message was successfully delivered.
-* `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
-* `permanent-failure` - the provider was unable to deliver message, email does not exist; remove this recipient from your list.
-* `temporary-failure` - the provider was unable to deliver message, email box was full; you can try to send the message again.
-* `technical-failure` - Notify had a technical failure; you can try to send the message again.
+A unique identifier you can create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
 
-You can omit this argument to ignore this filter.
-
-__text message__
-
-You can filter by:
-
-* `sending` - the message is queued to be sent by the provider.
-* `delivered` - the message was successfully delivered.
-* `failed` - this will return all failure statuses `permanent-failure`, `temporary-failure` and `technical-failure`.
-* `permanent-failure` - the provider was unable to deliver message, phone number does not exist; remove this recipient from your list.
-* `temporary-failure` - the provider was unable to deliver message, the phone was turned off; you can try to send the message again.
-* `technical-failure` - Notify had a technical failure; you can try to send the message again.
-
-You can omit this argument to ignore this filter.
-
-__letter__
-
-You can filter by:
-
-* `accepted` - Notify is in the process of printing and posting the letter
-* `technical-failure` - Notify had an unexpected error while sending to our printing provider
-
-You can omit this argument to ignore this filter.
-
-##### `reference`
-
-This is the `reference` you gave at the time of sending the notification. This can be omitted to ignore the filter.
-
-##### `olderThan`
-
-If omitted all messages are returned. Otherwise you can filter to retrieve all notifications older than the given notification `id`.
-
-</details>
-
-
-## Get a template by ID
-
-#### Method
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-notifyClient
-    .getTemplateById(templateId)
-    .then((response) => { })
-    .catch((err) => {})
-;
+```csharp
+string reference = "STRING";
 ```
 
-</details>
+#### olderThanId (optional)
 
+Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID. For example:
 
-#### Response
+```csharp
+string olderThanId: "e194efd1-c34d-49c9-9915-e4267e01e92e";
+```
 
-If the request is successful, `response` will be an `object`.
+If you leave out this argument, the client returns the most recent 250 notifications.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+The client only returns notifications that are 7 days old or less. If the notification specified in this argument is older than 7 days, the client returns an empty response.
 
-```javascript
-{
-    "id": "template_id",
-    "name": "template name",
-    "type": "sms|email|letter",
-    "created_at": "created at",
-    "updated_at": "updated at",
-    "version": "version",
-    "created_by": "someone@example.com",
-    "body": "body",
-    "subject": "null|email_subject"
+### Response
+
+If the request to the client is successful, the client returns a `Notify.Exceptions.NotifyClientException`.
+
+```csharp
+public List<Notification> notifications;
+public Link links;
+
+public class Link {
+	public String current;
+	public String next;
 }
 ```
 
-Otherwise the client will return an error `error object`:
+### Error codes
 
-|`status_code`|`errors`|
-|:---|:---|
-|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code:
 
-</details>
+|error.status_code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "bad status is not one of [created, sending, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure]"`<br>`}]`|Contact the Notify team|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "Apple is not one of [sms, email, letter]"`<br>`}]`|Contact the Notify team|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+
+# Get a template
+
+## Get a template by ID
+
+### Method
+
+This returns the latest version of the template.
+
+```csharp
+TemplateResponse response = client.GetTemplateById(
+    "templateId"
+);
+```
+
+### Arguments
+
+#### templateId (required)
+
+The ID of the template. Sign into GOV.UK Notify and go to the __Templates__ page to find this. For example:
+
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+
+### Response
+
+If the request to the client is successful, the client returns a `TemplateResponse`.
+
+```csharp
+public String id;
+public String name;
+public String type;
+public DateTime created_at;
+public DateTime? updated_at;
+public String created_by;
+public int version;
+public String body;
+public String subject; // null if an sms message
+```
 
 
-#### Arguments
+### Error codes
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+If the request is not successful, the client returns an `HTTPError` and an error code:
 
-##### `templateId`
-
-Find by clicking **API info** for the template you want to send.
-
-</details>
+|error.code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No Result Found"`<br>`}]`|Check your [template ID](#get-a-template-by-id-arguments-id-required)|
 
 
 ## Get a template by ID and version
 
-#### Method
+### Method
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+This returns the latest version of the template.
 
-```javascript
-notifyClient
-    .getTemplateByIdAndVersion(templateId, version)
-    .then((response) => { })
-    .catch((err) => {})
-;
+```csharp
+TemplateResponse response = client.GetTemplateByIdAndVersion(
+    "templateId",
+    1   // integer required for version number
+);
 ```
 
-</details>
+### Arguments
 
+#### templateId (required)
 
-#### Response
+The ID of the template. Sign in to GOV.UK Notify and go to the __Templates__ page to find this. For example:
 
-If the request is successful, `response` will be an `object`.
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-{
-    "id": "template_id",
-    "name": "template name",
-    "type": "sms|email|letter",
-    "created_at": "created at",
-    "updated_at": "updated at",
-    "version": "version",
-    "created_by": "someone@example.com",
-    "body": "body",
-    "subject": "null|email_subject"
-}
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
-Otherwise the client will return an error `error object`:
 
-|`status_code`|`errors`|
-|:---|:---|
-|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"No result found"`<br>`}]`|
+#### version (required)
 
-</details>
+The version number of the template.
 
+### Response
 
-#### Arguments
+If the request to the client is successful, the client returns a `TemplateResponse`.
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+```csharp
+public String id;
+public String name;
+public String type;
+public DateTime created_at;
+public DateTime? updated_at;
+public String created_by;
+public int version;
+public String body;
+public String subject; // null if an sms message
+```
 
-##### `templateId`
+### Error codes
 
-Find by clicking **API info** for the template you want to send.
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code:
 
-##### `version`
+|error.code|error.message|How to fix|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No Result Found"`<br>`}]`|Check your [template ID](/ruby.html#get-a-template-by-id-and-version-arguments-id-required) and [version](#version-required)|
 
-The version number of the template
-
-</details>
 
 ## Get all templates
 
-#### Method
+### Method
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+This returns the latest version of all templates _inside an object of some type?_.
 
-```javascript
-notifyClient
-    .getAllTemplates(templateType)
-    .then((response) => { })
-    .catch((err) => {})
-;
-```
-This will return the latest version for each template.
-
-</details>
-
-
-#### Response
-
-If the request is successful, `response` will be an `object`.
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-{
-    "templates" : [
-        {
-            "id": "template_id",
-            "name": "template name",
-            "type": "sms|email|letter",
-            "created_at": "created at",
-            "updated_at": "updated at",
-            "version": "version",
-            "created_by": "someone@example.com",
-            "body": "body",
-            "subject": "null|email_subject"
-        },
-        {
-            ... another template
-        }
-    ]
-}
+```csharp
+TemplateList response = client.GetAllTemplates(
+    "sms" | "email" | "letter" // optional
+);
 ```
 
-If no templates exist for a template type or there no templates for a service, the `response` will be an `object` with an empty `templates` list element:
+### Arguments
 
-```javascript
-{
-    "templates" : []
-}
+#### templateType (optional)
+
+If omitted, the method returns all templates. Otherwise you can filter by:
+
+- `email`
+- `sms`
+- `letter`
+
+### Response
+
+If the request to the client is successful, the client returns a `TemplateList`.
+
+```csharp
+List<TemplateResponse> templates;
 ```
 
-</details>
+If no templates exist for a template type or there no templates for a service, the client returns a `TemplateList` with an empty `templates` list element:
 
-
-#### Arguments
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-##### `templateType`
-
-If omitted all messages are returned. Otherwise you can filter by:
-
-* `email`
-* `sms`
-* `letter`
-
-</details>
-
+```csharp
+List<TemplateResponse> templates; // empty list of templates
+```
 
 ## Generate a preview template
 
-#### Method
+### Method
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+This generates a preview version of a template.
 
-```javascript
-personalisation = { "foo": "bar" };
-notifyClient
-    .previewTemplateById(templateId, personalisation)
-    .then((response) => { })
-    .catch((err) => {})
-;
+```csharp
+TemplatePreviewResponse response = client.GenerateTemplatePreview(
+    templateId,
+    personalisation
+);
 ```
 
-</details>
+The parameters in the personalisation argument must match the placeholder fields in the actual template. The API notification client ignores any extra fields in the method.
 
+### Arguments
 
-#### Response
+#### templateId (required)
 
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
+The ID of the template. Sign into GOV.UK Notify and go to the __Templates__ page. For example:
 
-If the request is successful, `response` will be an `object`:
+```csharp
+string templateId: "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
 
-```javascript
+#### personalisation (required)
+
+If a template has placeholder fields for personalised information such as name or reference number, you need to provide their values in a `Dictionary`. For example:
+
+```csharp
+Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
 {
-    "id": "notify_id",
-    "type": "sms|email|letter",
-    "version": "version",
-    "body": "Hello bar" // with substitution values,
-    "subject": "null|email_subject"
+    { "name", "someone" }
+};
+```
+
+You can leave out this argument if a template does not have any placeholder fields for personalised information.
+
+### Response
+
+If the request to the client is successful, you receive a `TemplatePreviewResponse` response.
+
+```csharp
+public String id;
+public String type;
+public int version;
+public String body;
+public String subject; // null if a sms message
+```
+
+### Error codes
+
+If the request is not successful, the client returns a `Notify.Exceptions.NotifyClientException` and an error code:
+
+|error.status_code|error.message|Notes|
+|:---|:---|:---|
+|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Missing personalisation: [PERSONALISATION FIELD]"`<br>`}]`|Check that the personalisation arguments in the method match the placeholder fields in the template|
+|`400`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the [template ID](#generate-a-preview-template-arguments-template-id-required)|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
+
+
+# Get received text messages
+
+This API call returns one page of up to 250 received text messages. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the `olderThanId` argument.
+
+You can only get the status of messages that are 7 days old or less.
+
+### Method
+
+```csharp
+ReceivedTextListResponse response = client.GetReceivedTexts(olderThanId);
+```
+
+To get older messages, pass the ID of an older notification into the `olderThanId` argument. This returns the next oldest messages from the specified notification ID.
+
+If you leave out the `olderThanId` argument, the client returns the most recent 250 notifications.
+
+
+### Arguments
+
+#### olderThanId (optional)
+
+Input the ID of a received text message into this argument. If you use this argument, the method returns the next 250 received text messages older than the given ID. For example:
+
+```csharp
+olderThanId: "740e5834-3a29-46b4-9a6f-16142fde533a"
+```
+
+If you leave out the `olderThanId` argument, the client returns the most recent 250 notifications.
+
+The client only returns notifications that are 7 days old or less. If the notification specified in this argument is older than 7 days, the client returns an empty `ReceivedTextListResponse` response.
+
+### Response
+
+If the request to the client is successful, the client returns a `ReceivedTextListResponse` that returns all received text messages. _Any further methods on this?_
+
+```csharp
+public List<ReceivedText> receivedTextList;
+public Link links;
+
+public class Link {
+	       public String current;
+	       public String next;
 }
 ```
 
-Otherwise the client will return an error `error object`:
+_further methods on this?_
 
-|`status_code`|`errors`|
-|:---|:---|
-|`400`|`[{`<br>`"error": "BadRequestError",`<br>`"Missing personalisation: [name]"`<br>`}]`|
-|`404`|`[{`<br>`"error": "NoResultFound",`<br>`"No result found"`<br>`}]`|
-
-</details>
-
-
-#### Arguments
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-##### `templateId`
-
-Find by clicking **API info** for the template you want to send.
-
-##### `personalisation`
-
-If a template has placeholders you need to provide their values. For example:
-
-```javascript
-personalisation={
-    'first_name': 'Amala',
-    'reference_number': '300241',
-}
+```csharp
+public String id;
+public String userNumber;
+public String createdAt;
+public String serviceId;
+public String notifyNumber;
+public String content;
 ```
-
-Otherwise the parameter can be omitted or `undefined` can be passed in its place.
-
-</details>
-
-## Get received text messages with pagination
-
-This will return one page of text messages (250) per call.
-
-#### Method
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-```javascript
-notifyClient
-    .getReceivedTexts(olderThan)
-    .then((response) => { })
-    .catch((err) => {})
-;
-```
-
-</details>
-
-
-#### Response
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-If the request is successful, `response` will be a `json object`:
-
-```javascript
-{
-  "received_text_messages":
-    [
-      {
-        "id": "notify_id", // required
-        "user_number": "user number", // required user number
-        "notify_number": "notify number", // receiving number
-        "created_at": "created at", // required
-        "service_id": "service id", // required service id
-        "content": "text content" // required text content
-      },
-      …
-    ],
-  "links": {
-    "current": "/received-test-messages",
-    "next": "/received-text-messages?older_than=last_id_in_list"
-  }
-}
-```
-
-</details>
-
-
-#### Arguments
-
-<details>
-<summary>
-Click here to expand for more information.
-</summary>
-
-##### `olderThan`
-
-If omitted, returns 250 of the latest received text messages. Otherwise the next 250 received text messages older than the given id are returned.
-
-</details>
-
-## Tests
-
-There are unit and integration tests that can be run to test functionality of the client. You will need to have the relevant environment variables sourced to run the tests.
-
-To run the unit tests:
-
-```sh
-npm test
-```
-
-To run the integration tests:
-
-```sh
-npm test --integration
-```
+If the notification specified in the `olderThanId` argument is older than 7 days, the client returns an empty `ReceivedTextListResponse` response.

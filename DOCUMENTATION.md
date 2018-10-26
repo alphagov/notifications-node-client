@@ -62,7 +62,7 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```
+```javascript
 String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
@@ -70,7 +70,7 @@ String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 
 The phone number of the recipient of the text message. This number can be a UK or international number.
 
-```
+```javascript
 String phoneNumber="+447900900123";
 ```
 
@@ -91,7 +91,7 @@ If a template does not have any placeholder fields for personalised information,
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
-```
+```javascript
 String reference='STRING';
 ```
 
@@ -142,9 +142,9 @@ All messages sent using the [team and whitelist](#team-and-whitelist) or [live](
 
 ### Error codes
 
-If the request is not successful, the client returns an `error object` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -175,7 +175,7 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```
+```javascript
 String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
@@ -183,7 +183,7 @@ String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 
 The email address of the recipient.
 
-```
+```javascript
 String emailAddress='sender@something.com';
 ```
 
@@ -204,7 +204,7 @@ If a template does not have any placeholder fields for personalised information,
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
-```
+```javascript
 String reference='STRING';
 ```
 
@@ -248,9 +248,11 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `error object` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+_err or error object?_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -268,13 +270,13 @@ To send a document by email, add a placeholder field to the template then upload
 
 [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
 
-#### Add a placeholder field to the template
+### Add a placeholder field to the template
 
 In Notify, use double brackets to add a placeholder field to the email template. For example:
 
 "Download your document at: ((link_to_document))"
 
-#### Upload your document
+### Upload your document
 
 The document you upload must be a PDF file smaller than 2MB.
 
@@ -295,11 +297,35 @@ fs.readFile('path/to/document.pdf', function(err, pdf_file) {
 });
 ```
 
+#### Response
+
+If the request to the client is successful, the client returns a response `object`:
+
+```javascript
+{
+  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+  "reference": "STRING",
+  "content": {
+    "subject": "SUBJECT TEXT",
+    "body": "MESSAGE TEXT",
+    "from_email": "SENDER EMAIL"
+  },
+  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
+  "template": {
+    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
+    "version": INTEGER,
+    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
+  }
+}
+```
+
 ### Error codes
 
-If the request is not successful, the client returns an `HTTPError` containing the relevant error code.
+If the request is not successful, the client returns an error `err`.
 
-|error.status_code|error.message|How to fix|
+_err or error object?_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -325,8 +351,8 @@ When your service first signs up to GOV.UK Notify, you’ll start in trial mode.
 ```javascript
 notifyClient
     .sendLetter(templateId, {
-				personalisation: personalisation,
-				reference: reference})
+			personalisation: personalisation,
+			reference: reference})
     .then(response => console.log(response))
     .catch(err => console.error object)
 ;
@@ -338,7 +364,7 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```
+```javascript
 String templateId = "f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
@@ -357,7 +383,7 @@ personalisation={
     address_line_1: 'The Occupier',
     address_line_2: '123 High Street',
     postcode: 'SW14 6BH',
-		application_date: '2018-01-01',
+    application_date: '2018-01-01',
 },
 ```
 
@@ -372,8 +398,8 @@ The following parameters in the letter recipient's address are optional:
 personalisation={
     address_line_3: 'Richmond upon Thames',
     address_line_4: 'London',
-		address_line_5: 'Middlesex',
-		address_line_6: 'UK',
+    address_line_5: 'Middlesex',
+    address_line_6: 'UK',
 },
 ```
 
@@ -382,7 +408,7 @@ personalisation={
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 _is this true?_
 
-```
+```javascript
 String reference='STRING';
 ```
 
@@ -410,9 +436,9 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `HTTPError` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+|err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -474,9 +500,9 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `HTTPError` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+|err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -493,7 +519,7 @@ If the request is not successful, the client returns an `HTTPError` containing t
 
 Message status depends on the type of message that you have sent.
 
-You can only get the status of messages that are 7 days old or less.
+You can only get the status of messages that are 7 days old or newer.
 
 ## Status - text and email
 
@@ -587,9 +613,11 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `error object` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+_err or error object?_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
@@ -601,7 +629,7 @@ If the request is not successful, the client returns an `error object` containin
 
 This API call returns one page of up to 250 messages and statuses. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the [`olderThanId`](#olderthanid) argument.
 
-You can only get the status of messages that are 7 days old or less.
+You can only get the status of messages that are 7 days old or newer.
 
 ### Method
 
@@ -648,7 +676,7 @@ You can filter by:
 
 A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications.
 
-```
+```javascript
 String reference='STRING';
 ```
 
@@ -656,7 +684,7 @@ String reference='STRING';
 
 Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID.
 
-```
+```javascript
 String olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
@@ -702,9 +730,11 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns a `NotificationClientException` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message||
+_err or errorobject?_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "bad status is not one of [created, sending, sent, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure, accepted, received]"`<br>`}]`|Contact the Notify team|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "Applet is not one of [sms, email, letter]"`<br>`}]`|Contact the Notify team|
@@ -734,7 +764,7 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```
+```javascript
 String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 ```
 
@@ -758,9 +788,11 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `error object` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|Message|How to fix|
+_err or errorobject?_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
@@ -787,7 +819,7 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```
+```javascript
 String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 ```
 
@@ -815,9 +847,11 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `error object` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|message|How to fix|
+_err or errorobject_
+
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
@@ -905,7 +939,9 @@ String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 
 #### personalisation (optional)
 
-If a template has placeholder fields for personalised information such as name or application date, you must provide their values in a _what?_. For example:
+If a template has placeholder fields for personalised information such as name or application date, you must pass in an empty map or `null`. For example:
+
+_is it a map or null or what?_
 
 ```javascript
 personalisation={
@@ -915,6 +951,8 @@ personalisation={
 ```
 
 If a template does not have any placeholder fields for personalised information, you must pass in an empty _what?_ or `undefined`.
+
+_empty map?_
 
 ### Response
 
@@ -932,9 +970,9 @@ If the request to the client is successful, the client returns a `TemplatePrevie
 
 ### Error codes
 
-If the request is not successful, the client returns a `NotificationClientException` containing the relevant error code:
+If the request is not successful, the client returns an error `err`.
 
-|httpResult|message|How to fix|
+|err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Missing personalisation: [PERSONALISATION FIELD]"`<br>`}]`|Check that the personalisation arguments in the method match the placeholder fields in the template|
 |`400`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the [template ID](#generate-a-preview-template-required-arguments-template-id)|
@@ -946,7 +984,7 @@ If the request is not successful, the client returns a `NotificationClientExcept
 
 This API call returns one page of up to 250 received text messages. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the [`olderThanId`](#olderThanId) argument.
 
-You can only get messages that are 7 days old or less.
+You can only get messages that are 7 days old or newer.
 
 ### Method
 
@@ -968,7 +1006,7 @@ To get older messages, pass the ID of an older notification into the `olderThan`
 
 Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID.
 
-```
+```javascript
 String olderThanId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
@@ -1000,3 +1038,21 @@ If the request to the client is successful, the client returns an `object` that 
 ```
 
 If the notification specified in the `olderThan` argument is older than 7 days, the client returns an empty response. _true?_
+
+## Tests
+
+_is this necessary?_
+
+There are unit and integration tests that can be run to test functionality of the client. You will need to have the relevant environment variables sourced to run the tests.
+
+To run the unit tests:
+
+```sh
+npm test
+```
+
+To run the integration tests:
+
+```sh
+npm test --integration
+```

@@ -1,5 +1,3 @@
-_speak to Tom Byers, Chris H-S, Alexey and Leo_
-
 # Node.js client documentation
 
 This documentation is for developers interested in using the GOV.UK Notify Node.js client to send emails, text messages or letters.
@@ -14,28 +12,24 @@ Run the following in the command line:
 npm install --save notifications-node-client
 ```
 
-_anything else?_
-
 ## Create a new instance of the client
 
 Add this code to your application:
 
 ```javascript
 var NotifyClient = require('notifications-node-client').NotifyClient,
-	notifyClient = new NotifyClient(apiKey);
+    notifyClient = new NotifyClient(apiKey);
 ```
 
 To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __API integration__ page. You can find more information in the [API keys](#api-keys) section of the documentation.
 
 ### Connect through a proxy (optional)
 
-```
+Add this code to your application:
+
+```javascript
 notifyClient.setProxy(proxyUrl);
 ```
-
-_why would you do this?_
-_add this to application or run separately?_
-_before or after above step?_
 
 # Send a message
 
@@ -143,6 +137,8 @@ All messages sent using the [team and whitelist](#team-and-whitelist) or [live](
 ### Error codes
 
 If the request is not successful, the client returns an error `err`.
+
+_Use err.error.status_code as per text_
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -388,7 +384,7 @@ personalisation={
 ```
 
 If a template does not have any placeholder fields for personalised information, you must pass in an empty map or `null`.
-_is this true?_
+_is this true? NO_
 
 #### personalisation (optional)
 
@@ -403,10 +399,10 @@ personalisation={
 },
 ```
 
-#### reference (required)
+#### reference (OPTIONAL)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
-_is this true?_
+_is this true? NO. OPTIONAL._
 
 ```javascript
 String reference='STRING';
@@ -1006,9 +1002,11 @@ To get older messages, pass the ID of an older notification into the `olderThan`
 
 Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID.
 
-```javascript
-String olderThanId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
+olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
+```
+
+_change so just value_
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 text messages.
 
@@ -1038,21 +1036,3 @@ If the request to the client is successful, the client returns an `object` that 
 ```
 
 If the notification specified in the `olderThan` argument is older than 7 days, the client returns an empty response. _true?_
-
-## Tests
-
-_is this necessary?_
-
-There are unit and integration tests that can be run to test functionality of the client. You will need to have the relevant environment variables sourced to run the tests.
-
-To run the unit tests:
-
-```sh
-npm test
-```
-
-To run the integration tests:
-
-```sh
-npm test --integration
-```

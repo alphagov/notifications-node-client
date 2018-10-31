@@ -33,7 +33,7 @@ notifyClient.setProxy(proxyUrl);
 
 # Send a message
 
-You can use GOV.UK Notify to send text messages, emails and letters.
+You can use GOV.UK Notify to send text messages, emails (including documents) and letters.
 
 ## Send a text message
 
@@ -56,21 +56,21 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```javascript
-String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
 #### phoneNumber (required)
 
 The phone number of the recipient of the text message. This number can be a UK or international number.
 
-```javascript
-String phoneNumber="+447900900123";
+```
+phoneNumber="+447900900123";
 ```
 
 #### personalisation (required)
 
-If a template has placeholder fields for personalised information such as name or reference number, you must provide their values in a map. For example:
+If a template has placeholder fields for personalised information such as name or reference number, you must provide their values in an `object`. For example:
 
 ```javascript
 personalisation={
@@ -79,14 +79,12 @@ personalisation={
 }
 ```
 
-If a template does not have any placeholder fields for personalised information, you must pass in an empty map or `null`.
-
 #### reference (required)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
-```javascript
-String reference='STRING';
+```
+reference='STRING';
 ```
 
 #### smsSenderId (optional)
@@ -104,7 +102,7 @@ In this screen, you can then either:
   - select __Change__ to change the default sender that the service will use, and select __Save__
 
 ```
-String smsSenderId='8e222534-7f05-4972-86e3-17c5d9f894e2'
+smsSenderId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
 If you do not have an `smsSenderId`, you can leave out this argument.
@@ -136,9 +134,7 @@ All messages sent using the [team and whitelist](#team-and-whitelist) or [live](
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_Use err.error.status_code as per text_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -171,21 +167,21 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```javascript
-String templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
 #### emailAddress (required)
 
 The email address of the recipient.
 
-```javascript
-String emailAddress='sender@something.com';
+```
+emailAddress='sender@something.com';
 ```
 
 #### personalisation (required)
 
-If a template has placeholder fields for personalised information such as name or application date, you must provide their values in a map. For example:
+If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
 personalisation={
@@ -194,14 +190,12 @@ personalisation={
 }
 ```
 
-If a template does not have any placeholder fields for personalised information, you must pass in an empty map or `null`.
-
 #### reference (required)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
-```javascript
-String reference='STRING';
+```
+reference='STRING';
 ```
 
 #### emailReplyToId (optional)
@@ -215,7 +209,7 @@ This is an email reply-to address specified by you to receive replies from your 
 1. Select __Change__ to specify the email address to receive replies, and select __Save__.
 
 ```
-String emailReplyToId='8e222534-7f05-4972-86e3-17c5d9f894e2'
+emailReplyToId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
 If you do not have an `emailReplyToId`, you can leave out this argument.
@@ -244,9 +238,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or error object?_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -317,9 +309,7 @@ If the request to the client is successful, the client returns a response `objec
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or error object?_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -360,8 +350,8 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```javascript
-String templateId = "f33517ff-2a88-4f6e-b855-c550268ce08a";
+```
+templateId = "f33517ff-2a88-4f6e-b855-c550268ce08a";
 ```
 
 #### personalisation (required)
@@ -372,7 +362,7 @@ The personalisation argument always contains the following parameters for the le
 - `address_line_2`
 - `postcode`
 
-Any other placeholder fields included in the letter template also count as required parameters. You must provide their values in a map. For example:
+Any other placeholder fields included in the letter template also count as required parameters. You must provide their values in an `object`. For example:
 
 ```javascript
 personalisation={
@@ -382,9 +372,6 @@ personalisation={
     application_date: '2018-01-01',
 },
 ```
-
-If a template does not have any placeholder fields for personalised information, you must pass in an empty map or `null`.
-_is this true? NO_
 
 #### personalisation (optional)
 
@@ -401,11 +388,10 @@ personalisation={
 
 #### reference (OPTIONAL)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
-_is this true? NO. OPTIONAL._
+A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. 
 
-```javascript
-String reference='STRING';
+```
+reference='STRING';
 ```
 
 ### Response
@@ -432,7 +418,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -466,7 +452,7 @@ var response = notifyClient.sendPrecompiledLetter(
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
 
 ```
-String reference="STRING";
+reference="STRING";
 ```
 
 #### pdf_file
@@ -496,7 +482,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -609,9 +595,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or error object?_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -637,7 +621,7 @@ notifyClient
 ;
 ```
 
-To get the most recent messages, you must pass in an empty `olderThan` argument or `null`._is this true?_
+To get the most recent messages, you must pass in an empty `olderThan` argument or `null`.
 
 To get older messages, pass the ID of an older notification into the `olderThan` argument. This returns the next oldest messages from the specified notification ID.
 
@@ -672,16 +656,16 @@ You can filter by:
 
 A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications.
 
-```javascript
-String reference='STRING';
+```
+reference='STRING';
 ```
 
 #### olderThan (optional)
 
 Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID.
 
-```javascript
-String olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
+```
+olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 notifications.
@@ -726,9 +710,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or errorobject?_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -760,8 +742,8 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```javascript
-String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+```
+templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 ```
 
 ### Response
@@ -784,9 +766,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or errorobject?_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -815,8 +795,8 @@ notifyClient
 
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
-```javascript
-String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+```
+templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 ```
 
 #### version (required)
@@ -843,9 +823,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
-
-_err or errorobject_
+If the request is not successful, the client returns an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -904,7 +882,7 @@ If the request to the client is successful, the client returns an `object`:
 }
 ```
 
-If no templates exist for a template type or there no templates for a service, the object is empty. _is this true?_
+If no templates exist for a template type or there no templates for a service, the object is empty.
 
 ## Generate a preview template
 
@@ -930,14 +908,12 @@ The parameters in the personalisation argument must match the placeholder fields
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-String templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 ```
 
 #### personalisation (optional)
 
-If a template has placeholder fields for personalised information such as name or application date, you must pass in an empty map or `null`. For example:
-
-_is it a map or null or what?_
+If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
 personalisation={
@@ -946,9 +922,7 @@ personalisation={
 }
 ```
 
-If a template does not have any placeholder fields for personalised information, you must pass in an empty _what?_ or `undefined`.
-
-_empty map?_
+You can leave out this argument if a template does not have any placeholder fields for personalised information.
 
 ### Response
 
@@ -992,7 +966,7 @@ notifyClient
 ;
 ```
 
-To get the most recent messages, you must pass in an empty argument or `null`._is this true?_
+To get the most recent messages, you must pass in an empty argument or `null`.
 
 To get older messages, pass the ID of an older notification into the `olderThan` argument. This returns the next oldest messages from the specified notification ID.
 
@@ -1005,8 +979,6 @@ Input the ID of a received text message into this argument. If you use this argu
 ```
 olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
-
-_change so just value_
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 text messages.
 
@@ -1035,4 +1007,4 @@ If the request to the client is successful, the client returns an `object` that 
 }
 ```
 
-If the notification specified in the `olderThan` argument is older than 7 days, the client returns an empty response. _true?_
+If the notification specified in the `olderThan` argument is older than 7 days, the client returns an empty response. 

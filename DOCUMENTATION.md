@@ -50,6 +50,11 @@ notifyClient
 ;
 ```
 
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
+
 ### Arguments
 
 #### templateId (required)
@@ -160,6 +165,11 @@ notifyClient
     .catch(err => console.error(err))
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 ### Arguments
 
@@ -285,9 +295,14 @@ fs.readFile('path/to/document.pdf', function(err, pdf_file) {
 });
 ```
 
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
+
 #### Response
 
-If the request to the client is successful, the client returns a response `object`:
+If the request to the client is successful, the client returns an `object`:
 
 ```javascript
 {
@@ -343,6 +358,11 @@ notifyClient
     .catch(err => console.error object)
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 ### Arguments
 
@@ -548,6 +568,11 @@ notifyClient
 ;
 ```
 
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
+
 ### Arguments
 
 #### notificationId (required)
@@ -620,6 +645,11 @@ notifyClient
 	.catch((err) => {})
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 To get the most recent messages, you must pass in an empty `olderThan` argument or `null`.
 
@@ -736,6 +766,11 @@ notifyClient
 ;
 ```
 
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
+
 ### Arguments
 
 #### templateId (required)
@@ -788,6 +823,11 @@ notifyClient
     .catch((err) => {})
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 ### Arguments
 
@@ -847,6 +887,11 @@ notifyClient
 ;
 ```
 
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
+
 ### Arguments
 
 #### templateType (optional)
@@ -898,6 +943,11 @@ notifyClient
     .catch((err) => {})
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 The parameters in the personalisation argument must match the placeholder fields in the actual template. The API notification client ignores any extra fields in the method.
 
@@ -965,6 +1015,11 @@ notifyClient
     .catch((err) => {})
 ;
 ```
+
+The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
+
+- resolve with a `response` if successful
+- fail with an `err` if unsuccessful
 
 To get the most recent messages, you must pass in an empty argument or `null`.
 

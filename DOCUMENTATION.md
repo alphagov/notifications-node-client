@@ -41,12 +41,12 @@ You can use GOV.UK Notify to send text messages, emails (including documents) an
 
 ```javascript
 notifyClient
-	.sendSms(templateId, phoneNumber, {
-			personalisation: personalisation,
-			reference: reference,
-			smsSenderId: smsSenderId})
-	.then(response => console.log(response))
-	.catch(err => console.error(err))
+    .sendSms(templateId, phoneNumber, {
+        personalisation: personalisation,
+        reference: reference,
+        smsSenderId: smsSenderId})
+    .then(response => console.log(response))
+    .catch(err => console.error(err))
 ;
 ```
 
@@ -62,7 +62,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 #### phoneNumber (required)
@@ -70,7 +70,7 @@ templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 The phone number of the recipient of the text message. This number can be a UK or international number.
 
 ```
-phoneNumber="+447900900123";
+"+447900900123"
 ```
 
 #### personalisation (required)
@@ -78,9 +78,9 @@ phoneNumber="+447900900123";
 If a template has placeholder fields for personalised information such as name or reference number, you must provide their values in an `object`. For example:
 
 ```javascript
-personalisation={
-    'first_name': 'Amala',
-    'reference_number': '300241',
+{
+    "first_name": "Amala",
+    "reference_number": "300241"
 }
 ```
 
@@ -89,7 +89,7 @@ personalisation={
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
 ```
-reference='STRING';
+"STRING";
 ```
 
 #### smsSenderId (optional)
@@ -107,14 +107,14 @@ In this screen, you can then either:
   - select __Change__ to change the default sender that the service will use, and select __Save__
 
 ```
-smsSenderId='8e222534-7f05-4972-86e3-17c5d9f894e2'
+"8e222534-7f05-4972-86e3-17c5d9f894e2"
 ```
 
 If you do not have an `smsSenderId`, you can leave out this argument.
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -139,7 +139,7 @@ All messages sent using the [team and whitelist](#team-and-whitelist) or [live](
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -157,10 +157,10 @@ If the request is not successful, the client returns an `err`.
 
 ```javascript
 notifyClient
-	.sendEmail(templateId, emailAddress, {
-			personalisation: personalisation,
-			reference: reference,
-			emailReplyToId: emailReplyToId})
+    .sendEmail(templateId, emailAddress, {
+        personalisation: personalisation,
+        reference: reference,
+        emailReplyToId: emailReplyToId})
     .then(response => console.log(response))
     .catch(err => console.error(err))
 ;
@@ -178,7 +178,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 #### emailAddress (required)
@@ -186,7 +186,7 @@ templateId="f33517ff-2a88-4f6e-b855-c550268ce08a";
 The email address of the recipient.
 
 ```
-emailAddress='sender@something.com';
+"sender@something.com"
 ```
 
 #### personalisation (required)
@@ -194,9 +194,9 @@ emailAddress='sender@something.com';
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
-personalisation={
-    'first_name': 'Amala',
-    'application_number': '300241',
+personalisation: {
+    "first_name": "Amala",
+    "application_number": "300241"
 }
 ```
 
@@ -205,7 +205,7 @@ personalisation={
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
 
 ```
-reference='STRING';
+"STRING"
 ```
 
 #### emailReplyToId (optional)
@@ -226,7 +226,7 @@ If you do not have an `emailReplyToId`, you can leave out this argument.
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -248,7 +248,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -284,14 +284,14 @@ Pass the file object as a value into the personalisation argument. For example:
 var fs = require('fs');
 
 fs.readFile('path/to/document.pdf', function(err, pdf_file) {
-	console.log(err);
-	notifyClient.sendEmail(templateId, emailAddress, {
-    personalisation: {
-        first_name: 'Amala',
-        application_date: '2018-01-01',
-        link_to_document: notifyClient.prepareUpload(pdf_file)
-    }
-	}).then(response => console.log(response.body)).catch(err => console.error(err))
+    console.log(err);
+    notifyClient.sendEmail(templateId, emailAddress, {
+        personalisation: {
+            first_name: 'Amala',
+            application_date: '2018-01-01',
+            link_to_document: notifyClient.prepareUpload(pdf_file)
+        }
+    }).then(response => console.log(response.body)).catch(err => console.error(err))
 });
 ```
 
@@ -302,29 +302,29 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": "STRING",
-  "content": {
-    "subject": "SUBJECT TEXT",
-    "body": "MESSAGE TEXT",
-    "from_email": "SENDER EMAIL"
-  },
-  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-  "template": {
-    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
-    "version": INTEGER,
-    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
-  }
+    "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+    "reference": "STRING",
+    "content": {
+        "subject": "SUBJECT TEXT",
+        "body": "MESSAGE TEXT",
+        "from_email": "SENDER EMAIL"
+    },
+    "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
+    "template": {
+        "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
+        "version": INTEGER,
+        "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
+    }
 }
 ```
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -352,8 +352,8 @@ When your service first signs up to GOV.UK Notify, you’ll start in trial mode.
 ```javascript
 notifyClient
     .sendLetter(templateId, {
-			personalisation: personalisation,
-			reference: reference})
+        personalisation: personalisation,
+        reference: reference})
     .then(response => console.log(response))
     .catch(err => console.error object)
 ;
@@ -371,7 +371,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId = "f33517ff-2a88-4f6e-b855-c550268ce08a";
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 #### personalisation (required)
@@ -385,12 +385,12 @@ The personalisation argument always contains the following parameters for the le
 Any other placeholder fields included in the letter template also count as required parameters. You must provide their values in an `object`. For example:
 
 ```javascript
-personalisation={
-    address_line_1: 'The Occupier',
-    address_line_2: '123 High Street',
-    postcode: 'SW14 6BH',
-    application_date: '2018-01-01',
-},
+personalisation: {
+    "address_line_1": "The Occupier",
+    "address_line_2": "123 High Street",
+    "postcode": "SW14 6BH",
+    "application_date": "2018-01-01"
+}
 ```
 
 #### personalisation (optional)
@@ -398,12 +398,12 @@ personalisation={
 The following parameters in the letter recipient's address are optional:
 
 ```javascript
-personalisation={
-    address_line_3: 'Richmond upon Thames',
-    address_line_4: 'London',
-    address_line_5: 'Middlesex',
-    address_line_6: 'UK',
-},
+personalisation: {
+    "address_line_3": "Richmond upon Thames",
+    "address_line_4": "London",
+    "address_line_5": "Middlesex",
+    "address_line_6": "UK"
+}
 ```
 
 #### reference (OPTIONAL)
@@ -411,12 +411,12 @@ personalisation={
 A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. 
 
 ```
-reference='STRING';
+"STRING"
 ```
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -431,14 +431,14 @@ If the request to the client is successful, the client returns an `object`:
     "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
     "version": 1,
     "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
-  }
+  },
   "scheduled_for": null
 }
 ```
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -472,7 +472,7 @@ var response = notifyClient.sendPrecompiledLetter(
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
 
 ```
-reference="STRING";
+"STRING"
 ```
 
 #### pdf_file
@@ -484,25 +484,25 @@ var fs = require('fs');
 
 fs.readFile('path/to/document.pdf', function(err, pdf_file) {
     var notification = notifyClient.sendPrecompiledLetter(
-        reference="your reference", pdf_file=pdf_file
+        "your reference", pdf_file
     )
 	});
 ```
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": "your-letter-reference"
+    "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
+    "reference": "your-letter-reference"
 }
 ```
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:--- |:---|:---|
@@ -562,9 +562,9 @@ You can only get the status of messages that are 7 days old or newer.
 
 ```javascript
 notifyClient
-	.getNotificationById(notificationId)
-	.then((response) => { })
-	.catch((err) => {})
+    .getNotificationById(notificationId)
+    .then((response) => {})
+    .catch((err) => {})
 ;
 ```
 
@@ -588,7 +588,7 @@ You can also find it in your [GOV.UK Notify Dashboard](https://www.notifications
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -620,7 +620,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -640,9 +640,9 @@ You can only get the status of messages that are 7 days old or newer.
 
 ```javascript
 notifyClient
-	.getNotifications(templateType, status, reference, olderThan)
-	.then((response) => { })
-	.catch((err) => {})
+    .getNotifications(templateType, status, reference, olderThan)
+    .then((response) => {})
+    .catch((err) => {})
 ;
 ```
 
@@ -687,7 +687,7 @@ You can filter by:
 A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications.
 
 ```
-reference='STRING';
+"STRING"
 ```
 
 #### olderThan (optional)
@@ -695,14 +695,14 @@ reference='STRING';
 Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID.
 
 ```
-olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
+"8e222534-7f05-4972-86e3-17c5d9f894e2"
 ```
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 notifications.
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 { "notifications":
@@ -722,25 +722,25 @@ If the request to the client is successful, the client returns an `object`:
         "status": sending | delivered | permanent-failure | temporary-failure | technical-failure
         "template": {
             "version": 1,
-          "id": 1,
-          "uri": "/template/{id}/{version}"
-       },
-       "created_by_name": "name of the person who sent the notification if sent manually",
-       "created_at": "created at",
-       "sent_at": "sent to provider at",
+            "id": 1,
+            "uri": "/template/{id}/{version}"
+        },
+        "created_by_name": "name of the person who sent the notification if sent manually",
+        "created_at": "created at",
+        "sent_at": "sent to provider at"
     },
     …
-  ],
-  "links": {
-     "current": "/notifications?template_type=sms&status=delivered",
-     "next": "/notifications?other_than=last_id_in_list&template_type=sms&status=delivered"
-  }
+    ],
+    "links": {
+        "current": "/notifications?template_type=sms&status=delivered",
+        "next": "/notifications?other_than=last_id_in_list&template_type=sms&status=delivered"
+    }
 }
 ```
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -761,7 +761,7 @@ This returns the latest version of the template.
 ```javascript
 notifyClient
     .getTemplateById(templateId)
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => {})
 ;
 ```
@@ -778,12 +778,12 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -801,7 +801,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -819,7 +819,7 @@ This returns the latest version of the template.
 ```javascript
 notifyClient
     .getTemplateByIdAndVersion(templateId, version)
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => {})
 ;
 ```
@@ -836,7 +836,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 #### version (required)
@@ -845,7 +845,7 @@ The version number of the template.
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -863,7 +863,7 @@ If the request to the client is successful, the client returns an `object`:
 
 ### Error codes
 
-If the request is not successful, the client returns an `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -882,7 +882,7 @@ This returns the latest version of all templates.
 ```javascript
 notifyClient
     .getAllTemplates(templateType)
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => {})
 ;
 ```
@@ -904,7 +904,7 @@ If you don’t use `templateType`, the client returns all templates. Otherwise y
 
 ### Response
 
-If the request to the client is successful, the client returns an `object`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -939,7 +939,7 @@ This generates a preview version of a template.
 personalisation = { "foo": "bar" };
 notifyClient
     .previewTemplateById(templateId, personalisation)
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => {})
 ;
 ```
@@ -958,7 +958,7 @@ The parameters in the personalisation argument must match the placeholder fields
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
 
 ```
-templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
+"f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
 #### personalisation (optional)
@@ -966,9 +966,9 @@ templateId='f33517ff-2a88-4f6e-b855-c550268ce08a';
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
-personalisation={
-    'first_name': 'Amala',
-    'reference_number': '300241',
+personalisation: {
+    "first_name": "Amala",
+    "reference_number": "300241"
 }
 ```
 
@@ -976,7 +976,7 @@ You can leave out this argument if a template does not have any placeholder fiel
 
 ### Response
 
-If the request to the client is successful, the client returns a `TemplatePreview`:
+If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
 {
@@ -990,7 +990,7 @@ If the request to the client is successful, the client returns a `TemplatePrevie
 
 ### Error codes
 
-If the request is not successful, the client returns an error `err`.
+If the request is not successful, the promise fails with an `err`.
 
 |err.error.status_code|err.error.errors|How to fix|
 |:---|:---|:---|
@@ -1011,7 +1011,7 @@ You can only get messages that are 7 days old or newer.
 ```javascript
 notifyClient
     .getReceivedTexts(olderThan)
-    .then((response) => { })
+    .then((response) => {})
     .catch((err) => {})
 ;
 ```
@@ -1032,34 +1032,34 @@ To get older messages, pass the ID of an older notification into the `olderThan`
 Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID.
 
 ```
-olderThan='8e222534-7f05-4972-86e3-17c5d9f894e2'
+8e222534-7f05-4972-86e3-17c5d9f894e2"
 ```
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 text messages.
 
 ### Response
 
-If the request to the client is successful, the client returns an `object` that returns all received texts.
+If the request to the client is successful, the promise resolves with an `object` containing all received texts.
 
 ```javascript
 {
-  "received_text_messages":
-    [
-      {
-        "id": "notify_id", // required
-        "user_number": "user number", // required user number
-        "notify_number": "notify number", // receiving number
-        "created_at": "created at", // required
-        "service_id": "service id", // required service id
-        "content": "text content" // required text content
-      },
-      …
-    ],
-  "links": {
-    "current": "/received-test-messages",
-    "next": "/received-text-messages?older_than=last_id_in_list"
-  }
+    "received_text_messages":
+        [
+            {
+                "id": "notify_id", // required
+                "user_number": "user number", // required user number
+                "notify_number": "notify number", // receiving number
+                "created_at": "created at", // required
+                "service_id": "service id", // required service id
+                "content": "text content" // required text content
+            },
+            …
+        ],
+    "links": {
+        "current": "/received-test-messages",
+        "next": "/received-text-messages?older_than=last_id_in_list"
+    }
 }
 ```
 
-If the notification specified in the `olderThan` argument is older than 7 days, the client returns an empty response. 
+If the notification specified in the `olderThan` argument is older than 7 days, the promise resolves an empty response. 

@@ -1,3 +1,9 @@
+## [4.5.2] - 2018-11-05
+
+### Changed
+
+* Moved documenation to https://docs.notifications.service.gov.uk/node.html (generated from DOCUMENTATION.md)
+
 ## [4.5.1] - 2018-09-14
 
 ### Changed

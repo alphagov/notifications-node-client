@@ -59,7 +59,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -67,7 +67,7 @@ Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to 
 
 #### phoneNumber (required)
 
-The phone number of the recipient of the text message. This number can be a UK or international number.
+The phone number of the recipient of the text message. This number can be a UK or international number. For example:
 
 ```
 "+447900900123"
@@ -86,29 +86,31 @@ If a template has placeholder fields for personalised information such as name o
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
-"STRING";
+"your_reference_here";
 ```
 
 #### smsSenderId (optional)
 
-A unique identifier of the sender of the text message notification. To find this information, go to the __Text Message sender__ settings screen:
+A unique identifier of the sender of the text message notification. For example:
+
+```
+"8e222534-7f05-4972-86e3-17c5d9f894e2"
+```
+
+To find this information, go to the __Text Message sender__ settings screen:
 
 1. Sign in to your GOV.UK Notify account.
 1. Go to __Settings__.
 1. If you need to change to another service, select __Switch service__ in the top right corner of the screen and select the correct one.
 1. Go to the __Text Messages__ section and select __Manage__ on the __Text Message sender__ row.
 
-In this screen, you can then either:
+In this screen, you can either:
 
   - copy the sender ID that you want to use and paste it into the method
   - select __Change__ to change the default sender that the service will use, and select __Save__
-
-```
-"8e222534-7f05-4972-86e3-17c5d9f894e2"
-```
 
 If you do not have an `smsSenderId`, you can leave out this argument.
 
@@ -175,7 +177,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -183,7 +185,7 @@ Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to 
 
 #### emailAddress (required)
 
-The email address of the recipient.
+The email address of the recipient. For example:
 
 ```
 "sender@something.com"
@@ -202,19 +204,19 @@ personalisation: {
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`.
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
-"STRING"
+"your_reference_here"
 ```
 
 #### emailReplyToId (optional)
 
-This is an email reply-to address specified by you to receive replies from your users. Your service cannot go live until you set up at least one of these email addresses. To set up:
+This is an email reply-to address specified by you to receive replies from your users. Your service cannot go live until you set up at least one of these email addresses. To set this up:
 
-1. Sign into your GOV.UK Notify account.
+1. Sign in to your GOV.UK Notify account.
 1. Go to __Settings__.
-1. If you need to change to another service, select __Switch service__ in the top right corner of the screen and select the correct one.
+1. If you need to change to another service, select __Switch service__ in the top right corner of the screen then select the correct one.
 1. Go to the __Email__ section and select __Manage__ on the __Email reply-to addresses__ row.
 1. Select __Change__ to specify the email address to receive replies, and select __Save__.
 
@@ -270,7 +272,7 @@ To send a document by email, add a placeholder field to the template then upload
 
 ### Add a placeholder field to the template
 
-In Notify, use double brackets to add a placeholder field to the email template. For example:
+In GOV.UK Notify, use double brackets to add a placeholder field to the email template. For example:
 
 "Download your document at: ((link_to_document))"
 
@@ -278,7 +280,7 @@ In Notify, use double brackets to add a placeholder field to the email template.
 
 The document you upload must be a PDF file smaller than 2MB.
 
-Pass the file object as a value into the personalisation argument. For example:
+Pass the file object as a value into the `personalisation` argument. For example:
 
 ```javascript
 var fs = require('fs');
@@ -307,7 +309,7 @@ If the request to the client is successful, the promise resolves with an `object
 ```javascript
 {
     "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-    "reference": "STRING",
+    "reference": "your_reference_here",
     "content": {
         "subject": "SUBJECT TEXT",
         "body": "MESSAGE TEXT",
@@ -341,7 +343,7 @@ If the request is not successful, the promise fails with an `err`.
 
 ## Send a letter
 
-When your service first signs up to GOV.UK Notify, you’ll start in trial mode. You can only send letters in live mode. You must ask GOV.UK Notify to make your service live.
+When your service first signs up to GOV.UK Notify, you’ll start in trial mode. You can only send letters in live mode. You must ask the GOV.UK Notify team to make your service live.
 
 1. Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/).
 1. Select __Using Notify__.
@@ -368,7 +370,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -406,12 +408,12 @@ personalisation: {
 }
 ```
 
-#### reference (OPTIONAL)
+#### reference (optional)
 
-A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. 
+A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. For example:
 
 ```
-"STRING"
+"your_reference_here"
 ```
 
 ### Response
@@ -469,15 +471,15 @@ var response = notifyClient.sendPrecompiledLetter(
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address.
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
 ```
-"STRING"
+"your_reference_here"
 ```
 
 #### pdf_file
 
-The precompiled letter must be a PDF file.
+The precompiled letter must be a PDF file. For example:
 
 ```javascript
 var fs = require('fs');
@@ -519,7 +521,7 @@ If the request is not successful, the promise fails with an `err`.
 
 # Get message status
 
-Message status depends on the type of message that you have sent.
+Message status depends on the type of message you have sent.
 
 You can only get the status of messages that are 7 days old or newer.
 
@@ -581,7 +583,7 @@ The ID of the notification. You can find the notification ID in the response to 
 
 You can also find it in your [GOV.UK Notify Dashboard](https://www.notifications.service.gov.uk).
 
-1. Sign into GOV.UK Notify and select __Dashboard__.
+1. Sign in to GOV.UK Notify and select __Dashboard__.
 1. Select either __emails sent__, __text messages sent__, or __letters sent__.
 1. Select the relevant notification.
 1. Copy the notification ID from the end of the page URL, for example `https://www.notifications.service.gov.uk/services/af90d4cb-ae88-4a7c-a197-5c30c7db423b/notification/ID`.
@@ -684,15 +686,15 @@ You can filter by:
 
 #### reference (optional)
 
-A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications.
+A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
 
 ```
-"STRING"
+"your_reference_here"
 ```
 
 #### olderThan (optional)
 
-Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID.
+Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID. For example:
 
 ```
 "8e222534-7f05-4972-86e3-17c5d9f894e2"
@@ -775,7 +777,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -833,7 +835,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -896,7 +898,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 #### templateType (optional)
 
-If you don’t use `templateType`, the client returns all templates. Otherwise you can filter by:
+If you do not use `templateType`, the client returns all templates. Otherwise you can filter by:
 
 - `email`
 - `sms`
@@ -955,7 +957,7 @@ The parameters in the personalisation argument must match the placeholder fields
 
 #### templateId (required)
 
-Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID.
+Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
@@ -1029,7 +1031,7 @@ To get older messages, pass the ID of an older notification into the `olderThan`
 
 #### olderThan (optional)
 
-Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID.
+Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID. For example:
 
 ```
 8e222534-7f05-4972-86e3-17c5d9f894e2"

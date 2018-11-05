@@ -357,11 +357,12 @@ When your service first signs up to GOV.UK Notify, you’ll start in trial mode.
 
 ```javascript
 notifyClient
-    .sendLetter(templateId, {
-        personalisation: personalisation,
-        reference: reference})
-    .then(response => console.log(response))
-    .catch(err => console.error(object))
+  .sendLetter(templateId, {
+    personalisation: personalisation,
+    reference: reference
+  })
+  .then(response => console.log(response))
+  .catch(err => console.error(object))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:

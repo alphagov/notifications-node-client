@@ -361,8 +361,7 @@ notifyClient
         personalisation: personalisation,
         reference: reference})
     .then(response => console.log(response))
-    .catch(err => console.error object)
-;
+    .catch(err => console.error(object))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:

@@ -9,7 +9,6 @@
 - [x] I’ve used the pull request template
 - [ ] I’ve written unit tests for these changes
 - [ ] I’ve updated the documentation in
-  - `README.md`
   - `DOCUMENTATION.md`
   - `CHANGELOG.md`
 - [ ] I’ve bumped the version number in

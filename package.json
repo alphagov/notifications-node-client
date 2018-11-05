@@ -4,9 +4,9 @@
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha \"spec/**/*.js\" && npm run test:markdown:standard",
+    "test": "mocha \"spec/**/*.js\" && npm run test:markdown:standard",
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",
-    "integration": "./node_modules/.bin/mocha spec/integration/test.js"
+    "integration": "mocha spec/integration/test.js"
   },
   "author": "GDS developers",
   "license": "MIT",

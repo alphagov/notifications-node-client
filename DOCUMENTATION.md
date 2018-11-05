@@ -195,9 +195,11 @@ The email address of the recipient. For example:
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
-personalisation: {
-    "first_name": "Amala",
-    "application_number": "300241"
+{
+  personalisation: {
+    'first_name': 'Amala',
+    'application_number': '300241'
+  }
 }
 ```
 

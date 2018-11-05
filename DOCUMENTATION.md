@@ -362,7 +362,7 @@ notifyClient
     reference: reference
   })
   .then(response => console.log(response))
-  .catch(err => console.error(object))
+  .catch(err => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -489,6 +489,9 @@ The precompiled letter must be a PDF file. For example:
 var fs = require('fs')
 
 fs.readFile('path/to/document.pdf', function (err, pdfFile) {
+  if (err) {
+    console.error(err)
+  }
   var notification = notifyClient.sendPrecompiledLetter(
     'your reference', pdfFile
   )
@@ -569,7 +572,7 @@ You can only get the status of messages that are 7 days old or newer.
 notifyClient
   .getNotificationById(notificationId)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -646,7 +649,7 @@ You can only get the status of messages that are 7 days old or newer.
 notifyClient
   .getNotifications(templateType, status, reference, olderThan)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -765,7 +768,7 @@ This returns the latest version of the template.
 notifyClient
   .getTemplateById(templateId)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -820,7 +823,7 @@ If the request is not successful, the promise fails with an `err`.
 notifyClient
   .getTemplateByIdAndVersion(templateId, version)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -882,7 +885,7 @@ This returns the latest version of all templates.
 notifyClient
   .getAllTemplates(templateType)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -938,7 +941,7 @@ personalisation = { 'foo': 'bar' }
 notifyClient
   .previewTemplateById(templateId, personalisation)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -1009,7 +1012,7 @@ You can only get messages that are 7 days old or newer.
 notifyClient
   .getReceivedTexts(olderThan)
   .then((response) => {})
-  .catch((err) => {})
+  .catch((err) => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:

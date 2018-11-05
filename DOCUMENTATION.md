@@ -288,13 +288,13 @@ Pass the file object as a value into the `personalisation` argument. For example
 ```javascript
 var fs = require('fs')
 
-fs.readFile('path/to/document.pdf', function (err, pdf_file) {
+fs.readFile('path/to/document.pdf', function (err, pdfFile) {
   console.log(err)
   notifyClient.sendEmail(templateId, emailAddress, {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_document: notifyClient.prepareUpload(pdf_file)
+      link_to_document: notifyClient.prepareUpload(pdfFile)
     }
   }).then(response => console.log(response.body)).catch(err => console.error(err))
 })
@@ -467,7 +467,7 @@ This is an invitation-only feature. Contact the GOV.UK Notify team on the [suppo
 ```javascript
 var response = notifyClient.sendPrecompiledLetter(
   reference,
-  pdf_file
+  pdfFile
 )
 ```
 
@@ -481,16 +481,16 @@ A unique identifier you create. This reference identifies a single unique notifi
 "your_reference_here"
 ```
 
-#### pdf_file
+#### pdfFile
 
 The precompiled letter must be a PDF file. For example:
 
 ```javascript
 var fs = require('fs')
 
-fs.readFile('path/to/document.pdf', function (err, pdf_file) {
+fs.readFile('path/to/document.pdf', function (err, pdfFile) {
   var notification = notifyClient.sendPrecompiledLetter(
-    'your reference', pdf_file
+    'your reference', pdfFile
   )
 })
 ```

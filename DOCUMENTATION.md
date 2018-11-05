@@ -62,7 +62,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __Templates__ page to find the template ID. For example:
 
 ```
-"f33517ff-2a88-4f6e-b855-c550268ce08a"
+'f33517ff-2a88-4f6e-b855-c550268ce08a'
 ```
 
 #### phoneNumber (required)
@@ -70,7 +70,7 @@ Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to 
 The phone number of the recipient of the text message. This number can be a UK or international number. For example:
 
 ```
-"+447900900123"
+'+447900900123'
 ```
 
 #### personalisation (required)
@@ -89,7 +89,7 @@ If a template has placeholder fields for personalised information such as name o
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
-"your_reference_here"
+'your_reference_here'
 ```
 
 #### smsSenderId (optional)
@@ -97,7 +97,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 A unique identifier of the sender of the text message notification. For example:
 
 ```
-"8e222534-7f05-4972-86e3-17c5d9f894e2"
+'8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
 To find this information, go to the __Text Message sender__ settings screen:
@@ -715,36 +715,37 @@ If you pass in an empty argument or `null`, the client returns the most recent 2
 If the request to the client is successful, the promise resolves with an `object`:
 
 ```javascript
-{ "notifications":
-    [{
-        "id": "notify_id",
-        "reference": "client reference",
-        "email_address": "email address",
-        "phone_number": "phone number",
-        "line_1": "full name of a person or company",
-        "line_2": "123 The Street",
-        "line_3": "Some Area",
-        "line_4": "Some Town",
-        "line_5": "Some county",
-        "line_6": "Something else",
-        "postcode": "postcode",
-        "type": "sms | letter | email",
-        "status": "sending | delivered | permanent-failure | temporary-failure | technical-failure",
-        "template": {
-            "version": 1,
-            "id": 1,
-            "uri": "/template/{id}/{version}"
-        },
-        "created_by_name": "name of the person who sent the notification if sent manually",
-        "created_at": "created at",
-        "sent_at": "sent to provider at"
-    },
-    // …
-    ],
-    "links": {
-        "current": "/notifications?template_type=sms&status=delivered",
-        "next": "/notifications?other_than=last_id_in_list&template_type=sms&status=delivered"
+{
+  'notifications': [
+    {
+      'id': 'notify_id',
+      'reference': 'client reference',
+      'email_address': 'email address',
+      'phone_number': 'phone number',
+      'line_1': 'full name of a person or company',
+      'line_2': '123 The Street',
+      'line_3': 'Some Area',
+      'line_4': 'Some Town',
+      'line_5': 'Some county',
+      'line_6': 'Something else',
+      'postcode': 'postcode',
+      'type': 'sms | letter | email',
+      'status': 'sending | delivered | permanent-failure | temporary-failure | technical-failure',
+      'template': {
+        'version': 1,
+        'id': 1,
+        'uri': '/template/{id}/{version}'
+      },
+      'created_by_name': 'name of the person who sent the notification if sent manually',
+      'created_at': 'created at',
+      'sent_at': 'sent to provider at'
     }
+    // …
+  ],
+  'links': {
+    'current': '/notifications?template_type=sms&status=delivered',
+    'next': '/notifications?other_than=last_id_in_list&template_type=sms&status=delivered'
+  }
 }
 ```
 
@@ -1048,22 +1049,22 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "received_text_messages":
+  'received_text_messages':
         [
-            {
-                "id": "notify_id", // required
-                "user_number": "user number", // required user number
-                "notify_number": "notify number", // receiving number
-                "created_at": "created at", // required
-                "service_id": "service id", // required service id
-                "content": "text content" // required text content
-            },
-            // …
+          {
+            'id': 'notify_id', // required
+            'user_number': 'user number', // required user number
+            'notify_number': 'notify number', // receiving number
+            'created_at': 'created at', // required
+            'service_id': 'service id', // required service id
+            'content': 'text content' // required text content
+          }
+          // …
         ],
-    "links": {
-        "current": "/received-test-messages",
-        "next": "/received-text-messages?older_than=last_id_in_list"
-    }
+  'links': {
+    'current': '/received-test-messages',
+    'next': '/received-text-messages?older_than=last_id_in_list'
+  }
 }
 ```
 

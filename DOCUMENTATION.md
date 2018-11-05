@@ -729,7 +729,7 @@ If the request to the client is successful, the promise resolves with an `object
         "line_6": "Something else",
         "postcode": "postcode",
         "type": "sms | letter | email",
-        "status": sending | delivered | permanent-failure | temporary-failure | technical-failure
+        "status": "sending | delivered | permanent-failure | temporary-failure | technical-failure",
         "template": {
             "version": 1,
             "id": 1,
@@ -739,7 +739,7 @@ If the request to the client is successful, the promise resolves with an `object
         "created_at": "created at",
         "sent_at": "sent to provider at"
     },
-    …
+    // …
     ],
     "links": {
         "current": "/notifications?template_type=sms&status=delivered",
@@ -913,22 +913,22 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "templates" : [
-        {
-            "id": "template_id",
-            "name": "template name",
-            "type": "sms|email|letter",
-            "created_at": "created at",
-            "updated_at": "updated at",
-            "version": "version",
-            "created_by": "someone@example.com",
-            "body": "body",
-            "subject": "null|email_subject"
-        },
-        {
-            ... another template
-        }
-    ]
+  'templates': [
+    {
+      'id': 'template_id',
+      'name': 'template name',
+      'type': 'sms|email|letter',
+      'created_at': 'created at',
+      'updated_at': 'updated at',
+      'version': 'version',
+      'created_by': 'someone@example.com',
+      'body': 'body',
+      'subject': 'null|email_subject'
+    },
+    {
+      // … another template
+    }
+  ]
 }
 ```
 
@@ -986,11 +986,11 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "notify_id",
-    "type": "sms|email|letter",
-    "version": "version",
-    "body": "Hello bar" // with substitution values,
-    "subject": "null|email_subject"
+  'id': 'notify_id',
+  'type': 'sms|email|letter',
+  'version': 'version',
+  'body': 'Hello bar', // with substitution values
+  'subject': 'null|email_subject'
 }
 ```
 
@@ -1058,7 +1058,7 @@ If the request to the client is successful, the promise resolves with an `object
                 "service_id": "service id", // required service id
                 "content": "text content" // required text content
             },
-            …
+            // …
         ],
     "links": {
         "current": "/received-test-messages",

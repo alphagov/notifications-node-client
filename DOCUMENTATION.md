@@ -17,8 +17,9 @@ npm install --save notifications-node-client
 Add this code to your application:
 
 ```javascript
-var NotifyClient = require('notifications-node-client').NotifyClient,
-    notifyClient = new NotifyClient(apiKey);
+var NotifyClient = require('notifications-node-client').NotifyClient
+
+var notifyClient = new NotifyClient(apiKey)
 ```
 
 To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to the __API integration__ page. You can find more information in the [API keys](#api-keys) section of the documentation.
@@ -28,7 +29,7 @@ To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.
 Add this code to your application:
 
 ```javascript
-notifyClient.setProxy(proxyUrl);
+notifyClient.setProxy(proxyUrl)
 ```
 
 # Send a message
@@ -41,13 +42,12 @@ You can use GOV.UK Notify to send text messages, emails (including documents) an
 
 ```javascript
 notifyClient
-    .sendSms(templateId, phoneNumber, {
-        personalisation: personalisation,
-        reference: reference,
-        smsSenderId: smsSenderId})
-    .then(response => console.log(response))
-    .catch(err => console.error(err))
-;
+  .sendSms(templateId, phoneNumber, {
+    personalisation: personalisation,
+    reference: reference,
+    smsSenderId: smsSenderId })
+  .then(response => console.log(response))
+  .catch(err => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -79,8 +79,8 @@ If a template has placeholder fields for personalised information such as name o
 
 ```javascript
 {
-    "first_name": "Amala",
-    "reference_number": "300241"
+  'first_name': 'Amala',
+  'reference_number': '300241'
 }
 ```
 
@@ -120,18 +120,18 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "bfb50d92-100d-4b8b-b559-14fa3b091cda",
-    "reference": null,
-    "content": {
-        "body": "Some words",
-        "from_number": "40604"
-    },
-    "uri": "https://api.notifications.service.gov.uk/v2/notifications/ceb50d92-100d-4b8b-b559-14fa3b091cd",
-    "template": {
-        "id": "ceb50d92-100d-4b8b-b559-14fa3b091cda",
-       "version": 1,
-       "uri": "https://api.notifications.service.gov.uk/v2/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda"
-    }
+  'id': 'bfb50d92-100d-4b8b-b559-14fa3b091cda',
+  'reference': null,
+  'content': {
+    'body': 'Some words',
+    'from_number': '40604'
+  },
+  'uri': 'https://api.notifications.service.gov.uk/v2/notifications/ceb50d92-100d-4b8b-b559-14fa3b091cd',
+  'template': {
+    'id': 'ceb50d92-100d-4b8b-b559-14fa3b091cda',
+    'version': 1,
+    'uri': 'https://api.notifications.service.gov.uk/v2/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda'
+  }
 }
 ```
 
@@ -159,13 +159,12 @@ If the request is not successful, the promise fails with an `err`.
 
 ```javascript
 notifyClient
-    .sendEmail(templateId, emailAddress, {
-        personalisation: personalisation,
-        reference: reference,
-        emailReplyToId: emailReplyToId})
-    .then(response => console.log(response))
-    .catch(err => console.error(err))
-;
+  .sendEmail(templateId, emailAddress, {
+    personalisation: personalisation,
+    reference: reference,
+    emailReplyToId: emailReplyToId })
+  .then(response => console.log(response))
+  .catch(err => console.error(err))
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -232,19 +231,19 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "bfb50d92-100d-4b8b-b559-14fa3b091cda",
-    "reference": null,
-    "content": {
-        "subject": "Licence renewal",
-        "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
-        "from_email": "the_service@gov.uk"
-    },
-    "uri": "https://api.notifications.service.gov.uk/v2/notifications/ceb50d92-100d-4b8b-b559-14fa3b091cd",
-    "template": {
-        "id": "ceb50d92-100d-4b8b-b559-14fa3b091cda",
-        "version": 1,
-        "uri": "https://api.notificaitons.service.gov.uk/service/your_service_id/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda"
-    }
+  'id': 'bfb50d92-100d-4b8b-b559-14fa3b091cda',
+  'reference': null,
+  'content': {
+    'subject': 'Licence renewal',
+    'body': 'Dear Bill, your licence is due for renewal on 3 January 2016.',
+    'from_email': 'the_service@gov.uk'
+  },
+  'uri': 'https://api.notifications.service.gov.uk/v2/notifications/ceb50d92-100d-4b8b-b559-14fa3b091cd',
+  'template': {
+    'id': 'ceb50d92-100d-4b8b-b559-14fa3b091cda',
+    'version': 1,
+    'uri': 'https://api.notificaitons.service.gov.uk/service/your_service_id/templates/bfb50d92-100d-4b8b-b559-14fa3b091cda'
+  }
 }
 ```
 
@@ -285,18 +284,18 @@ The document you upload must be a PDF file smaller than 2MB.
 Pass the file object as a value into the `personalisation` argument. For example:
 
 ```javascript
-var fs = require('fs');
+var fs = require('fs')
 
-fs.readFile('path/to/document.pdf', function(err, pdf_file) {
-    console.log(err);
-    notifyClient.sendEmail(templateId, emailAddress, {
-        personalisation: {
-            first_name: 'Amala',
-            application_date: '2018-01-01',
-            link_to_document: notifyClient.prepareUpload(pdf_file)
-        }
-    }).then(response => console.log(response.body)).catch(err => console.error(err))
-});
+fs.readFile('path/to/document.pdf', function (err, pdf_file) {
+  console.log(err)
+  notifyClient.sendEmail(templateId, emailAddress, {
+    personalisation: {
+      first_name: 'Amala',
+      application_date: '2018-01-01',
+      link_to_document: notifyClient.prepareUpload(pdf_file)
+    }
+  }).then(response => console.log(response.body)).catch(err => console.error(err))
+})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -310,19 +309,19 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-    "reference": "your_reference_here",
-    "content": {
-        "subject": "SUBJECT TEXT",
-        "body": "MESSAGE TEXT",
-        "from_email": "SENDER EMAIL"
-    },
-    "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-    "template": {
-        "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
-        "version": INTEGER,
-        "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
-    }
+  'id': '740e5834-3a29-46b4-9a6f-16142fde533a',
+  'reference': 'your_reference_here',
+  'content': {
+    'subject': 'SUBJECT TEXT',
+    'body': 'MESSAGE TEXT',
+    'from_email': 'SENDER EMAIL'
+  },
+  'uri': 'https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a',
+  'template': {
+    'id': 'f33517ff-2a88-4f6e-b855-c550268ce08a',
+    'version': INTEGER,
+    'uri': 'https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a'
+  }
 }
 ```
 
@@ -425,19 +424,19 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-  "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-  "reference": null,
-  "content": {
-    "subject": "Licence renewal",
-    "body": "Dear Bill, your licence is due for renewal on 3 January 2016.",
+  'id': '740e5834-3a29-46b4-9a6f-16142fde533a',
+  'reference': null,
+  'content': {
+    'subject': 'Licence renewal',
+    'body': 'Dear Bill, your licence is due for renewal on 3 January 2016.'
   },
-  "uri": "https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-  "template": {
-    "id": "f33517ff-2a88-4f6e-b855-c550268ce08a",
-    "version": 1,
-    "uri": "https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a"
+  'uri': 'https://api.notifications.service.gov.uk/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a',
+  'template': {
+    'id': 'f33517ff-2a88-4f6e-b855-c550268ce08a',
+    'version': 1,
+    'uri': 'https://api.notifications.service.gov.uk/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a'
   },
-  "scheduled_for": null
+  'scheduled_for': null
 }
 ```
 
@@ -465,8 +464,8 @@ This is an invitation-only feature. Contact the GOV.UK Notify team on the [suppo
 
 ```javascript
 var response = notifyClient.sendPrecompiledLetter(
-    reference,
-    pdf_file
+  reference,
+  pdf_file
 )
 ```
 
@@ -485,13 +484,13 @@ A unique identifier you create. This reference identifies a single unique notifi
 The precompiled letter must be a PDF file. For example:
 
 ```javascript
-var fs = require('fs');
+var fs = require('fs')
 
-fs.readFile('path/to/document.pdf', function(err, pdf_file) {
-    var notification = notifyClient.sendPrecompiledLetter(
-        "your reference", pdf_file
-    )
-	});
+fs.readFile('path/to/document.pdf', function (err, pdf_file) {
+  var notification = notifyClient.sendPrecompiledLetter(
+    'your reference', pdf_file
+  )
+})
 ```
 
 ### Response
@@ -500,8 +499,8 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "740e5834-3a29-46b4-9a6f-16142fde533a",
-    "reference": "your-letter-reference"
+  'id': '740e5834-3a29-46b4-9a6f-16142fde533a',
+  'reference': 'your-letter-reference'
 }
 ```
 
@@ -566,10 +565,9 @@ You can only get the status of messages that are 7 days old or newer.
 
 ```javascript
 notifyClient
-    .getNotificationById(notificationId)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getNotificationById(notificationId)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -596,29 +594,29 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "notify_id",
-    "body": "Hello Foo",
-    "subject": "null|email_subject",
-    "reference": "client reference",
-    "email_address": "email address",
-    "phone_number": "phone number",
-    "line_1": "full name of a person or company",
-    "line_2": "123 The Street",
-    "line_3": "Some Area",
-    "line_4": "Some Town",
-    "line_5": "Some county",
-    "line_6": "Something else",
-    "postcode": "postcode",
-    "type": "sms|letter|email",
-    "status": "current status",
-    "template": {
-        "version": 1,
-        "id": 1,
-        "uri": "/template/{id}/{version}"
-     },
-    "created_by_name": "name of the person who sent the notification if sent manually",
-    "created_at": "created at",
-    "sent_at": "sent to provider at",
+  'id': 'notify_id',
+  'body': 'Hello Foo',
+  'subject': 'null|email_subject',
+  'reference': 'client reference',
+  'email_address': 'email address',
+  'phone_number': 'phone number',
+  'line_1': 'full name of a person or company',
+  'line_2': '123 The Street',
+  'line_3': 'Some Area',
+  'line_4': 'Some Town',
+  'line_5': 'Some county',
+  'line_6': 'Something else',
+  'postcode': 'postcode',
+  'type': 'sms|letter|email',
+  'status': 'current status',
+  'template': {
+    'version': 1,
+    'id': 1,
+    'uri': '/template/{id}/{version}'
+  },
+  'created_by_name': 'name of the person who sent the notification if sent manually',
+  'created_at': 'created at',
+  'sent_at': 'sent to provider at'
 }
 ```
 
@@ -644,10 +642,9 @@ You can only get the status of messages that are 7 days old or newer.
 
 ```javascript
 notifyClient
-    .getNotifications(templateType, status, reference, olderThan)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getNotifications(templateType, status, reference, olderThan)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -764,10 +761,9 @@ This returns the latest version of the template.
 
 ```javascript
 notifyClient
-    .getTemplateById(templateId)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getTemplateById(templateId)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -791,15 +787,15 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "template_id",
-    "name": "template name",
-    "type": "sms|email|letter",
-    "created_at": "created at",
-    "updated_at": "updated at",
-    "version": "version",
-    "created_by": "someone@example.com",
-    "body": "body",
-    "subject": "null|email_subject"
+  'id': 'template_id',
+  'name': 'template name',
+  'type': 'sms|email|letter',
+  'created_at': 'created at',
+  'updated_at': 'updated at',
+  'version': 'version',
+  'created_by': 'someone@example.com',
+  'body': 'body',
+  'subject': 'null|email_subject'
 }
 ```
 
@@ -820,10 +816,9 @@ If the request is not successful, the promise fails with an `err`.
 
 ```javascript
 notifyClient
-    .getTemplateByIdAndVersion(templateId, version)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getTemplateByIdAndVersion(templateId, version)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -851,15 +846,15 @@ If the request to the client is successful, the promise resolves with an `object
 
 ```javascript
 {
-    "id": "template_id",
-    "name": "template name",
-    "type": "sms|email|letter",
-    "created_at": "created at",
-    "updated_at": "updated at",
-    "version": "version",
-    "created_by": "someone@example.com",
-    "body": "body",
-    "subject": "null|email_subject"
+  'id': 'template_id',
+  'name': 'template name',
+  'type': 'sms|email|letter',
+  'created_at': 'created at',
+  'updated_at': 'updated at',
+  'version': 'version',
+  'created_by': 'someone@example.com',
+  'body': 'body',
+  'subject': 'null|email_subject'
 }
 ```
 
@@ -883,10 +878,9 @@ This returns the latest version of all templates.
 
 ```javascript
 notifyClient
-    .getAllTemplates(templateType)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getAllTemplates(templateType)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -938,12 +932,11 @@ If no templates exist for a template type or there no templates for a service, t
 This generates a preview version of a template.
 
 ```javascript
-personalisation = { "foo": "bar" };
+personalisation = { 'foo': 'bar' }
 notifyClient
-    .previewTemplateById(templateId, personalisation)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .previewTemplateById(templateId, personalisation)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:
@@ -1012,10 +1005,9 @@ You can only get messages that are 7 days old or newer.
 
 ```javascript
 notifyClient
-    .getReceivedTexts(olderThan)
-    .then((response) => {})
-    .catch((err) => {})
-;
+  .getReceivedTexts(olderThan)
+  .then((response) => {})
+  .catch((err) => {})
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:

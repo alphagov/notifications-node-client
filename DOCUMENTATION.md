@@ -391,11 +391,13 @@ The personalisation argument always contains the following parameters for the le
 Any other placeholder fields included in the letter template also count as required parameters. You must provide their values in an `object`. For example:
 
 ```javascript
-personalisation: {
-    "address_line_1": "The Occupier",
-    "address_line_2": "123 High Street",
-    "postcode": "SW14 6BH",
-    "application_date": "2018-01-01"
+{
+  personalisation: {
+    'address_line_1': 'The Occupier',
+    'address_line_2': '123 High Street',
+    'postcode': 'SW14 6BH',
+    'application_date': '2018-01-01'
+  }
 }
 ```
 
@@ -404,11 +406,13 @@ personalisation: {
 The following parameters in the letter recipient's address are optional:
 
 ```javascript
-personalisation: {
-    "address_line_3": "Richmond upon Thames",
-    "address_line_4": "London",
-    "address_line_5": "Middlesex",
-    "address_line_6": "UK"
+{
+  personalisation: {
+    'address_line_3': 'Richmond upon Thames',
+    'address_line_4': 'London',
+    'address_line_5': 'Middlesex',
+    'address_line_6': 'UK'
+  }
 }
 ```
 
@@ -966,9 +970,11 @@ Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/) and go to 
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
 ```javascript
-personalisation: {
-    "first_name": "Amala",
-    "reference_number": "300241"
+{
+  personalisation: {
+    'first_name': 'Amala',
+    'reference_number': '300241'
+  }
 }
 ```
 

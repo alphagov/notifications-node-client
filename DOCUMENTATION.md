@@ -571,7 +571,7 @@ You can only get the status of messages that are 7 days old or newer.
 ```javascript
 notifyClient
   .getNotificationById(notificationId)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -648,7 +648,7 @@ You can only get the status of messages that are 7 days old or newer.
 ```javascript
 notifyClient
   .getNotifications(templateType, status, reference, olderThan)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -767,7 +767,7 @@ This returns the latest version of the template.
 ```javascript
 notifyClient
   .getTemplateById(templateId)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -822,7 +822,7 @@ If the request is not successful, the promise fails with an `err`.
 ```javascript
 notifyClient
   .getTemplateByIdAndVersion(templateId, version)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -884,7 +884,7 @@ This returns the latest version of all templates.
 ```javascript
 notifyClient
   .getAllTemplates(templateType)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -940,7 +940,7 @@ This generates a preview version of a template.
 personalisation = { 'foo': 'bar' }
 notifyClient
   .previewTemplateById(templateId, personalisation)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 
@@ -1011,7 +1011,7 @@ You can only get messages that are 7 days old or newer.
 ```javascript
 notifyClient
   .getReceivedTexts(olderThan)
-  .then((response) => {})
+  .then((response) => console.log(response))
   .catch((err) => console.error(err))
 ```
 

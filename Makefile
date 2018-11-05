@@ -26,6 +26,14 @@ test: ## Run tests
 integration-test: ## Run integration tests
 	npm test --integration
 
+.PHONY: markdown-standard-test
+markdown-standard-test: ## Run linting on JavaScript examples in markdown using StandardJS
+	npm run test:markdown:standard
+
+.PHONY: markdown-standard-test-fix
+markdown-standard-test-fix: ## Fix errors found from linting
+	npm run test:markdown:standard -- --fix
+
 .PHONY: generate-env-file
 generate-env-file: ## Generate the environment file for running the tests inside a Docker container
 	script/generate_docker_env.sh

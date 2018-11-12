@@ -531,34 +531,32 @@ You can only get the status of messages that are 7 days old or newer.
 
 |Status|Information|
 |:---|:---|
-|created|The message is queued to be sent to the provider. The notification usually remains in this state for a few seconds.|
-|sending|The message is queued to be sent by the provider to the recipient, and GOV.UK Notify is waiting for delivery information.|
-|delivered|The message was successfully delivered.|
-|permanent-failure|The provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list.|
-|temporary-failure|The provider was unable to deliver message, email inbox was full or phone was turned off; you can try to send the message again.|
-|technical-failure|Notify had a technical failure; you can try to send the message again.|
+|Created|The message is queued to be sent to the provider. The notification usually remains in this state for a few seconds.|
+|Sending|The message is queued to be sent by the provider to the recipient, and GOV.UK Notify is waiting for delivery information.|
+|Delivered|The message was successfully delivered.|
+|Failed|This covers all failure statuses:<br>- `permanent-failure` - "The provider was unable to deliver message, email or phone number does not exist; remove this recipient from your list"<br>- `temporary-failure` - "The provider was unable to deliver message, email inbox was full or phone was turned off; you can try to send the message again"<br>- `technical-failure` - "Notify had a technical failure; you can try to send the message again"|
 
 ## Status - text only
 
 |Status|Information|
 |:---|:---|
-|pending|GOV.UK Notify received a callback from the provider but the device has not yet responded. Another callback from the provider determines the final status of the notification.|
-|sent|The text message was delivered internationally. This only applies to text messages sent to non-UK phone numbers. GOV.UK Notify may not receive additional status updates depending on the recipient's country and telecoms provider.|
+|Pending|GOV.UK Notify received a callback from the provider but the device has not yet responded. Another callback from the provider determines the final status of the notification.|
+|Sent|The text message was delivered internationally. This only applies to text messages sent to non-UK phone numbers. GOV.UK Notify may not receive additional status updates depending on the recipient's country and telecoms provider.|
 
 ## Status - letter
 
 |Status|information|
 |:---|:---|
-|technical-failure|The only failure status that applies to letters is `technical-failure`. GOV.UK Notify had an unexpected error while sending to our printing provider.|
-|accepted|GOV.UK Notify is printing and posting the letter.|
-|received|The provider has received the letter to deliver.|
+|Failed|The only failure status that applies to letters is `technical-failure`. GOV.UK Notify had an unexpected error while sending to our printing provider.|
+|Accepted|GOV.UK Notify is printing and posting the letter.|
+|Received|The provider has received the letter to deliver.|
 
 ## Status - pre-compiled letter
 
 |Status|information|
 |:---|:---|
-|pending-virus-check|GOV.UK Notify virus scan of the pre-compiled letter file is not yet complete.|
-|virus-scan-failed|GOV.UK Notify virus scan has identified a potential virus in the pre-compiled letter file.|
+|Pending virus check|GOV.UK Notify virus scan of the pre-compiled letter file is not yet complete.|
+|Virus scan failed|GOV.UK Notify virus scan has identified a potential virus in the pre-compiled letter file.|
 
 ## Get the status of one message
 

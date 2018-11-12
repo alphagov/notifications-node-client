@@ -270,13 +270,15 @@ To send a document by email, add a placeholder field to the template then upload
 
 [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
 
-### Add a placeholder field to the template
+#### Add a placeholder field to the template
 
-In GOV.UK Notify, use double brackets to add a placeholder field to the email template. For example:
+1. Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/). 
+1. Go to the __Templates__ page and select the relevant email template.
+1. Add a placeholder field to the email template using double brackets. For example:
 
 "Download your document at: ((link_to_document))"
 
-### Upload your document
+#### Upload your document
 
 The document you upload must be a PDF file smaller than 2MB.
 
@@ -302,7 +304,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-#### Response
+### Response
 
 If the request to the client is successful, the promise resolves with an `object`:
 

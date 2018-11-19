@@ -86,7 +86,7 @@ If a template has placeholder fields for personalised information such as name o
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
 "your_reference_here";
@@ -204,7 +204,7 @@ personalisation: {
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
 "your_reference_here"
@@ -412,7 +412,7 @@ personalisation: {
 
 #### reference (optional)
 
-A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. For example:
+A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
 ```
 "your_reference_here"
@@ -686,7 +686,7 @@ You can filter by:
 
 #### reference (optional)
 
-A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
+A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
 ```
 "your_reference_here"

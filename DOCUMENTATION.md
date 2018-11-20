@@ -86,7 +86,7 @@ If a template has placeholder fields for personalised information such as name o
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
 "your_reference_here";
@@ -204,7 +204,7 @@ personalisation: {
 
 #### reference (required)
 
-A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. If you do not have a reference, you must pass in an empty string or `null`. For example:
+A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
 ```
 "your_reference_here"
@@ -413,7 +413,7 @@ personalisation: {
 
 #### reference (optional)
 
-A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. For example:
+A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
 ```
 "your_reference_here"
@@ -688,7 +688,7 @@ You can filter by:
 
 #### reference (optional)
 
-A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. For example:
+A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
 ```
 "your_reference_here"
@@ -1067,3 +1067,12 @@ If the request to the client is successful, the promise resolves with an `object
 ```
 
 If the notification specified in the `olderThan` argument is older than 7 days, the promise resolves an empty response. 
+
+### Error codes
+
+If the request is not successful, the promise fails with an `err`.
+
+|err.error.status_code|err.error.errors|How to fix|
+|:---|:---|:---|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
+|`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|

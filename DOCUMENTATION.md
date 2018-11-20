@@ -818,8 +818,6 @@ If the request is not successful, the promise fails with an `err`.
 
 ### Method
 
-This returns the latest version of the template.
-
 ```javascript
 notifyClient
     .getTemplateByIdAndVersion(templateId, version)

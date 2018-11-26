@@ -38,3 +38,16 @@ To run the integration tests:
 `make integration-test`
 
 The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.
+
+## Releasing a new version
+
+This can only be done by members of the GOV.UK Notify team
+
+- Change the version number in `package.json`
+- Update `CHANGELOG.md` with a summary of the changes
+- Commit your changes and make a pull request
+- Get the pull request merged
+- In your local terminal run:
+  - `git checkout master && git fetch && git reset --hard origin/master` (this ensures your working directory is clean)
+  - `npm login` (as the govuk-notify user)
+  - `npm publish`

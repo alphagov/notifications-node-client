@@ -48,6 +48,6 @@ This can only be done by members of the GOV.UK Notify team
 - Commit your changes and make a pull request
 - Get the pull request merged
 - In your local terminal run:
-  - `git checkout master && git pull`
+  - `git checkout master && git fetch && git reset --hard origin/master` (this ensures your working directory is clean)
   - `npm login` (as the govuk-notify user)
   - `npm publish`

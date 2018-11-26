@@ -45,7 +45,8 @@ notifyClient
   .sendSms(templateId, phoneNumber, {
     personalisation: personalisation,
     reference: reference,
-    smsSenderId: smsSenderId })
+    smsSenderId: smsSenderId
+  })
   .then(response => console.log(response))
   .catch(err => console.error(err))
 ```
@@ -162,7 +163,8 @@ notifyClient
   .sendEmail(templateId, emailAddress, {
     personalisation: personalisation,
     reference: reference,
-    emailReplyToId: emailReplyToId })
+    emailReplyToId: emailReplyToId
+  })
   .then(response => console.log(response))
   .catch(err => console.error(err))
 ```

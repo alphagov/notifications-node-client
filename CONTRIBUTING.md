@@ -39,6 +39,19 @@ To run the integration tests:
 
 The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.
 
+## Testing JavaScript examples in Markdown
+
+We automatically test that the JavaScript in the documentation examples matched [our linting standards](https://gds-way.cloudapps.digital/manuals/programming-languages/nodejs/#source-formatting-and-linting),
+this also catches some issues that could stop an example from running when copied.
+
+To test the JavaScript for syntax and linting errors run:
+
+`make markdown-standard-test`
+
+You can then fix some issues automatically by running:
+
+`make markdown-standard-test-fix`
+
 ## Releasing a new version
 
 This can only be done by members of the GOV.UK Notify team

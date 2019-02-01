@@ -5,6 +5,7 @@
     "properties": {
         "id": {"$ref": "definitions.json#/uuid"},
         "reference": {"type": ["string", "null"]},
+        "postage": {"type": "string"},
         "content": {"$ref": "definitions.json#/letter_content"},
         "uri": {"type": "string"},
         "template": {"$ref": "definitions.json#/template"},

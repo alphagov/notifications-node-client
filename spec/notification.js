@@ -273,6 +273,23 @@ describe('notification api', () => {
       });
     });
 
+
+    it('should be able to set postage when sending a precompiled letter', () => {
+      let pdf_file = Buffer.from("%PDF-1.5 testpdf"),
+      reference = "HORK",
+      postage = "first"
+      data = {"reference": reference, "content": pdf_file.toString('base64'), "postage": postage}
+
+      notifyAuthNock
+      .post('/v2/notifications/letter', data)
+      .reply(200, {hiphip: 'hooray'});
+
+      return notifyClient.sendPrecompiledLetter(reference, pdf_file, postage)
+      .then(function (response) {
+        expect(response.statusCode).to.equal(200);
+      });
+    });
+
     it('should throw error when file bigger than 5MB is supplied', () => {
       let file = Buffer.alloc(6*1024*1024),
       reference = "HORK"

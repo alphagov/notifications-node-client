@@ -149,7 +149,7 @@ describer('notification api with a live service', function () {
       var fs = require('fs');
       fs.readFile('./spec/integration/test_files/one_page_pdf.pdf', function(err, pdf_file) {
         console.log(err);
-        return notifyClient.sendPrecompiledLetter("my_reference", pdf_file)
+        return notifyClient.sendPrecompiledLetter("my_reference", pdf_file, "first")
         .then((response) => {
           response.statusCode.should.equal(201);
           expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);

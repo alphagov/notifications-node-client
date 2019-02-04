@@ -488,10 +488,6 @@ A unique identifier you create. This reference identifies a single unique notifi
 "your_reference_here"
 ```
 
-#### postage (optional)
-
-You can choose first or second class postage for your precompiled letter. Set the value to `first` for first class, or `second` for second class. If you do not pass in this argument, the postage will default to second class.
-
 #### pdfFile
 
 The precompiled letter must be a PDF file. For example:
@@ -508,6 +504,11 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
   )
 })
 ```
+
+#### postage (optional)
+
+You can choose first or second class postage for your precompiled letter. Set the value to `first` for first class, or `second` for second class. If you do not pass in this argument, the postage will default to second class.
+
 
 ### Response
 

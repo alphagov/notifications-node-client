@@ -473,7 +473,8 @@ This is an invitation-only feature. Contact the GOV.UK Notify team on the [suppo
 ```javascript
 var response = notifyClient.sendPrecompiledLetter(
   reference,
-  pdfFile
+  pdfFile,
+  postage
 )
 ```
 
@@ -504,6 +505,11 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
 })
 ```
 
+#### postage (optional)
+
+You can choose first or second class postage for your precompiled letter. Set the value to `first` for first class, or `second` for second class. If you do not pass in this argument, the postage will default to second class.
+
+
 ### Response
 
 If the request to the client is successful, the promise resolves with an `object`:
@@ -511,7 +517,8 @@ If the request to the client is successful, the promise resolves with an `object
 ```javascript
 {
   'id': '740e5834-3a29-46b4-9a6f-16142fde533a',
-  'reference': 'your-letter-reference'
+  'reference': 'your-letter-reference',
+  'postage': 'second'
 }
 ```
 
@@ -524,6 +531,7 @@ If the request is not successful, the promise fails with an `err`.
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "personalisation address_line_1 is a required property"`<br>`}]`|Send a valid PDF file|
+|`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "postage invalid. It must be either first or second."`<br>`}]`|Change the value of `postage` argument in the method call to either 'first' or 'second'|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Service is not allowed to send precompiled letters"`<br>`}]`|Contact the GOV.UK Notify team|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: signature, api token not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
@@ -618,6 +626,7 @@ If the request to the client is successful, the promise resolves with an `object
   'line_5': 'Some county',
   'line_6': 'Something else',
   'postcode': 'postcode',
+  'postage': 'first or second',
   'type': 'sms|letter|email',
   'status': 'current status',
   'template': {
@@ -731,6 +740,7 @@ If the request to the client is successful, the promise resolves with an `object
       'line_5': 'Some county',
       'line_6': 'Something else',
       'postcode': 'postcode',
+      'postage': 'first or second',
       'type': 'sms | letter | email',
       'status': 'sending | delivered | permanent-failure | temporary-failure | technical-failure',
       'template': {

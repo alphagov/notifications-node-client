@@ -273,15 +273,15 @@ This is an invitation-only feature. [Contact the GOV.UK Notify team](https://www
 
 To send a document by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the document.
 
-#### Add a placeholder field to the template
+### Add a placeholder field to the template
 
-1. Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/). 
+1. Sign in to [GOV.UK Notify](https://www.notifications.service.gov.uk/).
 1. Go to the __Templates__ page and select the relevant email template.
 1. Add a placeholder field to the email template using double brackets. For example:
 
 "Download your document at: ((link_to_document))"
 
-#### Upload your document
+### Upload your document
 
 The document you upload must be a PDF file smaller than 2MB.
 
@@ -1025,6 +1025,14 @@ This API call returns one page of up to 250 received text messages. You can get 
 
 You can only get messages that are 7 days old or newer.
 
+You can also set up [callbacks](/node.html#callbacks) for received text messages.
+
+## Enable received text messages
+
+Contact the GOV.UK Notify team on the [support page](https://www.notifications.service.gov.uk/support) or through the [Slack channel](https://ukgovernmentdigital.slack.com/messages/govuk-notify) to enable receiving text messages for your service.
+
+## Get a page of received text messages
+
 ### Method
 
 ```javascript
@@ -1080,7 +1088,7 @@ If the request to the client is successful, the promise resolves with an `object
 }
 ```
 
-If the notification specified in the `olderThan` argument is older than 7 days, the promise resolves an empty response. 
+If the notification specified in the `olderThan` argument is older than 7 days, the promise resolves an empty response.
 
 ### Error codes
 

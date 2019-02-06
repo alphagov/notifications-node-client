@@ -15,6 +15,7 @@
         "line_5": {"type": ["string", "null"]},
         "line_6": {"type": ["string", "null"]},
         "postcode": {"type": ["string", "null"]},
+        "postage": {"type": ["string", "null"]},
         "type": {"enum": ["sms", "letter", "email"]},
         "status": {"type": "string"},
         "template": {"$ref": "definitions.json#/template"},

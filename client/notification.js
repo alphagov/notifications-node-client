@@ -197,11 +197,15 @@ _.extend(NotifyClient.prototype, {
       createNotificationPayload('letter', templateId, undefined, personalisation, reference));
   },
 
-  sendPrecompiledLetter: function(reference, pdf_file) {
+  sendPrecompiledLetter: function(reference, pdf_file, postage) {
+    var postage = postage || undefined
     content = _check_and_encode_file(pdf_file, 5)
     notification = {
       "reference": reference,
       "content": content
+    }
+    if (postage != undefined) {
+      notification["postage"] = postage
     }
     return this.apiClient.post('/v2/notifications/letter', notification);
   },

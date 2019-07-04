@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha \"spec/**/*.js\" && npm run test:markdown:standard",
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",
-    "integration": "mocha spec/integration/test.js"
+    "integration": "mocha spec/integration/test.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "author": "GDS developers",
   "license": "MIT",
@@ -14,7 +16,8 @@
     "jsonwebtoken": "8.2.1",
     "request": "2.87.0",
     "request-promise": "4.2.2",
-    "underscore": "^1.9.0"
+    "underscore": "^1.9.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -26,5 +29,6 @@
     "nock": "9.2.6",
     "optimist": "0.6.1",
     "standard-markdown": "^5.0.1"
-  }
+  },
+  "snyk": true
 }

@@ -267,13 +267,13 @@ If the request is not successful, the promise fails with an `err`.
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#service-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification|
 
-## Send a document by email
+## Send a file by email
 
 Send files without the need for email attachments.
 
-This is an invitation-only feature. [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support) to enable this function for your service.
+This is an invitation-only feature. [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support/ask-question-give-feedback) to enable this function for your service.
 
-To send a document by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the document.
+To send a file by email, add a placeholder field to the template then upload a file. The placeholder field will contain a secure link to download the file.
 
 ### Add a placeholder field to the template
 
@@ -281,11 +281,11 @@ To send a document by email, add a placeholder field to the template then upload
 1. Go to the __Templates__ page and select the relevant email template.
 1. Add a placeholder field to the email template using double brackets. For example:
 
-"Download your document at: ((link_to_document))"
+"Download your file at: ((link_to_document))"
 
-### Upload your document
+### Upload your file
 
-The document you upload must be a PDF file smaller than 2MB.
+The file you upload must be a PDF file smaller than 2MB.
 
 Pass the file object as a value into the `personalisation` argument. For example:
 

@@ -1007,7 +1007,8 @@ If the request to the client is successful, the promise resolves with an `object
   'type': 'sms|email|letter',
   'version': 'version',
   'body': 'Hello bar', // with substitution values
-  'subject': 'null|email_subject'
+  'subject': 'null|email_subject',
+  'html': '<p>Example</p>' // Returns the rendered body (email templates only)
 }
 ```
 

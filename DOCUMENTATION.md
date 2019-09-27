@@ -490,7 +490,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 
 #### pdfFile
 
-The precompiled letter must be a PDF file which meets [the GOV.UK Notify PDF letter specification](https://docs.notifications.service.gov.uk/documentation/images/notify-pdf-letter-spec-v2.3.pdf). For example:
+The precompiled letter must be a PDF file which meets [the GOV.UK Notify PDF letter specification](https://docs.notifications.service.gov.uk/documentation/images/notify-pdf-letter-spec-v2.4.pdf). For example:
 
 ```javascript
 var fs = require('fs')

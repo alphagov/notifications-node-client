@@ -1,4 +1,4 @@
-FROM node:6.5.0-slim
+FROM node:10.16.3-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 

@@ -25,6 +25,6 @@
     "mockdate": "2.0.2",
     "nock": "9.2.6",
     "optimist": "0.6.1",
-    "standard-markdown": "^5.0.1"
+    "standard-markdown": "5.0.1"
   }
 }

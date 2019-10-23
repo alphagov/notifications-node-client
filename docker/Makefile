@@ -9,5 +9,8 @@ help:
 build:
 	docker pull `grep "FROM " Dockerfile | cut -d ' ' -f 2` || true
 	docker build \
-		-t govuknotify/nodejs-client-runner \
+		--build-arg HTTP_PROXY="${HTTP_PROXY}" \
+		--build-arg HTTPS_PROXY="${HTTP_PROXY}" \
+		--build-arg NO_PROXY="${NO_PROXY}" \
+		-t govuk/notify-nodejs-client-runner \
 		.

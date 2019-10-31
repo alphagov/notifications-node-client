@@ -236,6 +236,23 @@ _.extend(NotifyClient.prototype, {
 
   /**
    *
+   * @param {String} notificationId
+   *
+   * @returns {Promise}
+   */
+  getPdfForLetterNotification: function(notificationId) {
+    const url = '/v2/notifications/' + notificationId + '/pdf'
+
+    return this.apiClient.getPdf(url)
+    .then(function(response) {
+      var encoded_pdf = JSON.parse(Buffer.from(response.body, "base64").toString("utf8")).content
+      var pdf = Buffer.from(encoded_pdf, "base64")
+      return pdf
+    });
+  },
+
+  /**
+   *
    * @param {String} templateId
    *
    * @returns {Promise}

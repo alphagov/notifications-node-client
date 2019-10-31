@@ -1,3 +1,7 @@
+const chai = require('chai');
+const chaiBytes = require('chai-bytes');
+chai.use(chaiBytes);
+
 let expect = require('chai').expect,
   NotifyClient = require('../client/notification.js').NotifyClient,
   MockDate = require('mockdate'),
@@ -252,6 +256,21 @@ describe('notification api', () => {
     return notifyClient.getNotificationById(notificationId)
       .then(function (response) {
         expect(response.statusCode).to.equal(200);
+      });
+  });
+
+  it('should get letter pdf by id', () => {
+
+    let pdf_file = Buffer.from("%PDF-1.5 testpdf")
+    let notificationId = 'wfdfdgf';
+
+    notifyAuthNock
+      .get('/v2/notifications/' + notificationId + '/pdf')
+      .reply(200, {content: pdf_file.toString('base64')});
+
+    return notifyClient.getPdfForLetterNotification(notificationId)
+      .then(function (response_buffer) {
+        expect(response_buffer).to.equalBytes(pdf_file)
       });
   });
 

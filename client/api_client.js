@@ -81,6 +81,24 @@ _.extend(ApiClient.prototype, {
     return restClient(options);
   },
 
+  getPdf: function(path) {
+    var options = {
+      method: 'GET',
+      uri: this.urlBase + path,
+      json: true,
+      resolveWithFullResponse: true,
+      encoding: "base64",
+      headers: {
+        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version,
+        "Content-type": "application/pdf"
+      }
+    };
+    if(this.proxy !== null) options.proxy = this.proxy;
+
+    return restClient(options);
+  },
+
   /**
    *
    * @param {string} path

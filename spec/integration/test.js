@@ -1,10 +1,13 @@
+const fs = require('fs');
 const NotifyClient = require('../../client/notification.js').NotifyClient;
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const chaiJsonSchema = require('chai-json-schema');
+const chaiBytes = require('chai-bytes');
 chai.use(chaiAsPromised);
 chai.use(chaiJsonSchema);
+chai.use(chaiBytes);
 
 const should = chai.should();
 const expect = chai.expect;
@@ -24,7 +27,7 @@ function make_random_id() {
 
 describer('notification api with a live service', function () {
   // default is 2000 (ms) - api is sometimes slower than this :(
-  this.timeout(10000)
+  this.timeout(40000)
 
   let notifyClient;
   let whitelistNotifyClient;
@@ -61,7 +64,6 @@ describer('notification api with a live service', function () {
   });
 
   describe('notifications', () => {
-
     it('send email notification', () => {
       var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
         options = {personalisation: personalisation, reference: clientRef};
@@ -145,14 +147,14 @@ describer('notification api with a live service', function () {
     });
 
     it('send a precompiled letter notification', () => {
-      var postLetterNotificationResponseJson = require('./schemas/v2/POST_notification_letter_response.json');
-      var fs = require('fs');
+      var postPrecompiledLetterNotificationResponseJson = require(
+          './schemas/v2/POST_notification_precompiled_letter_response.json'
+      );
       fs.readFile('./spec/integration/test_files/one_page_pdf.pdf', function(err, pdf_file) {
-        console.log(err);
         return notifyClient.sendPrecompiledLetter("my_reference", pdf_file, "first")
         .then((response) => {
           response.statusCode.should.equal(201);
-          expect(response.body).to.be.jsonSchema(postLetterNotificationResponseJson);
+          expect(response.body).to.be.jsonSchema(postPrecompiledLetterNotificationResponseJson);
           letterNotificationId = response.body.id;
         })
       });
@@ -190,6 +192,47 @@ describer('notification api with a live service', function () {
         response.body.type.should.equal('letter');
         response.body.body.should.equal('Hello ' + letterContact.address_line_1);
       });
+    });
+
+    it('get a letter pdf', (done) => {
+      should.exist(letterNotificationId)
+      pdf_contents = fs.readFileSync('./spec/integration/test_files/one_page_pdf.pdf');
+      var count = 0
+      // make sure test is closed
+      const endTest = (err) => {
+        if (err !== undefined) {
+          done(err);
+        } else {
+          done();
+        }
+      };
+      // it takes a while for the pdf for a freshly sent letter to become ready, so we need to retry the promise
+      // a few times, and apply delay in between the attempts. Since our function returns a promise,
+      // and it's asynchronous, we cannot use a regular loop to do that. That's why we envelop our promise in a
+      // function which we call up to 7 times or until the promise is resolved.
+      const tryClient = () => {
+        return notifyClient.getPdfForLetterNotification(letterNotificationId)
+        .then((file_buffer) => {
+          var fileBuffer = file_buffer
+          expect(pdf_contents).to.equalBytes(file_buffer);
+          endTest();
+        })
+        .catch((err) => {
+          if (err.constructor.name === 'AssertionError') {
+            endTest(err)
+          }
+          if (err.error && (err.error.errors[0].error === "PDFNotReadyError")) {
+            count += 1
+            if (count < 7) {
+              setTimeout(tryClient, 5000)
+            } else {
+              endTest(new Error('Too many PDFNotReadyError errors'));
+            }
+          };
+        })
+      };
+      tryClient()
+
     });
 
     it('get all notifications', () => {

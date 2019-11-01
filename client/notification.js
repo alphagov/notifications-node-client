@@ -245,8 +245,7 @@ _.extend(NotifyClient.prototype, {
 
     return this.apiClient.getPdf(url)
     .then(function(response) {
-      var encoded_pdf = JSON.parse(Buffer.from(response.body, "base64").toString("utf8")).content
-      var pdf = Buffer.from(encoded_pdf, "base64")
+      var pdf = Buffer.from(response.body, "base64")
       return pdf
     });
   },

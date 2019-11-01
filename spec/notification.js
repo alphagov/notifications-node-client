@@ -266,7 +266,7 @@ describe('notification api', () => {
 
     notifyAuthNock
       .get('/v2/notifications/' + notificationId + '/pdf')
-      .reply(200, {content: pdf_file.toString('base64')});
+      .reply(200, pdf_file.toString());
 
     return notifyClient.getPdfForLetterNotification(notificationId)
       .then(function (response_buffer) {

@@ -87,7 +87,7 @@ _.extend(ApiClient.prototype, {
       uri: this.urlBase + path,
       json: true,
       resolveWithFullResponse: true,
-      encoding: "base64",
+      encoding: null,
       headers: {
         'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
         'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version,

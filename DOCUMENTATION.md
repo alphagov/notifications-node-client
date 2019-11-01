@@ -783,11 +783,10 @@ If the request is not successful, the promise fails with an `err`.
 ```javascript
 notifyClient
   .getPdfForLetterNotification(notificationId)
-  .then(function(fileBuffer) {
+  .then(function (fileBuffer) {
     return fileBuffer
-  })  /* the response is a file buffer ,an instance of Buffer */
+  }) /* the response is a file buffer, an instance of Buffer */
   .catch((err) => console.error(err))
-
 ```
 
 The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) [external link]. The promise will either:

@@ -1,3 +1,11 @@
+## [4.7.0] - 2019-02-01
+
+### Changed
+
+* Add `notifyClient.getPdfForLetterNotification(notificationId)`
+    * Returns a Buffer with pdf data
+    * Will raise a BadRequestError if the PDF is not available
+
 ## [4.6.0] - 2019-02-01
 
 ### Changed

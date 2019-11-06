@@ -243,7 +243,7 @@ _.extend(NotifyClient.prototype, {
   getPdfForLetterNotification: function(notificationId) {
     const url = '/v2/notifications/' + notificationId + '/pdf'
 
-    return this.apiClient.getPdf(url)
+    return this.apiClient.get(url, { encoding: null })
     .then(function(response) {
       var pdf = Buffer.from(response.body, "base64")
       return pdf

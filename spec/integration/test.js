@@ -198,14 +198,6 @@ describer('notification api with a live service', function () {
       should.exist(letterNotificationId)
       pdf_contents = fs.readFileSync('./spec/integration/test_files/one_page_pdf.pdf');
       var count = 0
-      // make sure test is closed
-      const endTest = (err) => {
-        if (err !== undefined) {
-          done(err);
-        } else {
-          done();
-        }
-      };
       // it takes a while for the pdf for a freshly sent letter to become ready, so we need to retry the promise
       // a few times, and apply delay in between the attempts. Since our function returns a promise,
       // and it's asynchronous, we cannot use a regular loop to do that. That's why we envelop our promise in a
@@ -213,20 +205,19 @@ describer('notification api with a live service', function () {
       const tryClient = () => {
         return notifyClient.getPdfForLetterNotification(letterNotificationId)
         .then((file_buffer) => {
-          var fileBuffer = file_buffer
           expect(pdf_contents).to.equalBytes(file_buffer);
-          endTest();
+          done();
         })
         .catch((err) => {
           if (err.constructor.name === 'AssertionError') {
-            endTest(err)
+            done(err);
           }
           if (err.error && (err.error.errors[0].error === "PDFNotReadyError")) {
             count += 1
             if (count < 7) {
               setTimeout(tryClient, 5000)
             } else {
-              endTest(new Error('Too many PDFNotReadyError errors'));
+              done(new Error('Too many PDFNotReadyError errors'));
             }
           };
         })

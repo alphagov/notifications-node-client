@@ -64,7 +64,7 @@ _.extend(ApiClient.prototype, {
    *
    * @returns {Promise}
    */
-  get: function(path) {
+  get: function(path, additionalOptions) {
     var options = {
       method: 'GET',
       uri: this.urlBase + path,
@@ -75,7 +75,7 @@ _.extend(ApiClient.prototype, {
         'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
-
+    _.extend(options, additionalOptions)
     if(this.proxy !== null) options.proxy = this.proxy;
 
     return restClient(options);

@@ -1,6 +1,6 @@
 {
   "name": "notifications-node-client",
-  "version": "4.6.0",
+  "version": "4.7.0",
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "chai": "4.1.2",
     "chai-as-promised": "7.1.1",
     "chai-json-schema": "1.5.0",
+    "chai-bytes": "0.1.2",
     "jsonschema": "1.2.4",
     "mocha": "5.2.0",
     "mockdate": "2.0.2",

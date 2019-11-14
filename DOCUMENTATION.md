@@ -106,7 +106,7 @@ A unique identifier of the sender of the text message notification. For example:
 '8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
-You can find this information on the __Text Message sender__ settings page:
+To find the text message sender:
 
 1. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in).
 1. Go to the __Settings__ page.

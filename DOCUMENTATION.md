@@ -224,7 +224,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 "your_reference_here"
 ```
 
-#### email_reply_to_id (optional)
+#### emailReplyToId (optional)
 
 This is an email address specified by you to receive replies from your users. You must add at least one reply-to email address before your service can go live.
 

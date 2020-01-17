@@ -135,7 +135,7 @@ describe('notification api', () => {
       let file = Buffer.alloc(3*1024*1024)
       expect(function(){
         notifyClient.prepareUpload(file);
-      }).to.throw("Document is larger than 2MB.")
+      }).to.throw("File is larger than 2MB.")
     });
   });
 
@@ -314,7 +314,7 @@ describe('notification api', () => {
       reference = "HORK"
       expect(function(){
         notifyClient.sendPrecompiledLetter(reference, file);
-      }).to.throw("Document is larger than 5MB.")
+      }).to.throw("File is larger than 5MB.")
     });
   });
 

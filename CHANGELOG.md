@@ -1,4 +1,10 @@
-## [4.7.0] - 2019-02-01
+## [4.7.1] - 2020-01-27
+
+### Changed
+
+* Refer to files, not documents, in error messages
+
+## [4.7.0] - 2019-11-01
 
 ### Changed
 

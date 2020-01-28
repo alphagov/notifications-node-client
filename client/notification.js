@@ -114,7 +114,7 @@ function checkOptionsKeys(allowedKeys, options) {
 
 function _check_and_encode_file(file, size_limit) {
   if (file.length > size_limit * 1024 * 1024) {
-    throw "Document is larger than " + String(size_limit) + "MB.";
+    throw "File is larger than " + String(size_limit) + "MB.";
   }
   return file.toString('base64')
 }

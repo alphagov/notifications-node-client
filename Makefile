@@ -83,6 +83,10 @@ integration-test-with-docker: prepare-docker-runner-image generate-env-file ## R
 		${DOCKER_BUILDER_IMAGE_NAME} \
 		make integration-test
 
+.PHONY: get-client-version
+get-client-version: ## Retrieve client version number from source code
+	@node -p "require('./package.json').version"
+
 .PHONY: clean-docker-containers
 clean-docker-containers: ## Clean up any remaining docker containers
 	docker rm -f $(shell docker ps -q -f "name=${DOCKER_CONTAINER_PREFIX}") 2> /dev/null || true

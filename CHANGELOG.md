@@ -1,3 +1,9 @@
+## [4.7.2] - 2020-01-31
+
+### Changed
+
+* Add homepage to package.json
+
 ## [4.7.1] - 2020-01-27
 
 ### Changed

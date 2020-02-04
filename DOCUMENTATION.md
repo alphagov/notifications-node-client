@@ -240,7 +240,7 @@ To add a reply-to email address:
 emailReplyToId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
-If you do not have an `emailReplyToId`, you can leave out this argument.
+You can leave out this argument if your service only has one reply-to email address, or you want to use the default email address.
 
 ### Response
 

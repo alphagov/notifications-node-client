@@ -118,7 +118,7 @@ In this screen, you can either:
   - copy the sender ID that you want to use and paste it into the method
   - select __Change__ to change the default sender that the service will use, and select __Save__
 
-If you do not have an `smsSenderId`, you can leave out this argument.
+You can leave out this argument if your service only has one text message sender, or if you want to use the default sender.
 
 ### Response
 
@@ -240,7 +240,7 @@ To add a reply-to email address:
 emailReplyToId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 ```
 
-If you do not have an `emailReplyToId`, you can leave out this argument.
+You can leave out this argument if your service only has one reply-to email address, or you want to use the default email address.
 
 ### Response
 

@@ -415,7 +415,7 @@ The personalisation argument always contains the following parameters for the le
 
 - `address_line_1`
 - `address_line_2`
-- `postcode`
+- `postcode` (this needs to be a real UK postcode)
 
 Any other placeholder fields included in the letter template also count as required parameters. You must provide their values in an `object`. For example:
 

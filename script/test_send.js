@@ -4,7 +4,7 @@ var argv = require('optimist')
       ' -s [notify secret]' +
       ' -t [templateId]' +
       ' -d [destination (email address or phone number, not needed for letters]' +
-      ' -p [personalisation (required for letter {"address_line_1": "mrs test", "address_line_2": "1 test street", "postcode": "N1"})]' +
+      ' -p [personalisation (required for letter {"address_line_1": "mrs test", "address_line_2": "1 test street", "postcode": "SW1 1AA"})]' +
       ' -m [type (email, sms or letter, default email)]')
     .demand(['s', 't'])
     .argv,

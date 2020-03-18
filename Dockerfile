@@ -7,6 +7,7 @@ RUN \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		make \
+		gnupg \
 	&& echo "Clean up" \
 	&& rm -rf /var/lib/apt/lists/* /tmp/*
 

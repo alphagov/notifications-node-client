@@ -41,7 +41,7 @@ describer('notification api with a live service', function () {
   const letterContact = {
     address_line_1: make_random_id(),
     address_line_2: 'Foo',
-    postcode: 'Bar',
+    postcode: 'SW1 1AA',
   };
   const smsTemplateId = process.env.SMS_TEMPLATE_ID;
   const smsSenderId = process.env.SMS_SENDER_ID || undefined;
@@ -350,7 +350,7 @@ describer('notification api with a live service', function () {
     });
 
     it('preview letter template', () => {
-      var personalisation = { "address_line_1": "Foo", "address_line_2": "Bar", "postcode": "Zing" }
+      var personalisation = { "address_line_1": "Foo", "address_line_2": "Bar", "postcode": "SW1 1AA" }
       return notifyClient.previewTemplateById(letterTemplateId, personalisation).then((response) => {
         response.statusCode.should.equal(200);
         expect(response.body).to.be.jsonSchema(postTemplatePreviewJson);

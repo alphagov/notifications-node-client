@@ -3,7 +3,7 @@ var expect = require('chai').expect,
   ApiClient = require('../client/api_client.js'),
   nock = require('nock'),
   createGovukNotifyToken = require('../client/authentication.js'),
-  version = require(__dirname + '/../package.json').version;
+  version = require('../package.json').version;
 
 
 describe('api client', function () {

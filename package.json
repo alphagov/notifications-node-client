@@ -2,6 +2,10 @@
   "name": "notifications-node-client",
   "version": "4.7.2",
   "homepage": "https://docs.notifications.service.gov.uk/node.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alphagov/notifications-node-client.git"
+  },
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
   "scripts": {

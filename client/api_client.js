@@ -2,7 +2,7 @@ var restClient = require('request-promise'),
     _ = require('underscore'),
     createGovukNotifyToken = require('../client/authentication.js'),
     notifyProductionAPI = 'https://api.notifications.service.gov.uk'
-    version = require(__dirname + '/../package.json').version;
+    version = require('../package.json').version;
 
 /**
  * @param urlBase

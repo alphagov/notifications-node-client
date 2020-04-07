@@ -1,3 +1,9 @@
+## [4.7.3] - 2020-04-03
+
+### Changed
+
+* Remove `__dirname` global call from api client
+
 ## [4.7.2] - 2020-01-31
 
 ### Changed

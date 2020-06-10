@@ -326,6 +326,25 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
+#### CSV Files
+
+Uploads for CSV files should use the `isCsv` parameter on the `prepareUpload()` function.  For example:
+
+```javascript
+var fs = require('fs')
+
+fs.readFile('path/to/document.csv', function (err, csvFile) {
+  console.log(err)
+  notifyClient.sendEmail(templateId, emailAddress, {
+    personalisation: {
+      first_name: 'Amala',
+      application_date: '2018-01-01',
+      link_to_file: notifyClient.prepareUpload(csvFile, true)
+    }
+  }).then(response => console.log(response.body)).catch(err => console.error(err))
+})
+```
+
 ### Response
 
 If the request to the client is successful, the promise resolves with an `object`:

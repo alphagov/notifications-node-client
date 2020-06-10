@@ -113,6 +113,57 @@ describe('notification api', () => {
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
         expect(response.statusCode).to.equal(200);
+        expect(response.request.body).to.include('"is_csv":false');
+      });
+    });
+
+    it('should send an email with CSV document upload', () => {
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {documents:
+            notifyClient.prepareUpload(Buffer.from("a,b"), true)
+          },
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation,
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.request.body).to.include('"is_csv":true');
+      });
+    });
+
+    it('should send an email with non CSV document upload', () => {
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {documents:
+            notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"), false)
+          },
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation,
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.request.body).to.include('"is_csv":false');
       });
     });
 

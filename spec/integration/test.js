@@ -30,7 +30,7 @@ describer('notification api with a live service', function () {
   this.timeout(40000)
 
   let notifyClient;
-  let whitelistNotifyClient;
+  let teamNotifyClient;
   let emailNotificationId;
   let smsNotificationId;
   let letterNotificationId;
@@ -54,9 +54,9 @@ describer('notification api with a live service', function () {
     const urlBase = process.env.NOTIFY_API_URL;
     const apiKeyId = process.env.API_KEY
     const inboundSmsKeyId = process.env.INBOUND_SMS_QUERY_KEY;
-    const whitelistApiKeyId = process.env.API_SENDING_KEY;
+    const teamApiKeyId = process.env.API_SENDING_KEY;
     notifyClient = new NotifyClient(urlBase, apiKeyId);
-    whitelistNotifyClient = new NotifyClient(urlBase, whitelistApiKeyId);
+    teamNotifyClient = new NotifyClient(urlBase, teamApiKeyId);
     receivedTextClient = new NotifyClient(urlBase, inboundSmsKeyId);
     var definitions_json = require('./schemas/v2/definitions.json');
     chai.tv4.addSchema('definitions.json', definitions_json);
@@ -126,7 +126,7 @@ describer('notification api with a live service', function () {
         options = {personalisation: personalisation, reference: clientRef, smsSenderId: smsSenderId};
 
       should.exist(smsSenderId);
-      return whitelistNotifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
+      return teamNotifyClient.sendSms(smsTemplateId, phoneNumber, options).then((response) => {
         response.statusCode.should.equal(201);
         expect(response.body).to.be.jsonSchema(postSmsNotificationResponseJson);
         response.body.content.body.should.equal('Hello Foo\n\nFunctional Tests make our world a better place');

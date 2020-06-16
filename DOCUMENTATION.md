@@ -143,7 +143,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If you are using the [test API key](#test), all your messages come back with a `delivered` status.
 
-All messages sent using the [team and whitelist](#team-and-whitelist) or [live](#live) keys appear on your dashboard.
+All messages sent using the [team and guest list](#team-and-guest-list) or [live](#live) keys appear on your dashboard.
 
 ### Error codes
 

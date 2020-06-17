@@ -709,10 +709,10 @@ You can pass in empty arguments or `null` to ignore these filters.
 
 You can filter by each:
 
-* [email status](#status---email)
-* [text message status](#status---text-message)
-* [letter status](#status---letter)
-* [precompiled letter status](#status---precompiled-letter)
+* [email status](#status-email)
+* [text message status](#status-text-message)
+* [letter status](#status-letter)
+* [precompiled letter status](#status-precompiled-letter)
 
 You can leave out this argument to ignore this filter.
 

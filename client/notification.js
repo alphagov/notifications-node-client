@@ -329,8 +329,18 @@ _.extend(NotifyClient.prototype, {
     this.apiClient.setProxy(url);
   },
 
-  prepareUpload: function(pdf_data) {
-    return {'file': _check_and_encode_file(pdf_data, 2)}
+  /**
+  *
+  * @param {Buffer} fileData
+  * @param {Boolean} isCsv
+  *
+  * @returns {Dictionary}
+  */
+  prepareUpload: function(fileData, isCsv = false) {
+    return {
+      'file': _check_and_encode_file(fileData, 2),
+      'is_csv': isCsv
+    }
   },
 
 });

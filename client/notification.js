@@ -331,14 +331,14 @@ _.extend(NotifyClient.prototype, {
 
   /**
   *
-  * @param {Buffer} pdf_data
+  * @param {Buffer} fileData
   * @param {Boolean} isCsv
   *
   * @returns {Dictionary}
   */
-  prepareUpload: function(pdf_data, isCsv = false) {
+  prepareUpload: function(fileData, isCsv = false) {
     return {
-      'file': _check_and_encode_file(pdf_data, 2),
+      'file': _check_and_encode_file(fileData, 2),
       'is_csv': isCsv
     }
   },

@@ -231,7 +231,7 @@ describer('notification api with a live service', function () {
           if (err.error && (err.error.errors[0].error === "PDFNotReadyError")) {
             count += 1
             if (count < 7) {
-              setTimeout(tryClient, 5000)
+              setTimeout(tryClient, 5)
             } else {
               done(new Error('Too many PDFNotReadyError errors'));
             }

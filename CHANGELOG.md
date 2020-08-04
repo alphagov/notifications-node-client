@@ -1,4 +1,10 @@
-## 4.8.0
+## 4.9.0 - 2020-08-19
+
+### Changed
+
+* Added `letter_contact_block` to the responses for `getTemplateById`, `getTemplateByIdAndVersion` and `getAllTemplates`.
+
+## 4.8.0 - 2020-06-18
 
 ### Changed
 

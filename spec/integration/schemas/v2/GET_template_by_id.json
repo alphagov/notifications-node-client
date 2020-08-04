@@ -20,7 +20,11 @@
         "created_by": {"type": "string"},
         "version": {"type": "integer"},
         "body": {"type": "string"},
-        "subject": {"type": ["string", "null"]}
+        "subject": {"type": ["string", "null"]},
+        "letter_contact_block": {"type": ["string", "null"]}
     },
-    "required": ["id", "name", "type", "created_at", "updated_at", "version", "created_by", "body"]
+    "required": [
+        "id", "name", "type", "created_at", "updated_at", "version", "created_by",
+        "body", "letter_contact_block"
+    ]
 }

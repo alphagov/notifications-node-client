@@ -11,4 +11,7 @@ RUN \
 	&& echo "Clean up" \
 	&& rm -rf /var/lib/apt/lists/* /tmp/*
 
+# npm commands can't be run as root, so add an npm user to run them
+RUN useradd -m npmuser
+
 WORKDIR /var/project

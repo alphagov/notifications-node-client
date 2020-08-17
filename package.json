@@ -13,7 +13,7 @@
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",
     "integration": "mocha spec/integration/test.js",
     "snyk-protect": "snyk protect",
-    "prepare": "su npmuser -c 'npm run snyk-protect'"
+    "prepare": "npm run snyk-protect"
   },
   "author": "GDS developers",
   "license": "MIT",

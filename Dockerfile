@@ -12,6 +12,11 @@ RUN \
 	&& rm -rf /var/lib/apt/lists/* /tmp/*
 
 # npm commands can't be run as root, so add an npm user to run them
-RUN useradd -m npmuser
+# RUN useradd -m npmuser
 
-WORKDIR /var/project
+USER node
+
+WORKDIR /home/node
+# WORKDIR /var/project
+
+# RUN sudo chown node:node /var/project

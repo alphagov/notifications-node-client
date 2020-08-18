@@ -62,7 +62,7 @@ describe('notification api', () => {
 
       return notifyClient.sendEmail(templateId, email, options)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -88,7 +88,7 @@ describe('notification api', () => {
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -112,8 +112,8 @@ describe('notification api', () => {
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
-        expect(response.statusCode).to.equal(200);
-        expect(response.request.body).to.include('"is_csv":false');
+        expect(response.status).to.equal(200);
+        expect(response.config.data).to.include('"is_csv":false');
       });
     });
 
@@ -137,8 +137,8 @@ describe('notification api', () => {
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
-        expect(response.statusCode).to.equal(200);
-        expect(response.request.body).to.include('"is_csv":true');
+        expect(response.status).to.equal(200);
+        expect(response.config.data).to.include('"is_csv":true');
       });
     });
 
@@ -162,8 +162,8 @@ describe('notification api', () => {
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
-        expect(response.statusCode).to.equal(200);
-        expect(response.request.body).to.include('"is_csv":false');
+        expect(response.status).to.equal(200);
+        expect(response.config.data).to.include('"is_csv":false');
       });
     });
 
@@ -211,7 +211,7 @@ describe('notification api', () => {
 
       return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -236,7 +236,7 @@ describe('notification api', () => {
 
       return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -277,7 +277,7 @@ describe('notification api', () => {
 
       return notifyClient.sendLetter(templateId, options)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -306,7 +306,7 @@ describe('notification api', () => {
 
     return notifyClient.getNotificationById(notificationId)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
   });
 
@@ -339,7 +339,7 @@ describe('notification api', () => {
 
       return notifyClient.sendPrecompiledLetter(reference, pdf_file)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -356,7 +356,7 @@ describe('notification api', () => {
 
       return notifyClient.sendPrecompiledLetter(reference, pdf_file, postage)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -380,7 +380,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications()
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -394,7 +394,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications(undefined, undefined, reference)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -408,7 +408,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications(undefined, 'failed')
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -423,7 +423,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications(templateType, status)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -439,7 +439,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications(templateType, status, reference)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
 
@@ -460,7 +460,7 @@ describe('notification api', () => {
 
       return notifyClient.getNotifications(templateType, status, reference, olderThanId)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
     });
   });
@@ -477,7 +477,7 @@ describe('notification api', () => {
 
       return notifyClient.getTemplateById(templateId)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -493,7 +493,7 @@ describe('notification api', () => {
 
       return notifyClient.getTemplateByIdAndVersion(templateId, version)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -506,7 +506,7 @@ describe('notification api', () => {
 
       return notifyClient.getAllTemplates()
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -521,7 +521,7 @@ describe('notification api', () => {
 
       return notifyClient.getAllTemplates(templateType)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -538,7 +538,7 @@ describe('notification api', () => {
 
       return notifyClient.previewTemplateById(templateId, payload)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
 
     });
@@ -553,7 +553,7 @@ describe('notification api', () => {
 
       return notifyClient.previewTemplateById(templateId)
       .then(function (response) {
-        expect(response .statusCode).to.equal(200);
+        expect(response .status).to.equal(200);
       });
     });
   });
@@ -566,7 +566,7 @@ describe('notification api', () => {
 
     return notifyClient.getReceivedTexts()
       .then(function(response){
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
       });
   });
 
@@ -580,7 +580,7 @@ describe('notification api', () => {
 
     return notifyClient.getReceivedTexts(olderThanId)
     .then(function(response){
-      expect(response.statusCode).to.equal(200);
+      expect(response.status).to.equal(200);
     });
   });
 });

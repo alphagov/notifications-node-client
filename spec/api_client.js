@@ -36,7 +36,7 @@ describe('api client', function () {
       nock(urlBase, {
         reqheaders: {
           'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
-          'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
+          'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
         }
       })
         .get(path)
@@ -44,7 +44,7 @@ describe('api client', function () {
 
       client.get(path)
         .then(function (response) {
-          expect(response.body).to.deep.equal(body);
+          expect(response.data).to.deep.equal(body);
           if (index == clients.length - 1) done();
       });
 
@@ -66,7 +66,7 @@ describe('api client', function () {
     nock(urlBase, {
       reqheaders: {
         'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),
-        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
+        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     })
       .post(path, data)
@@ -75,45 +75,45 @@ describe('api client', function () {
     apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
     apiClient.post(path, data)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
+        expect(response.status).to.equal(200);
         done();
     });
   });
 
   it('should direct get requests through the proxy when set', function (done) {
     var urlBase = 'https://api.notifications.service.gov.uk',
-      proxyUrl = 'http://proxy.service.gov.uk:3030/',
+      proxyConfig = { host: 'addressofmyproxy.test'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 
-    nock(urlBase)
-      .get(path)
+    nock("http://" + proxyConfig.host)
+      .get(urlBase + path)
       .reply(200, 'test');
 
-    apiClient.setProxy(proxyUrl);
+    apiClient.setProxy(proxyConfig);
     apiClient.get(path)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
-        expect(response.request.proxy.href).to.equal(proxyUrl);
+        expect(response.status).to.equal(200);
+        expect(response.config.proxy).to.eql(proxyConfig);
         done();
     });
   });
 
   it('should direct post requests through the proxy when set', function (done) {
     var urlBase = 'https://api.notifications.service.gov.uk',
-      proxyUrl = 'http://proxy.service.gov.uk:3030/',
+      proxyConfig = { host: 'addressofmyproxy.test'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 
-    nock(urlBase)
-      .post(path)
+    nock("http://" + proxyConfig.host)
+      .post(urlBase + path)
       .reply(200, 'test');
 
-    apiClient.setProxy(proxyUrl);
+    apiClient.setProxy(proxyConfig);
     apiClient.post(path)
       .then(function (response) {
-        expect(response.statusCode).to.equal(200);
-        expect(response.request.proxy.href).to.equal(proxyUrl);
+        expect(response.status).to.equal(200);
+        expect(response.config.proxy).to.eql(proxyConfig);
         done();
     });
   });

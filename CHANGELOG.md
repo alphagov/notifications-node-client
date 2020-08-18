@@ -1,3 +1,31 @@
+## 5.0.0 - 2020-09-02
+
+### Changed
+
+We have replaced the use of the npm [request-promise](https://www.npmjs.com/package/request-promise) package with [axios](https://www.npmjs.com/package/axios) as the npm `request` package has been deprecated. This makes the following breaking changes.
+
+1. The `object` returned by an API call is now of the form of an [axios response](https://www.npmjs.com/package/axios#response-schema) which has a different interface to a [request response](https://nodejs.org/api/http.html#http_class_http_serverresponse), of particular note
+
+    * `response.body` becomes `response.data`
+    * `response.status_code` becomes `response.status`
+
+2. To configure the use of a proxy you should pass the proxy configuration as an object as per [axios](https://github.com/axios/axios) rather than a URL.
+
+    Before:
+
+    ```
+    notifyClient.setProxy("exampleproxy.com:2345")
+    ```
+
+    After:
+
+    ```
+    notifyClient.setProxy({ host: "exampleproxy.com", port: 2345 })
+    ```
+
+3. We now return native [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) rather than [bluebird promises](http://bluebirdjs.com). It is unlikely you will need to make any changes unless you are using some of the additional methods found on bluebird promises that do not exist on native promises.
+
+
 ## 4.9.0 - 2020-08-19
 
 ### Changed

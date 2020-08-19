@@ -266,6 +266,7 @@ describer('notification api with a live service', function () {
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.name.should.equal('Client Functional test sms template');
         should.not.exist(response.body.subject);
+        should.not.exist(response.body.letter_contact_block);
       });
     });
 
@@ -276,6 +277,7 @@ describer('notification api with a live service', function () {
         response.body.body.should.equal('Hello ((name))\r\n\r\nFunctional test help make our world a better place');
         response.body.name.should.equal('Client Functional test email template');
         response.body.subject.should.equal('Functional Tests are good');
+        should.not.exist(response.body.letter_contact_block);
       });
     });
 
@@ -286,6 +288,10 @@ describer('notification api with a live service', function () {
         response.body.body.should.equal('Hello ((address_line_1))');
         response.body.name.should.equal('Client functional letter template');
         response.body.subject.should.equal('Main heading');
+        response.body.letter_contact_block.should.equal(
+          'Government Digital Service\nThe White Chapel Building\n' +
+          '10 Whitechapel High Street\nLondon\nE1 8QS\nUnited Kingdom'
+        );
       });
     });
 
@@ -296,6 +302,7 @@ describer('notification api with a live service', function () {
         response.body.name.should.equal('Example text message template');
         should.not.exist(response.body.subject);
         response.body.version.should.equal(1);
+        should.not.exist(response.body.letter_contact_block);
       });
     });
 
@@ -314,6 +321,8 @@ describer('notification api with a live service', function () {
         expect(response.body).to.be.jsonSchema(getTemplateJson);
         response.body.name.should.equal('Untitled');
         response.body.version.should.equal(1);
+        // version 1 of the template had no letter_contact_block
+        should.not.exist(response.body.letter_contact_block);
       });
     });
 

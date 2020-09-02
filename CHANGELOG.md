@@ -1,3 +1,9 @@
+## 4.9.1 - 2020-09-02
+
+### Changed
+
+* Added Snyk as a dependency and a recommended security patch to ensure a vulnerable version of lodash does not get installed.
+
 ## 4.9.0 - 2020-08-19
 
 ### Changed

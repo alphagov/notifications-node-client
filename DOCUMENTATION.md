@@ -2,9 +2,9 @@
 
 This documentation is for developers interested in using the GOV.UK Notify Node.js client to send emails, text messages or letters.
 
-# Set up the client
+## Set up the client
 
-## Install the client
+### Install the client
 
 Run the following in the command line:
 
@@ -12,7 +12,7 @@ Run the following in the command line:
 npm install --save notifications-node-client
 ```
 
-## Create a new instance of the client
+### Create a new instance of the client
 
 Add this code to your application:
 
@@ -24,7 +24,7 @@ var notifyClient = new NotifyClient(apiKey)
 
 To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __API integration__ page. You can find more information in the [API keys](#api-keys) section of this documentation.
 
-### Connect through a proxy (optional)
+#### Connect through a proxy (optional)
 
 Add this code to your application:
 
@@ -39,13 +39,13 @@ notifyClient.setProxy(proxyConfig)
 
 where the `proxyConfig` should be an object supported by [axios](https://github.com/axios/axios).
 
-# Send a message
+## Send a message
 
 You can use GOV.UK Notify to send text messages, emails (including documents) and letters.
 
-## Send a text message
+### Send a text message
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -63,9 +63,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 To find the template ID:
 
@@ -79,7 +79,7 @@ For example:
 'f33517ff-2a88-4f6e-b855-c550268ce08a'
 ```
 
-#### phoneNumber (required)
+##### phoneNumber (required)
 
 The phone number of the recipient of the text message. This number can be a UK or international number. For example:
 
@@ -87,7 +87,7 @@ The phone number of the recipient of the text message. This number can be a UK o
 '+447900900123'
 ```
 
-#### personalisation (required)
+##### personalisation (required)
 
 If a template has placeholder fields for personalised information such as name or reference number, you must provide their values in an `object`. For example:
 
@@ -98,7 +98,7 @@ If a template has placeholder fields for personalised information such as name o
 }
 ```
 
-#### reference (required)
+##### reference (required)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
@@ -106,7 +106,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 'your_reference_here'
 ```
 
-#### smsSenderId (optional)
+##### smsSenderId (optional)
 
 A unique identifier of the sender of the text message notification. For example:
 
@@ -127,7 +127,7 @@ In this screen, you can either:
 
 You can leave out this argument if your service only has one text message sender, or if you want to use the default sender.
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -152,7 +152,7 @@ If you are using the [test API key](#test), all your messages come back with a `
 
 All messages sent using the [team and guest list](#team-and-guest-list) or [live](#live) keys appear on your dashboard.
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -166,9 +166,9 @@ If the request is not successful, the promise fails with an `err`.
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#daily-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification|
 
-## Send an email
+### Send an email
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -186,9 +186,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 To find the template ID:
 
@@ -202,7 +202,7 @@ For example:
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
-#### emailAddress (required)
+##### emailAddress (required)
 
 The email address of the recipient. For example:
 
@@ -210,7 +210,7 @@ The email address of the recipient. For example:
 "sender@something.com"
 ```
 
-#### personalisation (required)
+##### personalisation (required)
 
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
@@ -223,7 +223,7 @@ If a template has placeholder fields for personalised information such as name o
 }
 ```
 
-#### reference (required)
+##### reference (required)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. If you do not have a reference, you must pass in an empty string or `null`. For example:
 
@@ -231,7 +231,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 "your_reference_here"
 ```
 
-#### emailReplyToId (optional)
+##### emailReplyToId (optional)
 
 This is an email address specified by you to receive replies from your users. You must add at least one reply-to email address before your service can go live.
 
@@ -249,7 +249,7 @@ emailReplyToId='8e222534-7f05-4972-86e3-17c5d9f894e2'
 
 You can leave out this argument if your service only has one reply-to email address, or you want to use the default email address.
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -271,7 +271,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -285,20 +285,20 @@ If the request is not successful, the promise fails with an `err`.
 |`429`|`[{`<br>`"error": "TooManyRequestsError",`<br>`"message": "Exceeded send limits (LIMIT NUMBER) for today"`<br>`}]`|Refer to [service limits](#daily-limits) for the limit number|
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification|
 
-## Send a file by email
+### Send a file by email
 
 To send a file by email, add a placeholder to the template then upload a file. The placeholder will contain a secure link to download the file.
 
 The links are unique and unguessable. GOV.UK Notify cannot access or decrypt your file.
 
-### Add contact details to the file download page
+#### Add contact details to the file download page
 
 1. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in).
 1. Go to the __Settings__ page.
 1. In the __Email__ section, select __Manage__ on the __Send files by email__ row.
 1. Enter the contact details you want to use, and select __Save__.
 
-### Add a placeholder to the template
+#### Add a placeholder to the template
 
 1. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in).
 1. Go to the __Templates__ page and select the relevant email template.
@@ -307,7 +307,7 @@ The links are unique and unguessable. GOV.UK Notify cannot access or decrypt you
 
 "Download your file at: ((link_to_file))"
 
-### Upload your file
+#### Upload your file
 
 You can upload PDF, CSV, .odt, .txt and MS Word Document files. Your file must be smaller than 2MB. [Contact the GOV.UK Notify team](https://www.notifications.service.gov.uk/support/ask-question-give-feedback) if you need to send other file types.
 
@@ -333,7 +333,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-#### CSV Files
+##### CSV Files
 
 Uploads for CSV files should use the `isCsv` parameter on the `prepareUpload()` function.  For example:
 
@@ -352,7 +352,7 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
 })
 ```
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -374,7 +374,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -392,7 +392,7 @@ If the request is not successful, the promise fails with an `err`.
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
 |`N/A`|`File is larger than 2MB`|The file is too big. Files must be smaller than 2MB|
 
-## Send a letter
+### Send a letter
 
 When you add a new service it will start in [trial mode](https://www.notifications.service.gov.uk/features/trial-mode). You can only send letters when your service is live.
 
@@ -402,7 +402,7 @@ To send Notify a request to go live:
 1. Go to the __Settings__ page.
 1. In the __Your service is in trial mode__ section, select __request to go live__.
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -419,9 +419,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 To find the template ID:
 
@@ -435,7 +435,7 @@ For example:
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
-#### personalisation (required)
+##### personalisation (required)
 
 The personalisation argument always contains the following parameters for the letter recipient’s address:
 
@@ -468,7 +468,7 @@ Any other placeholder fields included in the letter template also count as requi
 }
 ```
 
-#### reference (optional)
+##### reference (optional)
 
 A unique identifier you can create if required. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
@@ -476,7 +476,7 @@ A unique identifier you can create if required. This reference identifies a sing
 "your_reference_here"
 ```
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -498,7 +498,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -516,9 +516,9 @@ If the request is not successful, the promise fails with an `err`.
 |`500`|`[{`<br>`"error": "Exception",`<br>`"message": "Internal server error"`<br>`}]`|Notify was unable to process the request, resend your notification.|
 
 
-## Send a precompiled letter
+### Send a precompiled letter
 
-### Method
+#### Method
 
 ```javascript
 var response = notifyClient.sendPrecompiledLetter(
@@ -528,9 +528,9 @@ var response = notifyClient.sendPrecompiledLetter(
 )
 ```
 
-### Arguments
+#### Arguments
 
-#### reference (required)
+##### reference (required)
 
 A unique identifier you create. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
@@ -538,7 +538,7 @@ A unique identifier you create. This reference identifies a single unique notifi
 "your_reference_here"
 ```
 
-#### pdfFile
+##### pdfFile
 
 The precompiled letter must be a PDF file which meets [the GOV.UK Notify PDF letter specification](https://docs.notifications.service.gov.uk/documentation/images/notify-pdf-letter-spec-v2.4.pdf). For example:
 
@@ -555,12 +555,12 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
 })
 ```
 
-#### postage (optional)
+##### postage (optional)
 
 You can choose first or second class postage for your precompiled letter. Set the value to `first` for first class, or `second` for second class. If you do not pass in this argument, the postage will default to second class.
 
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -572,7 +572,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -590,13 +590,13 @@ If the request is not successful, the promise fails with an `err`.
 |N/A|`"message":"reference cannot be null or empty"`|Populate the reference parameter|
 |N/A|`"message":"precompiledPDF cannot be null or empty"`|Send a PDF file with data in it|
 
-# Get message status
+## Get message status
 
 Message status depends on the type of message you have sent.
 
 You can only get the status of messages that are 7 days old or newer.
 
-## Status - email
+### Status - email
 
 |Status|Information|
 |:---|:---|
@@ -605,7 +605,7 @@ You can only get the status of messages that are 7 days old or newer.
 |Delivered|The message was successfully delivered.|
 |Failed|This covers all failure statuses:<br>- `permanent-failure` - "The provider could not deliver the message because the email address was wrong. You should remove these email addresses from your database."<br>- `temporary-failure` - "The provider could not deliver the message. This can happen when the recipient’s inbox is full. You can try to send the message again."<br>- `technical-failure` - "Your message was not sent because there was a problem between Notify and the provider.<br>You’ll have to try sending your messages again."|
 
-## Status - text message
+### Status - text message
 
 |Status|Information|
 |:---|:---|
@@ -616,7 +616,7 @@ You can only get the status of messages that are 7 days old or newer.
 |Delivered|The message was successfully delivered.|
 |Failed|This covers all failure statuses:<br>- `permanent-failure` - "The provider could not deliver the message. This can happen if the phone number was wrong or if the network operator rejects the message. If you’re sure that these phone numbers are correct, you should [contact GOV.UK Notify support](https://www.notifications.service.gov.uk/support). If not, you should remove them from your database. You’ll still be charged for text messages that cannot be delivered."<br>- `temporary-failure` - "The provider could not deliver the message. This can happen when the recipient’s phone is off, has no signal, or their text message inbox is full. You can try to send the message again. You’ll still be charged for text messages to phones that are not accepting messages."<br>- `technical-failure` - "Your message was not sent because there was a problem between Notify and the provider.<br>You’ll have to try sending your messages again. You will not be charged for text messages that are affected by a technical failure."|
 
-## Status - letter
+### Status - letter
 
 |Status|information|
 |:---|:---|
@@ -624,7 +624,7 @@ You can only get the status of messages that are 7 days old or newer.
 |Accepted|GOV.UK Notify has sent the letter to the provider to be printed.|
 |Received|The provider has printed and dispatched the letter.|
 
-## Status - precompiled letter
+### Status - precompiled letter
 
 |Status|information|
 |:---|:---|
@@ -632,9 +632,9 @@ You can only get the status of messages that are 7 days old or newer.
 |Virus scan failed|GOV.UK Notify found a potential virus in the precompiled letter file.|
 |Validation failed|Content in the precompiled letter file is outside the printable area. [See the GOV.UK Notify PDF letter specification](https://docs.notifications.service.gov.uk/documentation/images/notify-pdf-letter-spec-v2.4.pdf) for more information. |
 
-## Get the status of one message
+### Get the status of one message
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -648,16 +648,16 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### notificationId (required)
+##### notificationId (required)
 
 The ID of the notification. To find the notification ID, you can either:
 
 * check the response to the [original notification method call](#response)
 * [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __API integration__ page
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -690,7 +690,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -702,13 +702,13 @@ If the request is not successful, the promise fails with an `err`.
 |`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the notification ID|
 
 
-## Get the status of multiple messages
+### Get the status of multiple messages
 
 This API call returns one page of up to 250 messages and statuses. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the [`olderThan`](#olderthan-optional) argument.
 
 You can only get the status of messages that are 7 days old or newer.
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -726,11 +726,11 @@ To get the most recent messages, you must pass in an empty `olderThan` argument 
 
 To get older messages, pass the ID of an older notification into the `olderThan` argument. This returns the next oldest messages from the specified notification ID.
 
-### Arguments
+#### Arguments
 
 You can pass in empty arguments or `null` to ignore these filters.
 
-#### status (optional)
+##### status (optional)
 
 You can filter by each:
 
@@ -741,7 +741,7 @@ You can filter by each:
 
 You can leave out this argument to ignore this filter.
 
-#### notificationType (optional)
+##### notificationType (optional)
 
 You can filter by:
 
@@ -749,7 +749,7 @@ You can filter by:
 * `sms`
 * `letter`
 
-#### reference (optional)
+##### reference (optional)
 
 A unique identifier you create if necessary. This reference identifies a single unique notification or a batch of notifications. It must not contain any personal information such as name or postal address. For example:
 
@@ -757,7 +757,7 @@ A unique identifier you create if necessary. This reference identifies a single 
 "your_reference_here"
 ```
 
-#### olderThan (optional)
+##### olderThan (optional)
 
 Input the ID of a notification into this argument. If you use this argument, the client returns the next 250 received notifications older than the given ID. For example:
 
@@ -767,7 +767,7 @@ Input the ID of a notification into this argument. If you use this argument, the
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 notifications.
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -807,7 +807,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -819,9 +819,9 @@ If the request is not successful, the promise fails with an `err`.
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: API key not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
 
 
-## Get a PDF for a letter notification
+### Get a PDF for a letter notification
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -837,20 +837,20 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with `fileBuffer` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### notificationId (required)
+##### notificationId (required)
 
 The ID of the notification. To find the notification ID, you can either:
 
 * check the response to the [original notification method call](#get-the-status-of-one-message-response)
 * [sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __API integration__ page
 
-### Response
+#### Response
 
 If the request to the client is successful, the client will return an instance of the [Buffer](https://nodejs.org/api/buffer.html#buffer_buffer) class containing the raw PDF data.
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the client will return an `HTTPError` containing the relevant error code:
 
@@ -866,11 +866,11 @@ If the request is not successful, the client will return an `HTTPError` containi
 |`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the notification ID|
 
 
-# Get a template
+## Get a template
 
-## Get a template by ID
+### Get a template by ID
 
-### Method
+#### Method
 
 This returns the latest version of the template.
 
@@ -886,9 +886,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __Templates__ page to find it. For example:
 
@@ -896,7 +896,7 @@ The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.ser
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -915,7 +915,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -926,9 +926,9 @@ If the request is not successful, the promise fails with an `err`.
 |`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No Result Found"`<br>`}]`|Check your [template ID](#get-a-template-by-id-arguments-templateid-required)|
 
 
-## Get a template by ID and version
+### Get a template by ID and version
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -942,9 +942,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __Templates__ page to find it. For example:
 
@@ -952,11 +952,11 @@ The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.ser
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
-#### version (required)
+##### version (required)
 
 The version number of the template.
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -975,7 +975,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -987,9 +987,9 @@ If the request is not successful, the promise fails with an `err`.
 |`404`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No Result Found"`<br>`}]`|Check your [template ID](#get-a-template-by-id-and-version-arguments-templateid-required) and [version](#version-required)|
 
 
-## Get all templates
+### Get all templates
 
-### Method
+#### Method
 
 This returns the latest version of all templates.
 
@@ -1005,9 +1005,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 - resolve with a `response` if successful
 - fail with an `err` if unsuccessful
 
-### Arguments
+#### Arguments
 
-#### templateType (optional)
+##### templateType (optional)
 
 If you do not use `templateType`, the client returns all templates. Otherwise you can filter by:
 
@@ -1015,7 +1015,7 @@ If you do not use `templateType`, the client returns all templates. Otherwise yo
 - `sms`
 - `letter`
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -1043,9 +1043,9 @@ If the request is successful, the promise resolves with a `response` `object`. F
 
 If no templates exist for a template type or there no templates for a service, the object is empty.
 
-## Generate a preview template
+### Generate a preview template
 
-### Method
+#### Method
 
 This generates a preview version of a template.
 
@@ -1064,9 +1064,9 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 The parameters in the personalisation argument must match the placeholder fields in the actual template. The API notification client ignores any extra fields in the method.
 
-### Arguments
+#### Arguments
 
-#### templateId (required)
+##### templateId (required)
 
 The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.service.gov.uk/sign-in) and go to the __Templates__ page to find it. For example:
 
@@ -1074,7 +1074,7 @@ The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.ser
 "f33517ff-2a88-4f6e-b855-c550268ce08a"
 ```
 
-#### personalisation (optional)
+##### personalisation (optional)
 
 If a template has placeholder fields for personalised information such as name or application date, you must provide their values in an `object`. For example:
 
@@ -1089,7 +1089,7 @@ If a template has placeholder fields for personalised information such as name o
 
 You can leave out this argument if a template does not have any placeholder fields for personalised information.
 
-### Response
+#### Response
 
 If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
@@ -1104,7 +1104,7 @@ If the request is successful, the promise resolves with a `response` `object`. F
 }
 ```
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 
@@ -1116,7 +1116,7 @@ If the request is not successful, the promise fails with an `err`.
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: API key not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
 
 
-# Get received text messages
+## Get received text messages
 
 This API call returns one page of up to 250 received text messages. You can get either the most recent messages, or get older messages by specifying a particular notification ID in the [`olderThan`](#get-a-page-of-received-text-messages-arguments-olderthan-optional) argument.
 
@@ -1124,13 +1124,13 @@ You can only get messages that are 7 days old or newer.
 
 You can also set up [callbacks](#callbacks) for received text messages.
 
-## Enable received text messages
+### Enable received text messages
 
 Contact the GOV.UK Notify team using the [support page](https://www.notifications.service.gov.uk/support) or [chat to us on Slack](https://ukgovernmentdigital.slack.com/messages/C0E1ADVPC) to request a unique number for text message replies.
 
-## Get a page of received text messages
+### Get a page of received text messages
 
-### Method
+#### Method
 
 ```javascript
 notifyClient
@@ -1148,9 +1148,9 @@ To get the most recent messages, you must pass in an empty argument or `null`.
 
 To get older messages, pass the ID of an older notification into the `olderThan` argument. This returns the next oldest messages from the specified notification ID.
 
-### Arguments
+#### Arguments
 
-#### olderThan (optional)
+##### olderThan (optional)
 
 Input the ID of a received text message into this argument. If you use this argument, the client returns the next 250 received text messages older than the given ID. For example:
 
@@ -1160,7 +1160,7 @@ Input the ID of a received text message into this argument. If you use this argu
 
 If you pass in an empty argument or `null`, the client returns the most recent 250 text messages.
 
-### Response
+#### Response
 
 If the request to the client is successful, the promise resolves with an `object` containing all received texts.
 
@@ -1187,7 +1187,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the notification specified in the `olderThan` argument is older than 7 days, the promise resolves an empty response.
 
-### Error codes
+#### Error codes
 
 If the request is not successful, the promise fails with an `err`.
 

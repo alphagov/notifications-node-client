@@ -4,10 +4,10 @@
 
 We have replaced the use of the npm [request-promise](https://www.npmjs.com/package/request-promise) package with [axios](https://www.npmjs.com/package/axios) as the npm `request` package has been deprecated. This makes the following breaking changes.
 
-1. The `object` returned by an API call is now of the form of an [axios response](https://www.npmjs.com/package/axios#response-schema) which has a different interface to a [request response](https://nodejs.org/api/http.html#http_class_http_serverresponse), of particular note
+1. The `object` returned by an API call is now of the form of an [axios response](https://www.npmjs.com/package/axios#response-schema) which has a different interface to a [request response](https://nodejs.org/api/http.html#http_class_http_incomingmessage), of particular note
 
     * `response.body` becomes `response.data`
-    * `response.status_code` becomes `response.status`
+    * `response.statusCode` becomes `response.status`
 
 2. To configure the use of a proxy you should pass the proxy configuration as an object as per [axios](https://github.com/axios/axios) rather than a URL.
 

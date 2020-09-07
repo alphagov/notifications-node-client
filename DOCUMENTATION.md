@@ -129,7 +129,7 @@ You can leave out this argument if your service only has one text message sender
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -251,7 +251,7 @@ You can leave out this argument if your service only has one reply-to email addr
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -354,7 +354,7 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -481,7 +481,7 @@ A unique identifier you can create if required. This reference identifies a sing
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -564,7 +564,7 @@ You can choose first or second class postage for your precompiled letter. Set th
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -660,7 +660,7 @@ You can also find it by [signing in to GOV.UK Notify](https://www.notifications.
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -770,7 +770,7 @@ If you pass in an empty argument or `null`, the client returns the most recent 2
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -898,7 +898,7 @@ The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.ser
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -958,7 +958,7 @@ The version number of the template.
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -1017,7 +1017,7 @@ If you do not use `templateType`, the client returns all templates. Otherwise yo
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -1091,7 +1091,7 @@ You can leave out this argument if a template does not have any placeholder fiel
 
 ### Response
 
-If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {

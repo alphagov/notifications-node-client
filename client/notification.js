@@ -243,10 +243,23 @@ _.extend(NotifyClient.prototype, {
   getPdfForLetterNotification: function(notificationId) {
     const url = '/v2/notifications/' + notificationId + '/pdf'
 
-    return this.apiClient.get(url, { encoding: null })
+    // Unlike other requests, we expect a successful response as an arraybuffer and an error as JSON
+    // Axios does not support flexible response types so we will need to handle the error case ourselves below
+    return this.apiClient.get(url, { responseType: 'arraybuffer' })
     .then(function(response) {
-      var pdf = Buffer.from(response.body, "base64")
+      var pdf = Buffer.from(response.data, "base64")
       return pdf
+    })
+    .catch(function(error) {
+      // If we receive an error, as the response is an arraybuffer rather than our usual JSON
+      // we need to convert it to JSON to be read by the user
+      string_of_error_body = new TextDecoder().decode(error.response.data);
+
+      // Then we replace the error data with the JSON error rather than the arraybuffer of the error
+      error.response.data = JSON.parse(string_of_error_body);
+
+      // and rethrow to let the user handle the error
+      throw error
     });
   },
 

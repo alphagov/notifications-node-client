@@ -1,4 +1,4 @@
-var restClient = require('request-promise'),
+var restClient = require('axios').default,
     _ = require('underscore'),
     createGovukNotifyToken = require('../client/authentication.js'),
     notifyProductionAPI = 'https://api.notifications.service.gov.uk'
@@ -66,13 +66,11 @@ _.extend(ApiClient.prototype, {
    */
   get: function(path, additionalOptions) {
     var options = {
-      method: 'GET',
-      uri: this.urlBase + path,
-      json: true,
-      resolveWithFullResponse: true,
+      method: 'get',
+      url: this.urlBase + path,
       headers: {
         'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
+        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
     _.extend(options, additionalOptions)
@@ -90,14 +88,12 @@ _.extend(ApiClient.prototype, {
    */
   post: function(path, data){
     var options = {
-      method: 'POST',
-      uri: this.urlBase + path,
-      json: true,
-      body: data,
-      resolveWithFullResponse: true,
+      method: 'post',
+      url: this.urlBase + path,
+      data: data,
       headers: {
         'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-agent': 'NOTIFY-API-NODE-CLIENT/' + version
+        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
 
@@ -108,10 +104,10 @@ _.extend(ApiClient.prototype, {
 
   /**
    *
-   * @param {String} url
+   * @param {object} an axios proxy config
    */
-  setProxy: function(url){
-    this.proxy = url;
+  setProxy: function(proxyConfig){
+    this.proxy = proxyConfig
   }
 });
 

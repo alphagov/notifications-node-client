@@ -1,3 +1,21 @@
+## 5.0.0 - 2020-09-02
+
+### Changed
+
+We have replaced the use of the npm [request-promise](https://www.npmjs.com/package/request-promise) package with [axios](https://www.npmjs.com/package/axios) as the npm [request](https://www.npmjs.com/package/request) package has been deprecated. This makes the following breaking changes:
+
+1. The `response` `object` returned by a successful API call is now in the form of an [axios response](https://www.npmjs.com/package/axios#response-schema). This has a different interface to a [request response](https://nodejs.org/api/http.html#http_class_http_incomingmessage). For example:
+
+    * `response.body` becomes `response.data`
+    * `response.statusCode` becomes `response.status`
+
+2. The `err` `object` returned by an unsuccessful API call has a different interface. For example, `err.error` becomes `err.response.data`. See the axios documentation for further details on [error handling](https://www.npmjs.com/package/axios#handling-errors).
+
+3. To configure the use of a proxy you should pass the proxy configuration as an `object` rather than a URL. For details, see the [axios client](https://github.com/axios/axios).
+
+4. We now return native [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) rather than [bluebird promises](http://bluebirdjs.com). You will not need to make any changes unless you are using some of the additional methods found on bluebird promises that do not exist on native promises.
+
+
 ## 4.9.0 - 2020-08-19
 
 ### Changed

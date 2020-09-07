@@ -29,8 +29,15 @@ To get an API key, [sign in to GOV.UK Notify](https://www.notifications.service.
 Add this code to your application:
 
 ```javascript
-notifyClient.setProxy(proxyUrl)
+proxyConfig = {
+  host: proxyHost,
+  port: proxyPort
+}
+
+notifyClient.setProxy(proxyConfig)
 ```
+
+where the `proxyConfig` should be an object supported by [axios](https://github.com/axios/axios).
 
 # Send a message
 
@@ -122,7 +129,7 @@ You can leave out this argument if your service only has one text message sender
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -149,7 +156,7 @@ All messages sent using the [team and guest list](#team-and-guest-list) or [live
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -244,7 +251,7 @@ You can leave out this argument if your service only has one reply-to email addr
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -268,7 +275,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -317,7 +324,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
       application_date: '2018-01-01',
       link_to_file: notifyClient.prepareUpload(pdfFile)
     }
-  }).then(response => console.log(response.body)).catch(err => console.error(err))
+  }).then(response => console.log(response)).catch(err => console.error(err))
 })
 ```
 
@@ -341,13 +348,13 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
       application_date: '2018-01-01',
       link_to_file: notifyClient.prepareUpload(csvFile, true)
     }
-  }).then(response => console.log(response.body)).catch(err => console.error(err))
+  }).then(response => console.log(response)).catch(err => console.error(err))
 })
 ```
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -371,7 +378,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient using a team-only API key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Can't send to this recipient when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -471,7 +478,7 @@ A unique identifier you can create if required. This reference identifies a sing
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -495,7 +502,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys).|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode).|
@@ -555,7 +562,7 @@ You can choose first or second class postage for your precompiled letter. Set th
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -569,7 +576,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:--- |:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters with a team api key"`<br>`]}`|Use the correct type of [API key](#api-keys)|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Cannot send letters when service is in trial mode - see https://www.notifications.service.gov.uk/trial-mode"`<br>`}]`|Your service cannot send this notification in [trial mode](https://www.notifications.service.gov.uk/features/using-notify#trial-mode)|
@@ -651,7 +658,7 @@ You can also find it by [signing in to GOV.UK Notify](https://www.notifications.
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -686,7 +693,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
@@ -761,7 +768,7 @@ If you pass in an empty argument or `null`, the client returns the most recent 2
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -803,7 +810,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "bad status is not one of [created, sending, sent, delivered, pending, failed, technical-failure, temporary-failure, permanent-failure, accepted, received]"`<br>`}]`|Contact the GOV.UK Notify team|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "Applet is not one of [sms, email, letter]"`<br>`}]`|Contact the GOV.UK Notify team|
@@ -889,7 +896,7 @@ The ID of the template. [Sign in to GOV.UK Notify](https://www.notifications.ser
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -910,7 +917,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: API key not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|
@@ -949,7 +956,7 @@ The version number of the template.
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -970,7 +977,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "ValidationError",`<br>`"message": "id is not a valid UUID"`<br>`}]`|Check the notification ID|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
@@ -1008,7 +1015,7 @@ If you do not use `templateType`, the client returns all templates. Otherwise yo
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -1082,7 +1089,7 @@ You can leave out this argument if a template does not have any placeholder fiel
 
 ### Response
 
-If the request to the client is successful, the promise resolves with an `object`:
+If the request is successful, the promise resolves with a `response` `object`. For example, the `response.data` property will look like this:
 
 ```javascript
 {
@@ -1099,7 +1106,7 @@ If the request to the client is successful, the promise resolves with an `object
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`400`|`[{`<br>`"error": "BadRequestError",`<br>`"message": "Missing personalisation: [PERSONALISATION FIELD]"`<br>`}]`|Check that the personalisation arguments in the method match the placeholder fields in the template|
 |`400`|`[{`<br>`"error": "NoResultFound",`<br>`"message": "No result found"`<br>`}]`|Check the [template ID](#generate-a-preview-template-required-arguments-template-id)|
@@ -1182,7 +1189,7 @@ If the notification specified in the `olderThan` argument is older than 7 days, 
 
 If the request is not successful, the promise fails with an `err`.
 
-|err.error.status_code|err.error.errors|How to fix|
+|err.response.data.status_code|err.response.data.errors|How to fix|
 |:---|:---|:---|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Error: Your system clock must be accurate to within 30 seconds"`<br>`}]`|Check your system clock|
 |`403`|`[{`<br>`"error": "AuthError",`<br>`"message": "Invalid token: API key not found"`<br>`}]`|Use the correct API key. Refer to [API keys](#api-keys) for more information|

@@ -29,7 +29,7 @@ We have replaced the use of the npm [request-promise](https://www.npmjs.com/pack
     notifyClient.setProxy({ host: "exampleproxy.com", port: 2345 })
     ```
 
-4. We now return native [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) rather than [bluebird promises](http://bluebirdjs.com). It is unlikely you will need to make any changes unless you are using some of the additional methods found on bluebird promises that do not exist on native promises.
+4. We now return native [promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) rather than [bluebird promises](http://bluebirdjs.com). You will not need to make any changes unless you are using some of the additional methods found on bluebird promises that do not exist on native promises.
 
 
 ## 4.9.0 - 2020-08-19

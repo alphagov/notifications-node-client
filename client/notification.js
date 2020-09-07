@@ -244,7 +244,7 @@ _.extend(NotifyClient.prototype, {
     const url = '/v2/notifications/' + notificationId + '/pdf'
 
     // Unlike other requests, we expect a successful response as an arraybuffer and an error as JSON
-    // Axios doesn't support flexible response types so we will need to handle the error case ourselves below
+    // Axios does not support flexible response types so we will need to handle the error case ourselves below
     return this.apiClient.get(url, { responseType: 'arraybuffer' })
     .then(function(response) {
       var pdf = Buffer.from(response.data, "base64")

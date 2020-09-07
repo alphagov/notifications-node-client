@@ -2,7 +2,7 @@
 
 ### Changed
 
-We have replaced the use of the npm [request-promise](https://www.npmjs.com/package/request-promise) package with [axios](https://www.npmjs.com/package/axios) as the npm `request` package has been deprecated. This makes the following breaking changes.
+We have replaced the use of the npm [request-promise](https://www.npmjs.com/package/request-promise) package with [axios](https://www.npmjs.com/package/axios) as the npm `request` package has been deprecated. This makes the following breaking changes:
 
 1. The `response` `object` returned by a successful API call is now of the form of an [axios response](https://www.npmjs.com/package/axios#response-schema) which has a different interface to a [request response](https://nodejs.org/api/http.html#http_class_http_incomingmessage), of particular note
 

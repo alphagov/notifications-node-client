@@ -13,9 +13,12 @@
     "dist/**/*"
   ],
   "scripts": {
+    "build:version": "node -e 'console.log(JSON.stringify(require(`./package.json`).version));' > src/version.json",
     "build": "tsc",
     "lint:ts": "eslint --format codeframe --ext .js,.ts .",
     "lint": "npm run -s lint:ts",
+    "postinstall": "npm run -s build:version",
+    "prebuild": "npm run -s build:version",
     "test:ts": "jest --coverage",
     "test": "npm run test:ts"
   },

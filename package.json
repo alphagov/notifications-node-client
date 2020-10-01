@@ -31,8 +31,6 @@
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
-    "jsonschema": "1.2.4",
-    "optimist": "0.6.1",
     "@types/jest": "^26.0.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.161",

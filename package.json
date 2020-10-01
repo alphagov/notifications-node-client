@@ -17,6 +17,8 @@
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",
     "integration": "mocha spec/integration/test.js"
     "build": "tsc",
+    "lint:ts": "eslint --format codeframe --ext .js,.ts .",
+    "lint": "npm run -s lint:ts",
   },
   "author": "GDS developers",
   "license": "MIT",
@@ -35,6 +37,11 @@
     "mockdate": "2.0.2",
     "nock": "9.2.6",
     "optimist": "0.6.1",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-plugin-functional": "^3.0.2",
+    "eslint-plugin-import": "^2.22.1",
     "typescript": "^4.0.3"
   }
 }

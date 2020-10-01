@@ -4,3 +4,6 @@ environment.sh
 package-lock.json
 .eslintrc.js
 docker.env
+coverage/
+dist/
+version.json

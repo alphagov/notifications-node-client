@@ -1,7 +1,7 @@
 var restClient = require('axios').default,
     _ = require('underscore'),
     createGovukNotifyToken = require('../client/authentication.js'),
-    notifyProductionAPI = 'https://api.notifications.service.gov.uk'
+    notifyProductionAPI = 'https://api.notifications.service.gov.uk',
     version = require('../package.json').version;
 
 /**

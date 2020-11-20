@@ -1,3 +1,15 @@
+## 5.0.2 - 2020-11-20
+
+### Changed
+
+Correct incorrect description of parameter to be used by `NotifyClient.setProxy`
+
+## 5.0.1 - 2020-11-18
+
+### Changed
+
+Remove unintentional global nature of variable `version`
+
 ## 5.0.0 - 2020-09-02
 
 ### Changed

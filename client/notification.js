@@ -336,10 +336,10 @@ _.extend(NotifyClient.prototype, {
 
   /**
    *
-   * @param {String} url
+   * @param {object} an axios proxy config
    */
-  setProxy: function(url) {
-    this.apiClient.setProxy(url);
+  setProxy: function(proxyConfig) {
+    this.apiClient.setProxy(proxyConfig);
   },
 
   /**

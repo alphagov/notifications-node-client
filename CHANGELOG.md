@@ -1,3 +1,10 @@
+## 5.1.0 - 2020-12-30
+
+### Changed
+
+* Upgrade axios version from 0.19.2 to 0.21.1
+* Allow any compatible version of axios to be used (0.21.1 to <1.0.0)
+
 ## 5.0.2 - 2020-11-20
 
 ### Changed

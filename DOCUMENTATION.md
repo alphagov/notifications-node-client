@@ -289,6 +289,8 @@ If the request is not successful, the promise fails with an `err`.
 
 To send a file by email, add a placeholder to the template then upload a file. The placeholder will contain a secure link to download the file.
 
+The file will be available for the recipient to download for 18 months.
+
 The links are unique and unguessable. GOV.UK Notify cannot access or decrypt your file.
 
 #### Add contact details to the file download page

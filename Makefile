@@ -28,12 +28,8 @@ markdown-standard-test: ## Run linting on JavaScript examples in markdown using 
 markdown-standard-test-fix: ## Fix errors found from linting
 	npm run test:markdown:standard -- --fix
 
-.PHONY: generate-env-file
-generate-env-file: ## Generate the environment file for running the tests inside a Docker container
-	scripts/generate_docker_env.sh
-
 .PHONY: bootstrap-with-docker
-bootstrap-with-docker: generate-env-file ## Prepare the Docker builder image
+bootstrap-with-docker: ## Prepare the Docker builder image
 	docker build -t notifications-node-client .
 	./scripts/run_with_docker.sh make bootstrap
 

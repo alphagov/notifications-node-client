@@ -20,14 +20,6 @@ test: ## Run tests
 integration-test: ## Run integration tests
 	npm test --integration
 
-.PHONY: markdown-standard-test
-markdown-standard-test: ## Run linting on JavaScript examples in markdown using StandardJS
-	npm run test:markdown:standard
-
-.PHONY: markdown-standard-test-fix
-markdown-standard-test-fix: ## Fix errors found from linting
-	npm run test:markdown:standard -- --fix
-
 .PHONY: bootstrap-with-docker
 bootstrap-with-docker: ## Prepare the Docker builder image
 	docker build -t notifications-node-client .

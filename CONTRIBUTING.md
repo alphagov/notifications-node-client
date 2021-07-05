@@ -44,17 +44,16 @@ The integration tests are used to test the contract of the response to all the a
 
 ## Working on the client locally
 
-`npm install --save notifications-node-client`
+```
+npm install --save notifications-node-client
+```
 
 ## Testing JavaScript examples in Markdown
 
-We automatically test that the JavaScript in the documentation examples matched [our linting standards](https://gds-way.cloudapps.digital/manuals/programming-languages/nodejs/#source-formatting-and-linting),
-this also catches some issues that could stop an example from running when copied.
+We automatically test that the JavaScript in the documentation examples matches [our linting standards](https://gds-way.cloudapps.digital/manuals/programming-languages/nodejs/#source-formatting-and-linting). This also catches some issues that could stop an example from running when copied.
 
-To test the JavaScript for syntax and linting errors run:
+You can fix issues automatically by running:
 
-`make markdown-standard-test`
-
-You can then fix some issues automatically by running:
-
-`make markdown-standard-test-fix`
+```
+npm run test:markdown:standard -- --fix
+```

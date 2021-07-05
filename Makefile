@@ -38,8 +38,8 @@ markdown-standard-test-fix: ## Fix errors found from linting
 generate-env-file: ## Generate the environment file for running the tests inside a Docker container
 	script/generate_docker_env.sh
 
-.PHONY: prepare-docker-runner-image
-prepare-docker-runner-image: ## Prepare the Docker builder image
+.PHONY: bootstrap-with-docker
+bootstrap-with-docker: generate-env-file ## Prepare the Docker builder image
 	docker build -t ${DOCKER_BUILDER_IMAGE_NAME} .
 	docker run -i --rm \
 		--name "${DOCKER_CONTAINER_PREFIX}-build" \
@@ -53,7 +53,7 @@ prepare-docker-runner-image: ## Prepare the Docker builder image
 		make bootstrap
 
 .PHONY: test-with-docker
-test-with-docker: prepare-docker-runner-image generate-env-file ## Run tests inside a Docker container
+test-with-docker: ## Run tests inside a Docker container
 	docker run -i --rm \
 		--name "${DOCKER_CONTAINER_PREFIX}-test" \
 		-v "`pwd`:/var/project" \
@@ -67,7 +67,7 @@ test-with-docker: prepare-docker-runner-image generate-env-file ## Run tests ins
 		make test
 
 .PHONY: integration-test-with-docker
-integration-test-with-docker: prepare-docker-runner-image generate-env-file ## Run integration tests inside a Docker container
+integration-test-with-docker: ## Run integration tests inside a Docker container
 	docker run -i --rm \
 		--name "${DOCKER_CONTAINER_PREFIX}-integration-test" \
 		-v "`pwd`:/var/project" \

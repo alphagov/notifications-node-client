@@ -40,10 +40,7 @@ generate-env-file: ## Generate the environment file for running the tests inside
 
 .PHONY: prepare-docker-runner-image
 prepare-docker-runner-image: ## Prepare the Docker builder image
-	make -C docker build
-
-.PHONY: build-with-docker
-build-with-docker: prepare-docker-runner-image ## Build inside a Docker container
+	docker build -t ${DOCKER_BUILDER_IMAGE_NAME} .
 	docker run -i --rm \
 		--name "${DOCKER_CONTAINER_PREFIX}-build" \
 		-v "`pwd`:/var/project" \
@@ -53,7 +50,7 @@ build-with-docker: prepare-docker-runner-image ## Build inside a Docker containe
 		-e HTTPS_PROXY="${HTTPS_PROXY}" \
 		-e NO_PROXY="${NO_PROXY}" \
 		${DOCKER_BUILDER_IMAGE_NAME} \
-		make build
+		make bootstrap
 
 .PHONY: test-with-docker
 test-with-docker: prepare-docker-runner-image generate-env-file ## Run tests inside a Docker container

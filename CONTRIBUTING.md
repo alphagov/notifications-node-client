@@ -2,9 +2,15 @@
 
 Pull requests welcome.
 
-## Working on the client locally
+## Setting Up
 
-`npm install --save notifications-node-client`
+### Docker container
+
+This app uses dependencies that are difficult to install locally. In order to make local development easy, we run app commands through a Docker container. Run the following to set this up:
+
+```shell
+make prepare-docker-runner-image
+```
 
 ## Tests
 
@@ -12,7 +18,9 @@ There are unit and integration tests that can be run to test functionality of th
 
 To run the unit tests:
 
-`make test`
+```
+make test-with-docker
+```
 
 ## Integration Tests
 
@@ -32,12 +40,17 @@ export API_SENDING_KEY="API_team_key for sending a SMS to a receiving number"
 export INBOUND_SMS_QUERY_KEY="API_test_key to get received text messages - leave blank for local development as cannot test locally"
 ```
 
-
 To run the integration tests:
 
-`make integration-test`
+```
+make integration-test-with-docker
+```
 
 The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.
+
+## Working on the client locally
+
+`npm install --save notifications-node-client`
 
 ## Testing JavaScript examples in Markdown
 

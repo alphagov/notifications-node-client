@@ -26,21 +26,21 @@ Unless you're part of the GOV.UK Notify team, you won't be able to run this comm
 
 There are unit and integration tests that can be run to test functionality of the client.
 
+### Unit tests
+
 To run the unit tests:
 
 ```
 make test-with-docker
 ```
 
-## Integration Tests
+### Integration Tests
 
 To run the integration tests:
 
 ```
 make integration-test-with-docker
 ```
-
-The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.
 
 ## Working on the client locally
 

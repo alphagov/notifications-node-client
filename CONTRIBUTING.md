@@ -2,52 +2,58 @@
 
 Pull requests welcome.
 
-## Working on the client locally
+## Setting Up
 
-`npm install --save notifications-node-client`
+### Docker container
+
+This app uses dependencies that are difficult to install locally. In order to make local development easy, we run app commands through a Docker container. Run the following to set this up:
+
+```shell
+make bootstrap-with-docker
+```
+
+### `environment.sh`
+
+In the root directory of the repo, run:
+
+```
+notify-pass credentials/client-integration-tests > environment.sh
+```
+
+Unless you're part of the GOV.UK Notify team, you won't be able to run this command or the Integration Tests. However, the file still needs to exist - run `touch environment.sh` instead.
 
 ## Tests
 
 There are unit and integration tests that can be run to test functionality of the client.
 
+### Unit tests
+
 To run the unit tests:
 
-`make test`
-
-## Integration Tests
-
-Before running the integration tests, please ensure that the environment variables are set up.
-
 ```
-export NOTIFY_API_URL="https://example.notify-api.url"
-export API_KEY="example_API_test_key"
-export FUNCTIONAL_TEST_NUMBER="valid mobile number"
-export FUNCTIONAL_TEST_EMAIL="valid email address"
-export EMAIL_TEMPLATE_ID="valid email_template_id"
-export SMS_TEMPLATE_ID="valid sms_template_id"
-export LETTER_TEMPLATE_ID="valid letter_template_id"
-export EMAIL_REPLY_TO_ID="valid email reply to id"
-export SMS_SENDER_ID="valid sms_sender_id - to test sending to a receiving number, so needs to be a valid number"
-export API_SENDING_KEY="API_team_key for sending a SMS to a receiving number"
-export INBOUND_SMS_QUERY_KEY="API_test_key to get received text messages - leave blank for local development as cannot test locally"
+make test-with-docker
 ```
 
+### Integration Tests
 
 To run the integration tests:
 
-`make integration-test`
+```
+make integration-test-with-docker
+```
 
-The integration tests are used to test the contract of the response to all the api calls, ensuring the latest version of notifications-api do not break the contract of the notifications-node-client.
+## Working on the client locally
+
+```
+npm install --save notifications-node-client
+```
 
 ## Testing JavaScript examples in Markdown
 
-We automatically test that the JavaScript in the documentation examples matched [our linting standards](https://gds-way.cloudapps.digital/manuals/programming-languages/nodejs/#source-formatting-and-linting),
-this also catches some issues that could stop an example from running when copied.
+We automatically test that the JavaScript in the documentation examples matches [our linting standards](https://gds-way.cloudapps.digital/manuals/programming-languages/nodejs/#source-formatting-and-linting). This also catches some issues that could stop an example from running when copied.
 
-To test the JavaScript for syntax and linting errors run:
+You can fix issues automatically by running:
 
-`make markdown-standard-test`
-
-You can then fix some issues automatically by running:
-
-`make markdown-standard-test-fix`
+```
+npm run test:markdown:standard -- --fix
+```

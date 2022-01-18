@@ -7,7 +7,7 @@ help:
 
 .PHONY: bootstrap
 bootstrap:  ## Install build dependencies
-	npm install
+	npm ci
 
 .PHONY: build
 build: bootstrap ## Build project (dummy task for CI)

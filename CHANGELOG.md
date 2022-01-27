@@ -1,3 +1,7 @@
+## 5.1.1 - 2022-01-18
+
+Upgrade axios version from ^0.21.1 to ^0.25.0
+
 ## 5.1.0 - 2020-12-30
 
 ### Changed

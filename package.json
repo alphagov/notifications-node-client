@@ -8,6 +8,7 @@
   },
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "mocha \"spec/**/*.js\" && npm run test:markdown:standard",
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",

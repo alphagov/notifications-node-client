@@ -83,9 +83,12 @@ export class NotifyClient {
 
   getNotificationById: (
     notificationId: string
-  ) => Promise<{ data: GetNotificationByIdResponse }>;
+  ) => Promise<{ status: number; data: GetNotificationByIdResponse }>;
 
-  getNotifications: () => Promise<{ data: GetNotificationsResponse }>;
+  getNotifications: () => Promise<{
+    status: number;
+    data: GetNotificationsResponse;
+  }>;
 
   prepareUpload: (fileData: Buffer, isCsv: boolean) => PreparedUpload;
 }

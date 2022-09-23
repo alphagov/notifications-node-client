@@ -1,5 +1,4 @@
 var restClient = require('axios').default,
-    _ = require('underscore'),
     createGovukNotifyToken = require('../client/authentication.js'),
     notifyProductionAPI = 'https://api.notifications.service.gov.uk',
     version = require('../package.json').version;
@@ -56,7 +55,7 @@ function createToken(requestMethod, requestPath, apiKeyId, serviceId) {
   return createGovukNotifyToken(requestMethod, requestPath, apiKeyId, serviceId);
 }
 
-_.extend(ApiClient.prototype, {
+Object.assign(ApiClient.prototype, {
 
   /**
    *
@@ -73,7 +72,7 @@ _.extend(ApiClient.prototype, {
         'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
       }
     };
-    _.extend(options, additionalOptions)
+    Object.assign(options, additionalOptions)
     if(this.proxy !== null) options.proxy = this.proxy;
 
     return restClient(options);

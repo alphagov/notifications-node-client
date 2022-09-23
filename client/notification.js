@@ -1,5 +1,4 @@
-var ApiClient = require('./api_client'),
-  _ = require('underscore');
+var ApiClient = require('./api_client');
 
 /**
  *
@@ -119,7 +118,7 @@ function _check_and_encode_file(file, size_limit) {
   return file.toString('base64')
 }
 
-_.extend(NotifyClient.prototype, {
+Object.assign(NotifyClient.prototype, {
   /**
    * Usage:
    *

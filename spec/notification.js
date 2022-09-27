@@ -188,6 +188,41 @@ describe('notification api', () => {
         notifyClient.prepareUpload(file);
       }).to.throw("File is larger than 2MB.")
     });
+
+    it('should allow isCsv to be set with the old method (directly into options)', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, true)
+      ).contains({is_csv: true, confirm_email_before_download: null, retention_period: null})
+    });
+
+    it('should allow isCsv to be set as part of the options object', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {isCsv: true})
+      ).contains({is_csv: true, confirm_email_before_download: null, retention_period: null})
+    });
+
+    it('should imply isCsv=false from empty options', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {})
+      ).contains({is_csv: false, confirm_email_before_download: null, retention_period: null})
+    });
+
+    it('should allow send a file email confirmation to be set', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {confirmEmailBeforeDownload: true})
+      ).contains({is_csv: false, confirm_email_before_download: true, retention_period: null})
+    });
+
+    it('should allow custom retention periods to be set', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {retentionPeriod: "52 weeks"})
+      ).contains({is_csv: false, confirm_email_before_download: null, retention_period: '52 weeks'})
+    });
   });
 
   describe('sendSms', () => {

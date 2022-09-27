@@ -344,15 +344,33 @@ Object.assign(NotifyClient.prototype, {
   /**
   *
   * @param {Buffer} fileData
-  * @param {Boolean} isCsv
+  * @param {object} options
   *
   * @returns {Dictionary}
   */
-  prepareUpload: function(fileData, isCsv = false) {
-    return {
-      'file': _check_and_encode_file(fileData, 2),
-      'is_csv': isCsv
+  prepareUpload: function(fileData, options) {
+    let data = {
+      file: _check_and_encode_file(fileData, 2),
+      is_csv: false,
+      confirm_email_before_download: null,
+      retention_period: null,
     }
+
+    if (options !== undefined) {
+      if (typeof(options) === 'boolean') {
+        data.is_csv = options
+      }
+      else {
+        if (options.isCsv !== undefined) {
+          data.is_csv = options.isCsv;
+        }
+
+        data.confirm_email_before_download = options.confirmEmailBeforeDownload || null;
+        data.retention_period = options.retentionPeriod || null
+      }
+    }
+
+    return data
   },
 
 });

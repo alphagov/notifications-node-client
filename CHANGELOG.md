@@ -1,6 +1,15 @@
+## 5.2.0 - 2022-09-27
+
+* Add support for new security features when sending a file by email:
+  * `confirmEmailBeforeDownload` can be set to `true` to require the user to enter their email address before accessing the file.
+  * `retentionPeriod` can be set to `<1-78> weeks` to set how long the file should be made available.
+
+* The `isCsv` parameter to `prepareUpload` has now been replaced by an `options` parameter. The implementation has been done in a backwards-compatible way, so if you are just sending `true/false` values as the seecond parameter, that will continue to work. Though we still recommend updating to use the new options format.
+
+
 ## 5.1.2 - 2022-09-23
 
-Remove underscore.js dependency
+Remove underscore.js dependencyr new send a file features)
 
 ## 5.1.1 - 2022-01-18
 

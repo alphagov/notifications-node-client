@@ -298,7 +298,7 @@ To help protect your files you can also:
 * ask recipients to confirm their email address before downloading
 * choose the length of time that a file is available to download
 
-To turn these features on or off, you will need version X.X.X of the Node.js client library or a more recent version.
+To turn these features on or off, you will need version 5.2.0 of the Node.js client library or a more recent version.
 
 #### Add contact details to the file download page
 
@@ -371,9 +371,9 @@ From 29 March 2023, we will turn this feature on by default for every file you s
 
 ##### Turn on email address check
 
-To use this feature before 29 March 2023 you will need version X.X.X of the Node.js client library, or a more recent version.
+To use this feature before 29 March 2023 you will need version 5.2.0 of the Node.js client library, or a more recent version.
 
-To make the recipient confirm their email address before downloading the file, set the `verify_email_before_download` flag to `True`.
+To make the recipient confirm their email address before downloading the file, set the `confirmEmailBeforeDownload` flag to `true`.
 
 You will not need to do this after 29 March.
 
@@ -386,7 +386,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile)
+      link_to_file: notifyClient.prepareUpload(pdfFile, false, true, undefined)
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -396,7 +396,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
 
 If you do not want to use this feature after 29 March 2023, you can turn it off on a file-by-file basis.
 
-To do this you will need version X.X.X of the Node.js client library, or a more recent version.
+To do this you will need version 5.2.0 of the Node.js client library, or a more recent version.
 
 You should not turn this feature off if you send files that contain:
 
@@ -404,7 +404,7 @@ You should not turn this feature off if you send files that contain:
 * commercially sensitive information
 * information classified as ‘OFFICIAL’ or ‘OFFICIAL-SENSITIVE’ under the [Government Security Classifications](https://www.gov.uk/government/publications/government-security-classifications) policy
 
-To let the recipient download the file without confirming their email address, set the `verify_email_before_download` flag to `False`.
+To let the recipient download the file without confirming their email address, set the `confirmEmailBeforeDownload` flag to `false`.
 
 ```javascript
 var fs = require('fs')
@@ -415,7 +415,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile)
+      link_to_file: notifyClient.prepareUpload(pdfFile, false, false, undefined)
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -423,11 +423,11 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
 
 #### Choose the length of time that a file is available to download
 
-Set the number of weeks you want the file to be available using the `retention_period` key.
+Set the number of weeks you want the file to be available using the `retentionPeriod` parameter.
 
 You can choose any value between 1 week and 78 weeks.
 
-To use this feature will need version X.X.X of the Node.js client library, or a more recent version.
+To use this feature will need version 5.2.0 of the Node.js client library, or a more recent version.
 
 If you do not choose a value, the file will be available for the default period of 78 weeks (18 months).
 
@@ -440,7 +440,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile)
+      link_to_file: notifyClient.prepareUpload(pdfFile, false, undefined, "52 weeks")
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })

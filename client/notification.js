@@ -115,6 +115,9 @@ function _check_and_encode_file(file, size_limit) {
   if (file.length > size_limit * 1024 * 1024) {
     throw "File is larger than " + String(size_limit) + "MB.";
   }
+  if (typeof(file) === 'string') {
+    file = Buffer.from(file);
+  }
   return file.toString('base64')
 }
 

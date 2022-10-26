@@ -188,6 +188,24 @@ describe('notification api', () => {
         notifyClient.prepareUpload(file);
       }).to.throw("File is larger than 2MB.")
     });
+    it('should accept files as buffers (from fs.readFile with no encoding)', () => {
+      let fs = require('fs');
+      let file = fs.readFileSync('./spec/test_files/simple.csv');
+      expect(typeof(file)).to.equal('object')
+      expect(Buffer.isBuffer(file)).to.equal(true);
+      expect(
+        notifyClient.prepareUpload(file, true)
+      ).contains({file: 'MSwyLDMKYSxiLGMK', is_csv: true})
+    });
+    it('should accept files as strings (from fs.readFile with an encoding)', () => {
+      let fs = require('fs');
+      let file = fs.readFileSync('./spec/test_files/simple.csv', 'binary');
+      expect(typeof(file)).to.equal('string')
+      expect(Buffer.isBuffer(file)).to.equal(false);
+      expect(
+        notifyClient.prepareUpload(file, true)
+      ).contains({file: 'MSwyLDMKYSxiLGMK', is_csv: true})
+    });
 
     it('should allow isCsv to be set with the old method (directly into options)', () => {
       let file = Buffer.alloc(2*1024*1024)

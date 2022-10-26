@@ -1,3 +1,7 @@
+## 5.2.1 - 2022-10-19
+
+* Support strings in calls to `prepareUpload`. `fs.readFile` can return strings if an encoding is provided, and the client didn't handle these correctly.
+
 ## 5.2.0 - 2022-09-27
 
 * Add support for new security features when sending a file by email:

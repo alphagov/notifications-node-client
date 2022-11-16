@@ -1,3 +1,7 @@
+## 5.2.2 - 2022-11-16
+
+* Upgrade ansi-regex dependencies to mitigate CVE-2021-3807.
+
 ## 5.2.1 - 2022-10-19
 
 * Support strings in calls to `prepareUpload`. `fs.readFile` can return strings if an encoding is provided, and the client didn't handle these correctly.

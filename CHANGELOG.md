@@ -1,3 +1,7 @@
+## 5.2.3 - 2022-11-22
+
+* Bump follow-redirects from 1.14.7 to 1.15.2
+
 ## 5.2.2 - 2022-11-16
 
 * Upgrade ansi-regex dependencies to mitigate CVE-2021-3807.

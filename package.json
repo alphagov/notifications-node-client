@@ -16,7 +16,7 @@
   "author": "GDS developers",
   "license": "MIT",
   "dependencies": {
-    "jsonwebtoken": "^8.2.1",
+    "jsonwebtoken": "^9.0.0",
     "axios": "^0.25.0"
   },
   "devDependencies": {

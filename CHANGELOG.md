@@ -1,3 +1,8 @@
+## 6.0.0 - 2022-12-22
+
+* Bump jsonwebtokens from 8.5.1 to 9.0.0 to mitigate CVE-2022-23529. We don't believe this CVE affects any use-cases of notifications-node-client; this update is out of best-practice rather than any direct concern.
+* Remove support for node versions below v12.
+
 ## 5.2.3 - 2022-11-22
 
 * Bump follow-redirects from 1.14.7 to 1.15.2

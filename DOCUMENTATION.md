@@ -355,7 +355,7 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(csvFile, true)
+      link_to_file: notifyClient.prepareUpload(csvFile, { isCsv: true })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -386,7 +386,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, true, undefined)
+      link_to_file: notifyClient.prepareUpload(pdfFile, { confirm_email_before_download: true })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -415,7 +415,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, false, undefined)
+      link_to_file: notifyClient.prepareUpload(pdfFile, { confirm_email_before_download: false })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -440,7 +440,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, undefined, '52 weeks')
+      link_to_file: notifyClient.prepareUpload(pdfFile, { retention_period: '52 weeks' })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })

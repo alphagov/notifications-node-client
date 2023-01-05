@@ -344,7 +344,7 @@ The method returns a [promise](https://developer.mozilla.org/en-US/docs/Web/Java
 
 ##### CSV Files
 
-Uploads for CSV files should use the `isCsv` parameter on the `prepareUpload()` function.  For example:
+Uploads for CSV files should use the `isCsv` option on the `prepareUpload()` function.  For example:
 
 ```javascript
 var fs = require('fs')
@@ -355,7 +355,7 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(csvFile, true)
+      link_to_file: notifyClient.prepareUpload(csvFile, { isCsv: true })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -373,7 +373,7 @@ From 29 March 2023, we will turn this feature on by default for every file you s
 
 To use this feature before 29 March 2023 you will need version 5.2.0 of the Node.js client library, or a more recent version.
 
-To make the recipient confirm their email address before downloading the file, set the `confirmEmailBeforeDownload` flag to `true`.
+To make the recipient confirm their email address before downloading the file, set the `confirmEmailBeforeDownload` option to `true`.
 
 You will not need to do this after 29 March.
 
@@ -386,7 +386,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, true, undefined)
+      link_to_file: notifyClient.prepareUpload(pdfFile, { confirmEmailBeforeDownload: true })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -404,7 +404,7 @@ You should not turn this feature off if you send files that contain:
 * commercially sensitive information
 * information classified as ‘OFFICIAL’ or ‘OFFICIAL-SENSITIVE’ under the [Government Security Classifications](https://www.gov.uk/government/publications/government-security-classifications) policy
 
-To let the recipient download the file without confirming their email address, set the `confirmEmailBeforeDownload` flag to `false`.
+To let the recipient download the file without confirming their email address, set the `confirmEmailBeforeDownload` option to `false`.
 
 ```javascript
 var fs = require('fs')
@@ -415,7 +415,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, false, undefined)
+      link_to_file: notifyClient.prepareUpload(pdfFile, { confirmEmailBeforeDownload: false })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })
@@ -423,7 +423,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
 
 #### Choose the length of time that a file is available to download
 
-Set the number of weeks you want the file to be available using the `retentionPeriod` parameter.
+Set the number of weeks you want the file to be available using the `retentionPeriod` option.
 
 You can choose any value between 1 week and 78 weeks.
 
@@ -440,7 +440,7 @@ fs.readFile('path/to/document.pdf', function (err, pdfFile) {
     personalisation: {
       first_name: 'Amala',
       application_date: '2018-01-01',
-      link_to_file: notifyClient.prepareUpload(pdfFile, false, undefined, '52 weeks')
+      link_to_file: notifyClient.prepareUpload(pdfFile, { retentionPeriod: '52 weeks' })
     }
   }).then(response => console.log(response)).catch(err => console.error(err))
 })

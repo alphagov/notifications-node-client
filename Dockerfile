@@ -1,4 +1,4 @@
-FROM node:12.16.1-slim
+FROM ghcr.io/alphagov/notify/node:18-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 

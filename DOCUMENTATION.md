@@ -361,9 +361,9 @@ fs.readFile('path/to/document.csv', function (err, csvFile) {
 
 #### Ask recipients to confirm their email address before they can download the file
 
-This security feature is enabled by default. You should use it if you send files that are sensitive - for example, because they contain personal information about your users.
-
 When a recipient clicks the link in the email you’ve sent them, they have to enter their email address. Only someone who knows the recipient’s email address can download the file.
+
+This security feature is turned on by default.
 
 ##### Turn off email address check (not recommended)
 

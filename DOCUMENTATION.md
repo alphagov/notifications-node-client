@@ -429,7 +429,7 @@ You can choose any value between 1 week and 78 weeks.
 
 To use this feature will need version 5.2.0 of the Node.js client library, or a more recent version.
 
-If you do not choose a value, the file will be available for the default period of 26 weeks (6 months).
+If you do not choose a value, the file will be available for the default period of 78 weeks (18 months).
 
 ```javascript
 var fs = require('fs')

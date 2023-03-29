@@ -404,7 +404,7 @@ To use this feature will need version 5.2.0 of the Node.js client library, or a 
 
 If you do not choose a value, the file will be available for the default period of 26 weeks (6 months).
 
-Files sent before 12 April 2023 had a longer default of 78 weeks (18 months).
+Files sent before 12 April 2023 had a longer default period of 78 weeks (18 months).
 
 ```javascript
 var fs = require('fs')

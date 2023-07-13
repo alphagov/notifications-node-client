@@ -1,3 +1,7 @@
+## 7.0.2 - 2023-07-13
+
+* Bump semver from 5.7.1 to 5.7.2
+
 ## 7.0.1 - 2023-07-13
 
 * Fix a bug with default behaviour for `confirmEmailBeforeDownload`, which coalesced false to null.

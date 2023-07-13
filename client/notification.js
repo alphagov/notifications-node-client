@@ -368,7 +368,7 @@ Object.assign(NotifyClient.prototype, {
           data.is_csv = options.isCsv;
         }
 
-        data.confirm_email_before_download = options.confirmEmailBeforeDownload || null;
+        data.confirm_email_before_download = options.confirmEmailBeforeDownload !== undefined ? options.confirmEmailBeforeDownload : null;
         data.retention_period = options.retentionPeriod || null
       }
     }

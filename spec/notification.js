@@ -228,6 +228,13 @@ describe('notification api', () => {
       ).contains({is_csv: false, confirm_email_before_download: null, retention_period: null})
     });
 
+    it('should allow send a file email confirmation to be disabled', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {confirmEmailBeforeDownload: false})
+      ).contains({is_csv: false, confirm_email_before_download: false, retention_period: null})
+    });
+
     it('should allow send a file email confirmation to be set', () => {
       let file = Buffer.alloc(2*1024*1024)
       expect(

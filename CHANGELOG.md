@@ -1,3 +1,7 @@
+## 7.0.1 - 2023-07-13
+
+* Fix a bug with default behaviour for `confirmEmailBeforeDownload`, which coalesced false to null.
+
 ## 7.0.0 - 2023-01-12
 
 * Remove support for node versions below v14.17.3.

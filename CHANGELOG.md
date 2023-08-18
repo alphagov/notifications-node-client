@@ -1,3 +1,7 @@
+## 7.0.5 - 2023-11-13
+
+* Fix a few cases of assignment to undeclared (global) variables
+
 ## 7.0.4 - 2023-11-10
 
 * Bump axios to the 1.x branch to address CVE-2023-45857. Due to underlying changes in Axios you may have to explicitly set the `protocol` property when constructing your `proxyConfig` object, if using a proxy.

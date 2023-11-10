@@ -1,6 +1,6 @@
 {
   "name": "notifications-node-client",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "homepage": "https://docs.notifications.service.gov.uk/node.html",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "jsonwebtoken": "^9.0.0",
-    "axios": "^0.25.0"
+    "axios": "^1.2.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -36,3 +36,4 @@
     "standard-markdown": "5.0.1"
   }
 }
+

@@ -82,7 +82,7 @@ describe('api client', function () {
 
   it('should direct get requests through the proxy when set', function (done) {
     var urlBase = 'https://api.notifications.service.gov.uk',
-      proxyConfig = { host: 'addressofmyproxy.test'},
+      proxyConfig = { host: 'addressofmyproxy.test', protocol: 'http'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 
@@ -101,7 +101,7 @@ describe('api client', function () {
 
   it('should direct post requests through the proxy when set', function (done) {
     var urlBase = 'https://api.notifications.service.gov.uk',
-      proxyConfig = { host: 'addressofmyproxy.test'},
+      proxyConfig = { host: 'addressofmyproxy.test', protocol: 'http'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 

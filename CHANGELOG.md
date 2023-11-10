@@ -1,5 +1,9 @@
 ## 7.0.3 - 2023-07-21
 
+* Bump axios to the 1.x branch to address CVE-2023-45857. Due to underlying changes in Axios you may have to explicitly set the `protocol` property when constructing your `proxyConfig` object, if using a proxy.
+
+## 7.0.3 - 2023-07-21
+
 * Bump word-wrap from 1.2.3 to 1.2.4 to address CVE-2023-26115.
 
 ## 7.0.2 - 2023-07-13

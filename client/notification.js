@@ -201,8 +201,8 @@ Object.assign(NotifyClient.prototype, {
 
   sendPrecompiledLetter: function(reference, pdf_file, postage) {
     var postage = postage || undefined
-    content = _check_and_encode_file(pdf_file, 5)
-    notification = {
+    var content = _check_and_encode_file(pdf_file, 5)
+    var notification = {
       "reference": reference,
       "content": content
     }
@@ -327,6 +327,8 @@ Object.assign(NotifyClient.prototype, {
   * @returns {Promise}
   */
   getReceivedTexts: function(olderThan){
+    let queryString;
+
     if (olderThan) {
       queryString = '?older_than=' + olderThan;
     } else {

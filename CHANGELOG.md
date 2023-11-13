@@ -1,3 +1,7 @@
+## 7.0.6 - 2023-11-13
+
+* Bump axios from 1.2.6 to 1.6.1
+
 ## 7.0.5 - 2023-11-13
 
 * Fix a few cases of assignment to undeclared (global) variables

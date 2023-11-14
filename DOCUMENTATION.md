@@ -39,6 +39,26 @@ notifyClient.setProxy(proxyConfig)
 
 where the `proxyConfig` should be an object supported by [axios](https://github.com/axios/axios).
 
+## Error codes
+
+Errors consist of:
+
+- a code, for example ‘400’
+- a type, for example’BadRequestError’
+- a message, for example ‘Mobile numbers can only include: 0 1 2 3 4 5 6 7 8 9 ( ) + -‘
+
+Do not use the error message despcriptions in your code. These can sometimes change, which may affect your API integration.
+
+Use the error code or error type instead, as these will not change. 
+
+Find more information on error codes in:
+
+- [send a message](https://docs.notifications.service.gov.uk/node.html#send-a-message)
+- [get message status](https://docs.notifications.service.gov.uk/node.html#get-message-status)
+- [get a template](https://docs.notifications.service.gov.uk/node.html#get-a-template)
+- [get received text messages](https://docs.notifications.service.gov.uk/node.html#get-received-text-messages)
+
+
 ## Send a message
 
 You can use GOV.UK Notify to send text messages, emails (including documents) and letters.

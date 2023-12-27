@@ -113,16 +113,15 @@ describe('notification api', () => {
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.config.data).to.include('"is_csv":false');
       });
     });
 
-    it('should send an email with CSV document upload', () => {
+    it('should send an email with a custom filename', () => {
       let email = 'dom@example.com',
         templateId = '123',
         options = {
           personalisation: {documents:
-            notifyClient.prepareUpload(Buffer.from("a,b"), true)
+            notifyClient.prepareUpload(Buffer.from("a,b"), {filename: 'report.csv'})
           },
         },
         data = {
@@ -138,32 +137,7 @@ describe('notification api', () => {
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.config.data).to.include('"is_csv":true');
-      });
-    });
-
-    it('should send an email with non CSV document upload', () => {
-      let email = 'dom@example.com',
-        templateId = '123',
-        options = {
-          personalisation: {documents:
-            notifyClient.prepareUpload(Buffer.from("%PDF-1.5 testpdf"), false)
-          },
-        },
-        data = {
-          template_id: templateId,
-          email_address: email,
-          personalisation: options.personalisation,
-        };
-
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
-
-      return notifyClient.sendEmail(templateId, email, options)
-      .then((response) => {
-        expect(response.status).to.equal(200);
-        expect(response.config.data).to.include('"is_csv":false');
+        expect(response.config.data).to.include('"filename":"report.csv"');
       });
     });
 
@@ -194,8 +168,8 @@ describe('notification api', () => {
       expect(typeof(file)).to.equal('object')
       expect(Buffer.isBuffer(file)).to.equal(true);
       expect(
-        notifyClient.prepareUpload(file, true)
-      ).contains({file: 'MSwyLDMKYSxiLGMK', is_csv: true})
+        notifyClient.prepareUpload(file)
+      ).contains({file: 'MSwyLDMKYSxiLGMK'})
     });
     it('should accept files as strings (from fs.readFile with an encoding)', () => {
       let fs = require('fs');
@@ -203,50 +177,36 @@ describe('notification api', () => {
       expect(typeof(file)).to.equal('string')
       expect(Buffer.isBuffer(file)).to.equal(false);
       expect(
-        notifyClient.prepareUpload(file, true)
-      ).contains({file: 'MSwyLDMKYSxiLGMK', is_csv: true})
-    });
-
-    it('should allow isCsv to be set with the old method (directly into options)', () => {
-      let file = Buffer.alloc(2*1024*1024)
-      expect(
-        notifyClient.prepareUpload(file, true)
-      ).contains({is_csv: true, confirm_email_before_download: null, retention_period: null})
-    });
-
-    it('should allow isCsv to be set as part of the options object', () => {
-      let file = Buffer.alloc(2*1024*1024)
-      expect(
-        notifyClient.prepareUpload(file, {isCsv: true})
-      ).contains({is_csv: true, confirm_email_before_download: null, retention_period: null})
-    });
-
-    it('should imply isCsv=false from empty options', () => {
-      let file = Buffer.alloc(2*1024*1024)
-      expect(
-        notifyClient.prepareUpload(file, {})
-      ).contains({is_csv: false, confirm_email_before_download: null, retention_period: null})
+        notifyClient.prepareUpload(file)
+      ).contains({file: 'MSwyLDMKYSxiLGMK'})
     });
 
     it('should allow send a file email confirmation to be disabled', () => {
       let file = Buffer.alloc(2*1024*1024)
       expect(
         notifyClient.prepareUpload(file, {confirmEmailBeforeDownload: false})
-      ).contains({is_csv: false, confirm_email_before_download: false, retention_period: null})
+      ).contains({confirm_email_before_download: false, retention_period: null})
     });
 
     it('should allow send a file email confirmation to be set', () => {
       let file = Buffer.alloc(2*1024*1024)
       expect(
         notifyClient.prepareUpload(file, {confirmEmailBeforeDownload: true})
-      ).contains({is_csv: false, confirm_email_before_download: true, retention_period: null})
+      ).contains({confirm_email_before_download: true, retention_period: null})
     });
 
     it('should allow custom retention periods to be set', () => {
       let file = Buffer.alloc(2*1024*1024)
       expect(
         notifyClient.prepareUpload(file, {retentionPeriod: "52 weeks"})
-      ).contains({is_csv: false, confirm_email_before_download: null, retention_period: '52 weeks'})
+      ).contains({confirm_email_before_download: null, retention_period: '52 weeks'})
+    });
+
+    it('should allow custom filenames to be set', () => {
+      let file = Buffer.alloc(2*1024*1024)
+      expect(
+        notifyClient.prepareUpload(file, {filename: "report.csv"})
+      ).contains({confirm_email_before_download: null, filename: "report.csv"})
     });
   });
 

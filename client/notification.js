@@ -356,26 +356,18 @@ Object.assign(NotifyClient.prototype, {
   prepareUpload: function(fileData, options) {
     let data = {
       file: _check_and_encode_file(fileData, 2),
-      is_csv: false,
+      filename: null,
       confirm_email_before_download: null,
       retention_period: null,
     }
 
     if (options !== undefined) {
-      if (typeof(options) === 'boolean') {
-        data.is_csv = options
-      }
-      else {
-        if (options.isCsv !== undefined) {
-          data.is_csv = options.isCsv;
-        }
-
-        data.confirm_email_before_download = options.confirmEmailBeforeDownload !== undefined ? options.confirmEmailBeforeDownload : null;
-        data.retention_period = options.retentionPeriod || null
-      }
+      data.filename = options.filename || null;
+      data.confirm_email_before_download = options.confirmEmailBeforeDownload !== undefined ? options.confirmEmailBeforeDownload : null;
+      data.retention_period = options.retentionPeriod || null;
     }
 
-    return data
+    return data;
   },
 
 });

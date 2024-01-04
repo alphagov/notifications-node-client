@@ -9,7 +9,7 @@
 - [x] I’ve used the pull request template
 - [ ] I’ve written unit tests for these changes
 - [ ] I’ve updated the documentation in
-  - `DOCUMENTATION.md`
+  - `notifications-tech-docs` repository
   - `CHANGELOG.md`
 - [ ] I’ve bumped the version number in
   - `package.json`

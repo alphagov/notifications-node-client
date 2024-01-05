@@ -1,3 +1,10 @@
+## 8.0.0 - 2023-12-27
+
+* Remove the default `is_csv` boolean parameter from `prepareUpload`. This method now accepts a file and an options map with the following options. For more specific information please read the documentation.
+    * `filename` (string) - specify the document's filename upon download
+    * `confirm_email_before_download` (boolean) - require the user to enter their email address before the file can be downloaded.
+    * `retention_period` (string) - how long Notify should make the file available to the user for.
+
 ## 7.0.6 - 2023-11-13
 
 * Bump axios from 1.2.6 to 1.6.1

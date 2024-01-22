@@ -20,10 +20,10 @@ function getNotifyClient() {
   return notifyClient;
 }
 
-function getNotifyAuthNock() {
+async function getNotifyAuthNock() {
   let notifyNock = nock(baseUrl, {
     reqheaders: {
-      'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
+      'Authorization': 'Bearer ' + await createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
     }
   })
   return notifyNock;
@@ -31,16 +31,17 @@ function getNotifyAuthNock() {
 
 describe('notification api', () => {
 
-  beforeEach(() => {
+  let notifyClient = getNotifyClient();
+  let notifyAuthNock;
+
+  before(async () => {
     MockDate.set(1234567890000);
+    notifyAuthNock = await getNotifyAuthNock();
   });
 
-  afterEach(() => {
+  after(() => {
     MockDate.reset();
   });
-
-  let notifyClient = getNotifyClient();
-  let notifyAuthNock = getNotifyAuthNock();
 
   describe('sendEmail', () => {
     it('should send an email', () => {

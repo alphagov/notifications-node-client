@@ -49,7 +49,7 @@ function ApiClient() {
  * @param {string} apiKeyId
  * @param {string} serviceId
  *
- * @returns {string}
+ * @returns {Promise<string>}
  */
 function createToken(requestMethod, requestPath, apiKeyId, serviceId) {
   return createGovukNotifyToken(requestMethod, requestPath, apiKeyId, serviceId);
@@ -64,18 +64,21 @@ Object.assign(ApiClient.prototype, {
    * @returns {Promise}
    */
   get: function(path, additionalOptions) {
-    var options = {
-      method: 'get',
-      url: this.urlBase + path,
-      headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    };
-    Object.assign(options, additionalOptions)
-    if(this.proxy !== null) options.proxy = this.proxy;
+    return createToken('GET', path, this.apiKeyId, this.serviceId)
+      .then((token) => {
+        var options = {
+          method: 'get',
+          url: this.urlBase + path,
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+          }
+        };
+        Object.assign(options, additionalOptions)
+        if(this.proxy !== null) options.proxy = this.proxy;
 
-    return restClient(options);
+        return restClient(options);
+      })
   },
 
   /**
@@ -86,19 +89,22 @@ Object.assign(ApiClient.prototype, {
    * @returns {Promise}
    */
   post: function(path, data){
-    var options = {
-      method: 'post',
-      url: this.urlBase + path,
-      data: data,
-      headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    };
+    return createToken('GET', path, this.apiKeyId, this.serviceId)
+      .then((token) => {
+        var options = {
+          method: 'post',
+          url: this.urlBase + path,
+          data: data,
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+          }
+        };
 
-    if(this.proxy !== null) options.proxy = this.proxy;
+        if(this.proxy !== null) options.proxy = this.proxy;
 
-    return restClient(options);
+        return restClient(options);
+      })
   },
 
   /**

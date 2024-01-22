@@ -33,20 +33,23 @@ describe('api client', function () {
       new ApiClient('key_name' + ':' + serviceId + ':' + apiKeyId),
     ].forEach(function(client, index, clients) {
 
-      nock(urlBase, {
-        reqheaders: {
-          'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
-          'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-        }
-      })
-        .get(path)
-        .reply(200, body);
+      createGovukNotifyToken('GET', path, apiKeyId, serviceId)
+        .then((token) => {
+          nock(urlBase, {
+            reqheaders: {
+              'Authorization': 'Bearer ' + token,
+              'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+            }
+          })
+            .get(path)
+            .reply(200, body);
 
-      client.get(path)
-        .then(function (response) {
-          expect(response.data).to.deep.equal(body);
-          if (index == clients.length - 1) done();
-      });
+          client.get(path)
+            .then(function (response) {
+              expect(response.data).to.deep.equal(body);
+              if (index == clients.length - 1) done();
+          });
+        })
 
     });
 
@@ -55,29 +58,32 @@ describe('api client', function () {
   it('should make a post request with correct headers', function (done) {
 
     var urlBase = 'http://localhost',
-      path = '/email',
-      data = {
-        'data': 'qwjjs'
-      },
-      serviceId = 123,
-      apiKeyId = 'SECRET',
+        path = '/email',
+        data = {
+          'data': 'qwjjs'
+        },
+        serviceId = 123,
+        apiKeyId = 'SECRET',
+        apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
+
+    createGovukNotifyToken('POST', path, apiKeyId, serviceId)
+      .then((token) => {
+      nock(urlBase, {
+        reqheaders: {
+          'Authorization': 'Bearer ' + token,
+          'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+        }
+      })
+        .post(path, data)
+        .reply(200, {"hooray": "bkbbk"});
+
       apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
-
-    nock(urlBase, {
-      reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    })
-      .post(path, data)
-      .reply(200, {"hooray": "bkbbk"});
-
-    apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
-    apiClient.post(path, data)
-      .then(function (response) {
-        expect(response.status).to.equal(200);
-        done();
-    });
+      apiClient.post(path, data)
+        .then(function (response) {
+          expect(response.status).to.equal(200);
+          done();
+      });
+      });
   });
 
   it('should direct get requests through the proxy when set', function (done) {

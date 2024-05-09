@@ -23,10 +23,11 @@ function NotifyClient() {
  * @param {Object} personalisation
  * @param {String} reference
  * @param {String} replyToId
+ * @param {String} unsubscribeLink
  *
  * @returns {Object}
  */
-function createNotificationPayload(type, templateId, to, personalisation, reference, replyToId) {
+function createNotificationPayload(type, templateId, to, personalisation, reference, replyToId, unsubscribeLink) {
 
   var payload = {
     template_id: templateId
@@ -51,6 +52,10 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
     payload.email_reply_to_id = replyToId;
   } else if (replyToId && type == 'sms') {
     payload.sms_sender_id = replyToId;
+  }
+
+  if (unsubscribeLink && type == 'email') {
+    payload.unsubscribe_link = unsubscribeLink;
   }
 
   return payload;
@@ -144,16 +149,17 @@ Object.assign(NotifyClient.prototype, {
    */
   sendEmail: function (templateId, emailAddress, options) {
     options = options || {};
-    var err = checkOptionsKeys(['personalisation', 'reference', 'emailReplyToId'], options)
+    var err = checkOptionsKeys(['personalisation', 'reference', 'emailReplyToId', 'unsubscribeLink'], options)
     if (err) {
       return Promise.reject(err);
     }
     var personalisation = options.personalisation || undefined,
       reference = options.reference || undefined,
-      emailReplyToId = options.emailReplyToId || undefined;
+      emailReplyToId = options.emailReplyToId || undefined,
+      unsubscribeLink = options.unsubscribeLink || undefined;
 
     return this.apiClient.post('/v2/notifications/email',
-      createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId));
+      createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId, unsubscribeLink));
   },
 
   /**

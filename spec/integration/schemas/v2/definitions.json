@@ -25,7 +25,8 @@
     "properties": {
         "body": {"type": "string"},
         "from_email": {"type": "string", "format": "email_address"},
-        "subject": {"type": "string"}
+        "subject": {"type": "string"},
+        "unsubscribe_link": {"type": ["string", "null"], "format": "uri"}
     },
     "required": ["body", "from_email", "subject"]
   },

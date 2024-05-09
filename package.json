@@ -1,6 +1,6 @@
 {
   "name": "notifications-node-client",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "homepage": "https://docs.notifications.service.gov.uk/node.html",
   "repository": {
     "type": "git",
@@ -36,4 +36,3 @@
     "standard-markdown": "5.0.1"
   }
 }
-

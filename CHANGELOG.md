@@ -1,3 +1,7 @@
+## 8.1.0 - 2024-05-09
+
+* The `sendEmail` function can now be passed `unsubscribeLink` as an optional argument.
+
 ## 8.0.0 - 2023-12-27
 
 * Remove the default `is_csv` boolean parameter from `prepareUpload`. This method now accepts a file and an options map with the following options. For more specific information please read the documentation.

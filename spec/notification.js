@@ -98,13 +98,13 @@ describe('notification api', () => {
         templateId = '123',
         options = {
           personalisation: {foo: 'bar'},
-          unsubscribeLink: '456',
+          oneClickUnsubscribeURL: '456',
         },
         data = {
           template_id: templateId,
           email_address: email,
           personalisation: options.personalisation,
-          unsubscribe_link: options.unsubscribeLink
+          one_click_unsubscribe_url: options.oneClickUnsubscribeURL
         };
 
       notifyAuthNock

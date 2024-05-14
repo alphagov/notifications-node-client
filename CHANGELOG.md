@@ -1,6 +1,6 @@
 ## 8.1.0 - 2024-05-09
 
-* The `sendEmail` function can now be passed `unsubscribeLink` as an optional argument.
+* The `sendEmail` function can now be passed `oneClickUnsubscribeURL` as an optional argument.
 
 ## 8.0.0 - 2023-12-27
 

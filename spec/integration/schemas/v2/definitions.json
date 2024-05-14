@@ -26,7 +26,7 @@
         "body": {"type": "string"},
         "from_email": {"type": "string", "format": "email_address"},
         "subject": {"type": "string"},
-        "unsubscribe_link": {"type": ["string", "null"], "format": "uri"}
+        "one_click_unsubscribe_url": {"type": ["string", "null"], "format": "uri"}
     },
     "required": ["body", "from_email", "subject"]
   },

@@ -36,7 +36,7 @@ describer('notification api with a live service', function () {
   let letterNotificationId;
   const personalisation = { name: 'Foo' };
   const clientRef = 'client-ref';
-  const unsubscribeLink = 'https://www.example.com';
+  const oneClickUnsubscribeURL = 'https://www.example.com';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
   const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
   const letterContact = {
@@ -89,7 +89,7 @@ describer('notification api with a live service', function () {
         expect(response.data).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.data.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.data.content.subject.should.equal('Functional Tests are good');
-        should.equal(response.data.content.unsubscribe_link, null);
+        should.equal(response.data.content.one_click_unsubscribe_url, null);
         response.data.reference.should.equal(clientRef);
         emailNotificationId = response.data.id;
       })
@@ -97,14 +97,14 @@ describer('notification api with a live service', function () {
 
     it('send email notification with unsubscribe link', () => {
       var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
-        options = {personalisation: personalisation, reference: clientRef, unsubscribeLink: unsubscribeLink};
+        options = {personalisation: personalisation, reference: clientRef, oneClickUnsubscribeURL: oneClickUnsubscribeURL};
 
       return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
         response.status.should.equal(201);
         expect(response.data).to.be.jsonSchema(postEmailNotificationResponseJson);
         response.data.content.body.should.equal('Hello Foo\r\n\r\nFunctional test help make our world a better place');
         response.data.content.subject.should.equal('Functional Tests are good');
-        response.data.content.unsubscribe_link.should.equal(unsubscribeLink);
+        response.data.content.one_click_unsubscribe_url.should.equal(oneClickUnsubscribeURL);
         response.data.reference.should.equal(clientRef);
         emailNotificationId = response.data.id;
       })

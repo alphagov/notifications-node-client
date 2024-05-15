@@ -92,7 +92,7 @@ describe('notification api', () => {
       });
     });
 
-    it('should send an email with an unsubscribe link', () => {
+    it('should send an email with a one click unsubscribe URL', () => {
 
       let email = 'me@example.com',
         templateId = '123',

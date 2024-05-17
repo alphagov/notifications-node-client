@@ -1,4 +1,4 @@
-var restClient = require('axios').default,
+var defaultRestClient = require('axios').default,
     createGovukNotifyToken = require('../client/authentication.js'),
     notifyProductionAPI = 'https://api.notifications.service.gov.uk',
     version = require('../package.json').version;
@@ -13,6 +13,7 @@ var restClient = require('axios').default,
 function ApiClient() {
 
   this.proxy = null;
+  this.restClient = defaultRestClient;
 
   if (arguments.length === 1) {
     this.urlBase = notifyProductionAPI;
@@ -75,7 +76,7 @@ Object.assign(ApiClient.prototype, {
     Object.assign(options, additionalOptions)
     if(this.proxy !== null) options.proxy = this.proxy;
 
-    return restClient(options);
+    return this.restClient(options);
   },
 
   /**
@@ -98,7 +99,7 @@ Object.assign(ApiClient.prototype, {
 
     if(this.proxy !== null) options.proxy = this.proxy;
 
-    return restClient(options);
+    return this.restClient(options);
   },
 
   /**
@@ -107,6 +108,14 @@ Object.assign(ApiClient.prototype, {
    */
   setProxy: function(proxyConfig){
     this.proxy = proxyConfig
+  },
+
+  /**
+   *
+   * @param {object} an axios instance
+   */
+  setClient: function(restClient){
+    this.restClient = restClient;
   }
 });
 

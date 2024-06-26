@@ -1,3 +1,7 @@
+## 8.2.0 - 2024-05-17
+
+* Add support for providing a custom underlying Axios client via `setClient`.
+
 ## 8.1.0 - 2024-05-09
 
 * The `sendEmail` function can now be passed `oneClickUnsubscribeURL` as an optional argument.

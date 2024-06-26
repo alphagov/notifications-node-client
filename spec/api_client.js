@@ -3,8 +3,9 @@ var expect = require('chai').expect,
   ApiClient = require('../client/api_client.js'),
   nock = require('nock'),
   createGovukNotifyToken = require('../client/authentication.js'),
-  version = require('../package.json').version;
-
+  version = require('../package.json').version,
+  axios = require('axios'),
+  sinon = require('sinon');
 
 describe('api client', function () {
 
@@ -116,5 +117,40 @@ describe('api client', function () {
         expect(response.config.proxy).to.eql(proxyConfig);
         done();
     });
+  });
+
+  it('should use the custom Axios client when set', function (done) {
+    var urlBase = 'https://api.notifications.service.gov.uk',
+      path = '/email',
+      body = {
+        'body': 'body text'
+      },
+      serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
+      apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
+
+    var customClientStub = sinon.stub().resolves({ data: body });
+
+    var apiClient = new ApiClient(serviceId, apiKeyId);
+    apiClient.setClient(customClientStub);
+
+    nock(urlBase, {
+      reqheaders: {
+        'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
+        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+      }
+    })
+      .get(path)
+      .reply(200, body);
+
+    apiClient.get(path)
+      .then(function (response) {
+        expect(response.data).to.deep.equal(body);
+        expect(customClientStub.calledOnce).to.be.true;
+        expect(customClientStub.args[0][0].url).to.equal(urlBase + path);
+        expect(customClientStub.args[0][0].headers['Authorization']).to.equal('Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId));
+        expect(customClientStub.args[0][0].headers['User-Agent']).to.equal('NOTIFY-API-NODE-CLIENT/' + version);
+        done();
+      })
+      .catch(done);
   });
 });

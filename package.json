@@ -1,6 +1,6 @@
 {
   "name": "notifications-node-client",
-  "version": "8.1.0",
+  "version": "8.2.0",
   "homepage": "https://docs.notifications.service.gov.uk/node.html",
   "repository": {
     "type": "git",
@@ -20,19 +20,20 @@
   "author": "GDS developers",
   "license": "MIT",
   "dependencies": {
-    "jsonwebtoken": "^9.0.0",
-    "axios": "^1.6.1"
+    "axios": "^1.6.1",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
     "chai-as-promised": "7.1.1",
-    "chai-json-schema": "1.5.0",
     "chai-bytes": "0.1.2",
+    "chai-json-schema": "1.5.0",
     "jsonschema": "1.2.4",
     "mocha": "10.1.0",
     "mockdate": "2.0.2",
     "nock": "9.2.6",
     "optimist": "0.6.1",
+    "sinon": "^18.0.0",
     "standard-markdown": "5.0.1"
   }
 }

@@ -353,6 +353,14 @@ Object.assign(NotifyClient.prototype, {
   },
 
   /**
+   *
+   * @param {object} an axios instance
+   */
+  setClient: function(client) {
+    this.apiClient.setClient(client);
+  },
+
+  /**
   *
   * @param {Buffer} fileData
   * @param {object} options

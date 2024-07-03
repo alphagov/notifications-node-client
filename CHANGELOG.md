@@ -1,3 +1,7 @@
+## 8.2.1 - 2024-07-03
+
+* Fix a bug where an internal API client function isn't being exposed in the library.
+
 ## 8.2.0 - 2024-05-17
 
 * Add support for providing a custom underlying Axios client via `setClient`.

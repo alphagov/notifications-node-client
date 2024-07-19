@@ -28,7 +28,19 @@
         "scheduled_for": {"oneOf":[
           {"$ref": "definitions.json#/datetime"},
           {"type": "null"}
-        ]}
+        ]},
+        "cost_in_pounds": {"type": ["number", "null"]},
+        "is_cost_data_ready": {"type": "boolean"},
+        "cost_details": {
+            "type": "object",
+            "properties": {
+                "billable_sms_fragments": {"type": ["integer", "null"]},
+                "international_rate_multiplier": {"type": ["number", "null"]},
+                "sms_rate": {"type": ["number", "null"]},
+                "billable_sheets_of_paper": {"type": ["integer", "null"]},
+                "postage": {"type": ["string", "null"]}
+            }
+        }
     },
     "required": [
         "id", "reference", "email_address", "phone_number",

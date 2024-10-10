@@ -1,5 +1,5 @@
 FROM ghcr.io/alphagov/notify/node:18-slim
-
+COPY ./ /notifications-node-client
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN \

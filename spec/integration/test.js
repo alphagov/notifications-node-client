@@ -37,25 +37,25 @@ describer('notification api with a live service', function () {
   const personalisation = { name: 'Foo' };
   const clientRef = 'client-ref';
   const oneClickUnsubscribeURL = 'https://www.example.com';
-  const email = process.env.FUNCTIONAL_TEST_EMAIL;
-  const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
+  const email = process.env.API_CLIENT_INTEGRATION_TESTS_EMAIL;
+  const phoneNumber = process.env.API_CLIENT_INTEGRATION_TESTS_NUMBER;
   const letterContact = {
     address_line_1: make_random_id(),
     address_line_2: 'Foo',
     postcode: 'SW1 1AA',
   };
-  const smsTemplateId = process.env.SMS_TEMPLATE_ID;
-  const smsSenderId = process.env.SMS_SENDER_ID || undefined;
-  const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-  const emailReplyToId = process.env.EMAIL_REPLY_TO_ID || undefined;
-  const letterTemplateId = process.env.LETTER_TEMPLATE_ID;
+  const smsTemplateId = process.env.API_CLIENT_INTEGRATION_TESTS_SMS_TEMPLATE_ID;
+  const smsSenderId = process.env.API_CLIENT_INTEGRATION_TESTS_SMS_SENDER_ID || undefined;
+  const emailTemplateId = process.env.API_CLIENT_INTEGRATION_TESTS_EMAIL_TEMPLATE_ID;
+  const emailReplyToId = process.env.API_CLIENT_INTEGRATION_TESTS_EMAIL_REPLY_TO_ID || undefined;
+  const letterTemplateId = process.env.API_CLIENT_INTEGRATION_TESTS_LETTER_TEMPLATE_ID;
 
   beforeEach(() => {
 
-    const urlBase = process.env.NOTIFY_API_URL;
-    const apiKeyId = process.env.API_KEY
-    const inboundSmsKeyId = process.env.INBOUND_SMS_QUERY_KEY;
-    const teamApiKeyId = process.env.API_SENDING_KEY;
+    const urlBase = process.env.API_CLIENT_INTEGRATION_TESTS_NOTIFY_API_URL;
+    const apiKeyId = process.env.API_CLIENT_INTEGRATION_TESTS_TEST_API_KEY
+    const inboundSmsKeyId = process.env.API_CLIENT_INTEGRATION_TESTS_INBOUND_SMS_API_KEY;
+    const teamApiKeyId = process.env.API_CLIENT_INTEGRATION_TESTS_TEAM_API_KEY;
     notifyClient = new NotifyClient(urlBase, apiKeyId);
     teamNotifyClient = new NotifyClient(urlBase, teamApiKeyId);
     receivedTextClient = new NotifyClient(urlBase, inboundSmsKeyId);

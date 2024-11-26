@@ -6,9 +6,12 @@ RUN \
 	echo "Install base packages" \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends \
+		awscli \
 		make \
 		gnupg \
+		jq \
 	&& echo "Clean up" \
 	&& rm -rf /var/lib/apt/lists/* /tmp/*
 
 WORKDIR /var/project
+COPY . .

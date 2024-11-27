@@ -38,24 +38,24 @@ describer('notification api with a live service', function () {
   const clientRef = 'client-ref';
   const oneClickUnsubscribeURL = 'https://www.example.com';
   const email = process.env.FUNCTIONAL_TEST_EMAIL;
-  const phoneNumber = process.env.FUNCTIONAL_TEST_NUMBER;
+  const phoneNumber = process.env.TEST_NUMBER;
   const letterContact = {
     address_line_1: make_random_id(),
     address_line_2: 'Foo',
     postcode: 'SW1 1AA',
   };
-  const smsTemplateId = process.env.SMS_TEMPLATE_ID;
-  const smsSenderId = process.env.SMS_SENDER_ID || undefined;
-  const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-  const emailReplyToId = process.env.EMAIL_REPLY_TO_ID || undefined;
-  const letterTemplateId = process.env.LETTER_TEMPLATE_ID;
+  const smsTemplateId = process.env.FUNCTIONAL_TEST_SMS_TEMPLATE_ID;
+  const smsSenderId = process.env.FUNCTIONAL_TESTS_SERVICE_SMS_SENDER_ID || undefined;
+  const emailTemplateId = process.env.FUNCTIONAL_TEST_EMAIL_TEMPLATE_ID;
+  const emailReplyToId = process.env.FUNCTIONAL_TESTS_SERVICE_EMAIL_REPLY_TO_ID || undefined;
+  const letterTemplateId = process.env.FUNCTIONAL_TEST_LETTER_TEMPLATE_ID;
 
   beforeEach(() => {
 
-    const urlBase = process.env.NOTIFY_API_URL;
-    const apiKeyId = process.env.API_KEY
-    const inboundSmsKeyId = process.env.INBOUND_SMS_QUERY_KEY;
-    const teamApiKeyId = process.env.API_SENDING_KEY;
+    const urlBase = process.env.FUNCTIONAL_TESTS_API_HOST;
+    const apiKeyId = process.env.FUNCTIONAL_TESTS_SERVICE_API_TEST_KEY
+    const inboundSmsKeyId = process.env.FUNCTIONAL_TESTS_SERVICE_API_TEST_KEY;
+    const teamApiKeyId = process.env.FUNCTIONAL_TESTS_SERVICE_API_KEY;
     notifyClient = new NotifyClient(urlBase, apiKeyId);
     teamNotifyClient = new NotifyClient(urlBase, teamApiKeyId);
     receivedTextClient = new NotifyClient(urlBase, inboundSmsKeyId);

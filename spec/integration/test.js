@@ -27,7 +27,7 @@ function make_random_id() {
 
 describer('notification api with a live service', function () {
   // default is 2000 (ms) - api is sometimes slower than this :(
-  this.timeout(40000)
+  this.timeout(120000)
 
   let notifyClient;
   let teamNotifyClient;
@@ -247,7 +247,7 @@ describer('notification api with a live service', function () {
           }
           if (err.response.data && (err.response.data.errors[0].error === "PDFNotReadyError")) {
             count += 1
-            if (count < 7) {
+            if (count < 24) {
               setTimeout(tryClient, 5000)
             } else {
               done(new Error('Too many PDFNotReadyError errors'));

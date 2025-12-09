@@ -19,6 +19,7 @@
   },
   "author": "GDS developers",
   "license": "MIT",
+  "types": "types/index.d.ts",
   "dependencies": {
     "axios": "^1.7.2",
     "jsonwebtoken": "^9.0.2"

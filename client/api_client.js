@@ -4,13 +4,12 @@ var defaultRestClient = require('axios').default,
     version = require('../package.json').version;
 
 /**
- * @param urlBase
- * @param serviceId
- * @param apiKeyId
- *
+ * @param {string} apiKeyOrUrl - API key (1 arg), or base URL (2-3 args)
+ * @param {string} [serviceIdOrApiKey] - API key (2 args), or service ID (3 args)
+ * @param {string} [apiKeyId] - API key (3 args)
  * @constructor
  */
-function ApiClient() {
+function ApiClient(apiKeyOrUrl, serviceIdOrApiKey, apiKeyId) {
 
   this.proxy = null;
   this.restClient = defaultRestClient;
@@ -56,67 +55,61 @@ function createToken(requestMethod, requestPath, apiKeyId, serviceId) {
   return createGovukNotifyToken(requestMethod, requestPath, apiKeyId, serviceId);
 }
 
-Object.assign(ApiClient.prototype, {
+/**
+ * @param {string} path
+ * @param {import('axios').AxiosRequestConfig} [additionalOptions]
+ * @returns {Promise<import('axios').AxiosResponse>}
+ */
+ApiClient.prototype.get = function(path, additionalOptions) {
+  var options = {
+    method: 'get',
+    url: this.urlBase + path,
+    headers: {
+      'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+      'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+    }
+  };
+  Object.assign(options, additionalOptions)
+  if(this.proxy !== null) options.proxy = this.proxy;
 
-  /**
-   *
-   * @param {string} path
-   *
-   * @returns {Promise}
-   */
-  get: function(path, additionalOptions) {
-    var options = {
-      method: 'get',
-      url: this.urlBase + path,
-      headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    };
-    Object.assign(options, additionalOptions)
-    if(this.proxy !== null) options.proxy = this.proxy;
+  return this.restClient(options);
+};
 
-    return this.restClient(options);
-  },
+/**
+ * @param {string} path
+ * @param {object} data
+ * @returns {Promise<import('axios').AxiosResponse>}
+ */
+ApiClient.prototype.post = function(path, data){
+  var options = {
+    method: 'post',
+    url: this.urlBase + path,
+    data: data,
+    headers: {
+      'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+      'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+    }
+  };
 
-  /**
-   *
-   * @param {string} path
-   * @param {object} data
-   *
-   * @returns {Promise}
-   */
-  post: function(path, data){
-    var options = {
-      method: 'post',
-      url: this.urlBase + path,
-      data: data,
-      headers: {
-        'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    };
+  if(this.proxy !== null) options.proxy = this.proxy;
 
-    if(this.proxy !== null) options.proxy = this.proxy;
+  return this.restClient(options);
+};
 
-    return this.restClient(options);
-  },
+/**
+ * @param {import('axios').AxiosProxyConfig} proxyConfig
+ * @returns {void}
+ */
+ApiClient.prototype.setProxy = function(proxyConfig){
+  this.proxy = proxyConfig
+};
 
-  /**
-   *
-   * @param {object} an axios proxy config
-   */
-  setProxy: function(proxyConfig){
-    this.proxy = proxyConfig
-  },
-
-  /**
-   *
-   * @param {object} an axios instance
-   */
-  setClient: function(restClient){
-    this.restClient = restClient;
-  }
-});
+/**
+ * @param {import('axios').AxiosInstance} restClient
+ * @returns {void}
+ */
+ApiClient.prototype.setClient = function(restClient){
+  this.restClient = restClient;
+};
 
 module.exports = ApiClient;

@@ -14,6 +14,7 @@ build: bootstrap ## Build project (dummy task for CI)
 
 .PHONY: test
 test: ## Run tests
+	npm run check:types
 	npm test
 
 .PHONY: integration-test

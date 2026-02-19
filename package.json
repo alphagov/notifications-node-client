@@ -8,10 +8,13 @@
   },
   "description": "GOV.UK Notify Node.js client ",
   "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "mocha \"spec/**/*.js\" && npm run test:markdown:standard",
     "test:markdown:standard": "standard-markdown DOCUMENTATION.md",
-    "integration": "mocha spec/integration/test.js"
+    "integration": "mocha spec/integration/test.js",
+    "build:types": "tsc",
+    "check:types": "tsc --noEmit"
   },
   "engines": {
     "npm": ">=6.14.13",
@@ -24,6 +27,7 @@
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@types/node": "^25.3.0",
     "chai": "4.3.4",
     "chai-as-promised": "7.1.1",
     "chai-bytes": "0.1.2",
@@ -34,6 +38,7 @@
     "nock": "9.2.6",
     "optimist": "0.6.1",
     "sinon": "^18.0.0",
-    "standard-markdown": "7.1.0"
+    "standard-markdown": "7.1.0",
+    "typescript": "^5.9.0"
   }
 }

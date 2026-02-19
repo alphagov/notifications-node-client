@@ -1,3 +1,8 @@
+## 8.3.0 - 2026-02-19
+
+* Adds Typescript hints (run `npm build:types` to generate type files in `types/`)
+* Bump axios from 1.7.2 to 1.13.5
+
 ## 8.2.1 - 2024-07-03
 
 * Fix a bug where an internal API client function isn't being exposed in the library.

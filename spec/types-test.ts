@@ -125,7 +125,7 @@ async function testPreviewTemplateById() {
   const type: "sms" | "letter" | "email" = response.data.type;
   const body: string = response.data.body;
   const html: string | undefined = response.data.html;
-  const postage: "first" | "second" | "europe" | "rest-of-world" | undefined = response.data.postage;
+  const postage: "first" | "second" | "economy" | "europe" | "rest-of-world" | undefined = response.data.postage;
 }
 
 // getReceivedTexts

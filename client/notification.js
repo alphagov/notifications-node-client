@@ -5,7 +5,7 @@ var ApiClient = require('./api_client');
  */
 
 /**
- * @typedef {"first" | "second" | "europe" | "rest-of-world"} PostageType
+ * @typedef {"first" | "second" | "economy" | "europe" | "rest-of-world"} PostageType
  */
 
 /**
@@ -57,7 +57,7 @@ var ApiClient = require('./api_client');
  * @property {string} body
  * @property {string} [subject]
  * @property {string} [letter_contact_block]
- * @property {string} [postage]
+ * @property {PostageType} [postage]
  */
 
 /**
@@ -247,7 +247,7 @@ NotifyClient.prototype.sendLetter = function (templateId, options) {
 /**
  * @param {string} reference
  * @param {Buffer | string} pdf_file
- * @param {"first" | "second" | "europe" | "rest-of-world"} [postage]
+ * @param {"first" | "second" | "economy" | "europe" | "rest-of-world"} [postage]
  * @returns {Promise<import('axios').AxiosResponse<{id: string, reference: string, postage: PostageType}>>}
  */
 NotifyClient.prototype.sendPrecompiledLetter = function(reference, pdf_file, postage) {

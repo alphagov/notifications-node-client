@@ -3,3 +3,4 @@ node_modules
 environment.sh
 .eslintrc.js
 docker.env
+types/

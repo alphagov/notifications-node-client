@@ -234,7 +234,7 @@ describer('notification api with a live service', function () {
       // it takes a while for the pdf for a freshly sent letter to become ready, so we need to retry the promise
       // a few times, and apply delay in between the attempts. Since our function returns a promise,
       // and it's asynchronous, we cannot use a regular loop to do that. That's why we envelop our promise in a
-      // function which we call up to 7 times or until the promise is resolved.
+      // function which we call up to 24 times or until the promise is resolved.
       const tryClient = () => {
         return notifyClient.getPdfForLetterNotification(letterNotificationId)
         .then((file_buffer) => {

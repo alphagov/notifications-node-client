@@ -1,3 +1,7 @@
+## 8.3.1 - 2026-03-24
+
+* Include type files in published package
+
 ## 8.3.0 - 2026-02-19
 
 * Adds Typescript hints (run `npm build:types` to generate type files in `types/`)

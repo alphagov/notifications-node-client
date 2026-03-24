@@ -1,3 +1,7 @@
+## 8.3.2 - 2026-03-24
+
+* Include type files in published package (previous attempt did not work)
+
 ## 8.3.1 - 2026-03-24
 
 * Include type files in published package

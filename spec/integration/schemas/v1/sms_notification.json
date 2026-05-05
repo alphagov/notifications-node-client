@@ -55,7 +55,7 @@
         },
         "version": {"type": "number"}
       },
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": ["id", "name", "template_type", "version"]
     },
     "service": {"$ref": "definitions.json#/uuid"},
@@ -67,7 +67,7 @@
             "id": {"$ref": "definitions.json#/uuid"},
             "original_file_name": {"type": "string"}
           },
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": ["id", "original_file_name"]
         },
         {"type": "null"}
@@ -80,7 +80,7 @@
     "body": {"type": "string"},
     "content_char_count": {"type": "number"}
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
     "id",
     "to",

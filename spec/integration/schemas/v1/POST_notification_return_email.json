@@ -11,17 +11,17 @@
           "properties": {
             "id": {"$ref": "definitions.json#/uuid"}
           },
-          "additionalProperties": false,
+          "additionalProperties": true,
           "required": ["id"]
         },
         "body": {"type": "string"},
         "template_version": {"type": "number"},
         "subject": {"type": "string"}
       },
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": ["notification", "body", "template_version", "subject"]
     }
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": ["data"]
 }

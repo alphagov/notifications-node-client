@@ -13,6 +13,6 @@
         {"type": "null"}
       ]}
   },
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": ["id", "content", "uri", "template"]
 }

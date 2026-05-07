@@ -117,6 +117,31 @@ describe('notification api', () => {
       });
     });
 
+    it('should send an email with sanitise content parameter', () => {
+
+      let email = 'dom@example.com',
+        templateId = '123',
+        options = {
+          personalisation: {code: '12345', name: 'John'},
+          sanitiseContentFor: ['code']
+        },
+        data = {
+          template_id: templateId,
+          email_address: email,
+          personalisation: options.personalisation,
+          sanitise_content_for: options.sanitiseContentFor
+        };
+
+      notifyAuthNock
+      .post('/v2/notifications/email', data)
+      .reply(200, {hooray: 'bkbbk'});
+
+      return notifyClient.sendEmail(templateId, email, options)
+      .then((response) => {
+        expect(response.status).to.equal(200);
+      });
+    });
+
     it('should send an email with document upload', () => {
       let email = 'dom@example.com',
         templateId = '123',

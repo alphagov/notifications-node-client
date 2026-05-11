@@ -1,3 +1,7 @@
+## 8.4.0 - 2026-05-14
+
+* The `sendEmail` function can now be passed `santiseContentFor` as an optional argument.
+
 ## 8.3.2 - 2026-03-24
 
 * Include type files in published package (previous attempt did not work)

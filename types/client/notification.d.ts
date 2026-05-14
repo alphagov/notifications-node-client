@@ -193,14 +193,15 @@ declare class NotifyClient {
     /**
      * @param {string} templateId
      * @param {string} emailAddress
-     * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string}} [options]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, uri: string, template: TemplateRef}>>}
+     * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string, sanitiseContentFor?: string[]}} [options]
+     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>>}
      */
     sendEmail(templateId: string, emailAddress: string, options?: {
         personalisation?: any;
         reference?: string;
         emailReplyToId?: string;
         oneClickUnsubscribeURL?: string;
+        sanitiseContentFor?: string[];
     }): Promise<import("axios").AxiosResponse<{
         id: string;
         reference?: string;
@@ -210,6 +211,7 @@ declare class NotifyClient {
             from_email: string;
             one_click_unsubscribe_url?: string;
         };
+        sanitised_content: Record<string, Record<string, string>>;
         uri: string;
         template: TemplateRef;
     }>>;

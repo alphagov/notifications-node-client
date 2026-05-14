@@ -82,10 +82,11 @@ function NotifyClient(apiKeyOrUrl, serviceIdOrApiKey, apiKeyId) {
  * @param {String} reference
  * @param {String} replyToId
  * @param {String} oneClickUnsubscribeURL
+ * @param {String[]} [sanitiseContentFor]
  *
  * @returns {Object}
  */
-function createNotificationPayload(type, templateId, to, personalisation, reference, replyToId, oneClickUnsubscribeURL) {
+function createNotificationPayload(type, templateId, to, personalisation, reference, replyToId, oneClickUnsubscribeURL, sanitiseContentFor) {
 
   var payload = {
     template_id: templateId
@@ -114,6 +115,10 @@ function createNotificationPayload(type, templateId, to, personalisation, refere
 
   if (oneClickUnsubscribeURL && type == 'email') {
     payload.one_click_unsubscribe_url = oneClickUnsubscribeURL;
+  }
+
+  if (sanitiseContentFor && type == 'email') {
+    payload.sanitise_content_for = sanitiseContentFor;
   }
 
   return payload;
@@ -187,22 +192,23 @@ function _check_and_encode_file(file, size_limit) {
 /**
  * @param {string} templateId
  * @param {string} emailAddress
- * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string}} [options]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, uri: string, template: TemplateRef}>>}
+ * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string, sanitiseContentFor?: string[]}} [options]
+ * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>>}
  */
 NotifyClient.prototype.sendEmail = function (templateId, emailAddress, options) {
   options = options || {};
-  var err = checkOptionsKeys(['personalisation', 'reference', 'emailReplyToId', 'oneClickUnsubscribeURL'], options)
+  var err = checkOptionsKeys(['personalisation', 'reference', 'emailReplyToId', 'oneClickUnsubscribeURL', 'sanitiseContentFor'], options)
   if (err) {
     return Promise.reject(err);
   }
   var personalisation = options.personalisation || undefined,
     reference = options.reference || undefined,
     emailReplyToId = options.emailReplyToId || undefined,
-    oneClickUnsubscribeURL = options.oneClickUnsubscribeURL || undefined;
+    oneClickUnsubscribeURL = options.oneClickUnsubscribeURL || undefined,
+    sanitiseContentFor = options.sanitiseContentFor || undefined;
 
   return this.apiClient.post('/v2/notifications/email',
-    createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId, oneClickUnsubscribeURL));
+    createNotificationPayload('email', templateId, emailAddress, personalisation, reference, emailReplyToId, oneClickUnsubscribeURL, sanitiseContentFor));
 };
 
 /**

@@ -110,6 +110,31 @@ describer('notification api with a live service', function () {
       })
     });
 
+    it('email notification with sanitise_content_for', () => {
+      const unsafeInput = 'User, [click here](https://evil.link)';
+      const expectedSanitised = 'User, \\[click here\\]\\(\\)';
+      
+      let modified_personalisation = { ...personalisation };
+      modified_personalisation['name'] = unsafeInput;
+
+      var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
+        options = {
+          personalisation: modified_personalisation, 
+          reference: clientRef, 
+          sanitiseContentFor: ['name']
+        };
+
+      return notifyClient.sendEmail(emailTemplateId, email, options).then((response) => {
+        response.status.should.equal(201);
+        expect(response.data).to.be.jsonSchema(postEmailNotificationResponseJson);
+        response.data.content.body.should.contain(expectedSanitised);
+        const field = response.data.sanitised_content.name;
+        field.sanitised.should.equal(expectedSanitised);
+        field.unsanitised.should.equal(unsafeInput);
+        response.data.should.have.property('sanitised_content');
+      });
+    });
+
     it('send email notification with document upload', () => {
       var postEmailNotificationResponseJson = require('./schemas/v2/POST_notification_email_response.json'),
         options = {personalisation: { name: 'Foo', documents:

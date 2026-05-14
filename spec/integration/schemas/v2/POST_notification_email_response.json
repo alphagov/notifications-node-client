@@ -11,8 +11,15 @@
       "scheduled_for": {"oneOf":[
         {"$ref": "definitions.json#/datetime"},
         {"type": "null"}
-      ]}
+      ]},
+      "sanitised_content": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
   },
   "additionalProperties": true,
-  "required": ["id", "content", "uri", "template"]
+  "required": ["id", "content", "uri", "template", "sanitised_content"]
 }

@@ -5,8 +5,8 @@ chai.use(chaiBytes);
 let expect = require('chai').expect,
   NotifyClient = require('../client/notification.js').NotifyClient,
   MockDate = require('mockdate'),
-  nock = require('nock'),
   createGovukNotifyToken = require('../client/authentication.js');
+const {getGlobalDispatcher, MockAgent, setGlobalDispatcher} = require("undici");
 
 MockDate.set(1234567890000);
 
@@ -15,32 +15,43 @@ const serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1';
 const apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
 function getNotifyClient() {
-  let baseUrl = 'http://localhost';
-  let notifyClient = new NotifyClient(baseUrl, serviceId, apiKeyId);
-  return notifyClient;
+  return new NotifyClient(baseUrl, serviceId, apiKeyId);
 }
 
-function getNotifyAuthNock() {
-  let notifyNock = nock(baseUrl, {
-    reqheaders: {
+/** @type {import('undici').Interceptable} */
+let mockPool;
+
+function getNotifyAuthNock(path, {method, data, query} = {}) {
+  return mockPool.intercept({
+    path,
+    method,
+    body: data && JSON.stringify(data),
+    query,
+    headers: {
       'Authorization': 'Bearer ' + createGovukNotifyToken('POST', '/v2/notifications/', apiKeyId, serviceId)
     }
-  })
-  return notifyNock;
+  });
 }
 
+const responseOptions =  {headers: {'Content-Type': 'application/json'}};
+
 describe('notification api', () => {
+  let dispatcher;
 
   beforeEach(() => {
     MockDate.set(1234567890000);
+    dispatcher = getGlobalDispatcher();
+    const mockAgent = new MockAgent();
+    setGlobalDispatcher(mockAgent);
+    mockPool = mockAgent.get(baseUrl);
   });
 
   afterEach(() => {
     MockDate.reset();
+    setGlobalDispatcher(dispatcher);
   });
 
   let notifyClient = getNotifyClient();
-  let notifyAuthNock = getNotifyAuthNock();
 
   describe('sendEmail', () => {
     it('should send an email', () => {
@@ -56,15 +67,13 @@ describe('notification api', () => {
           personalisation: options.personalisation
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then(function (response) {
         expect(response.status).to.equal(200);
       });
-
     });
 
     it('should send an email with email_reply_to_id', () => {
@@ -82,9 +91,8 @@ describe('notification api', () => {
           email_reply_to_id: options.emailReplyToId
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
@@ -107,9 +115,8 @@ describe('notification api', () => {
           one_click_unsubscribe_url: options.oneClickUnsubscribeURL
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
@@ -132,9 +139,8 @@ describe('notification api', () => {
           sanitise_content_for: options.sanitiseContentFor
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
@@ -156,9 +162,8 @@ describe('notification api', () => {
           personalisation: options.personalisation,
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
@@ -180,14 +185,13 @@ describe('notification api', () => {
           personalisation: options.personalisation,
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/email', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/email', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendEmail(templateId, email, options)
       .then((response) => {
         expect(response.status).to.equal(200);
-        expect(response.config.data).to.include('"filename":"report.csv"');
+        expect(data.personalisation.documents.filename).to.include('report.csv');
       });
     });
 
@@ -275,9 +279,8 @@ describe('notification api', () => {
           personalisation: options.personalisation
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/sms', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/sms', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
@@ -300,9 +303,8 @@ describe('notification api', () => {
           sms_sender_id: options.smsSenderId,
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/sms', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/sms', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendSms(templateId, phoneNo, options)
       .then(function (response) {
@@ -341,9 +343,8 @@ describe('notification api', () => {
           personalisation: options.personalisation
         };
 
-      notifyAuthNock
-      .post('/v2/notifications/letter', data)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications/letter', {method: 'POST', data})
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.sendLetter(templateId, options)
       .then(function (response) {
@@ -370,9 +371,8 @@ describe('notification api', () => {
 
     let notificationId = 'wfdfdgf';
 
-    notifyAuthNock
-      .get('/v2/notifications/' + notificationId)
-      .reply(200, {hooray: 'bkbbk'});
+    getNotifyAuthNock('/v2/notifications/' + notificationId)
+      .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
     return notifyClient.getNotificationById(notificationId)
       .then(function (response) {
@@ -385,9 +385,8 @@ describe('notification api', () => {
     let pdf_file = Buffer.from("%PDF-1.5 testpdf")
     let notificationId = 'wfdfdgf';
 
-    notifyAuthNock
-      .get('/v2/notifications/' + notificationId + '/pdf')
-      .reply(200, pdf_file.toString());
+    getNotifyAuthNock('/v2/notifications/' + notificationId + '/pdf')
+      .reply(200, pdf_file, {headers: {'Content-Type': 'application/pdf'}});
 
     return notifyClient.getPdfForLetterNotification(notificationId)
       .then(function (response_buffer) {
@@ -403,9 +402,8 @@ describe('notification api', () => {
       reference = "HORK",
       data = {"reference": reference, "content": pdf_file.toString('base64')}
 
-      notifyAuthNock
-      .post('/v2/notifications/letter', data)
-      .reply(200, {hiphip: 'hooray'});
+      getNotifyAuthNock('/v2/notifications/letter', {method: 'POST', data})
+        .reply(200, {hiphip: 'hooray'}, responseOptions);
 
       return notifyClient.sendPrecompiledLetter(reference, pdf_file)
       .then(function (response) {
@@ -420,9 +418,8 @@ describe('notification api', () => {
       postage = "first"
       data = {"reference": reference, "content": pdf_file.toString('base64'), "postage": postage}
 
-      notifyAuthNock
-      .post('/v2/notifications/letter', data)
-      .reply(200, {hiphip: 'hooray'});
+      getNotifyAuthNock('/v2/notifications/letter', {method: 'POST', data})
+        .reply(200, {hiphip: 'hooray'}, responseOptions);
 
       return notifyClient.sendPrecompiledLetter(reference, pdf_file, postage)
       .then(function (response) {
@@ -444,9 +441,8 @@ describe('notification api', () => {
 
     it('should get all notifications', () => {
 
-      notifyAuthNock
-      .get('/v2/notifications')
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications')
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications()
       .then(function (response) {
@@ -458,9 +454,8 @@ describe('notification api', () => {
 
       let reference = 'myref';
 
-      notifyAuthNock
-      .get('/v2/notifications?reference=' + reference)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications?reference=' + reference)
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications(undefined, undefined, reference)
       .then(function (response) {
@@ -472,9 +467,8 @@ describe('notification api', () => {
 
       let status = 'failed';
 
-      notifyAuthNock
-      .get('/v2/notifications?status=' + status)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications?status=' + status)
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications(undefined, 'failed')
       .then(function (response) {
@@ -487,9 +481,8 @@ describe('notification api', () => {
       let templateType = 'sms';
       let status = 'failed';
 
-      notifyAuthNock
-      .get('/v2/notifications?template_type=' + templateType + '&status=' + status)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications?template_type=' + templateType + '&status=' + status)
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications(templateType, status)
       .then(function (response) {
@@ -503,9 +496,14 @@ describe('notification api', () => {
       let status = 'delivered';
       let reference = 'myref';
 
-      notifyAuthNock
-      .get('/v2/notifications?template_type=' + templateType + '&status=' + status + '&reference=' + reference)
-      .reply(200, {hooray: 'bkbbk'});
+      getNotifyAuthNock('/v2/notifications', {
+        query: {
+          template_type: templateType,
+          status,
+          reference
+        }
+      })
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications(templateType, status, reference)
       .then(function (response) {
@@ -520,13 +518,13 @@ describe('notification api', () => {
       let reference = 'myref';
       let olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-      notifyAuthNock
-      .get('/v2/notifications?template_type=' + templateType +
+      getNotifyAuthNock('/v2/notifications?template_type=' + templateType +
         '&status=' + status +
         '&reference=' + reference +
-        '&older_than=' + olderThanId
+        '&older_than=' + olderThanId,
+          'GET'
       )
-      .reply(200, {hooray: 'bkbbk'});
+        .reply(200, {hooray: 'bkbbk'}, responseOptions);
 
       return notifyClient.getNotifications(templateType, status, reference, olderThanId)
       .then(function (response) {
@@ -541,9 +539,8 @@ describe('notification api', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-      notifyAuthNock
-      .get('/v2/template/' + templateId)
-      .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/template/' + templateId)
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.getTemplateById(templateId)
       .then(function (response) {
@@ -556,9 +553,8 @@ describe('notification api', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-      notifyAuthNock
-      .get('/v2/template/' + templateId)
-      .reply(200, {personalisation: {name: {required: true}}});
+      getNotifyAuthNock('/v2/template/' + templateId)
+        .reply(200, {personalisation: {name: {required: true}}}, responseOptions);
 
       return notifyClient.getTemplateById(templateId)
       .then(function (response) {
@@ -573,9 +569,8 @@ describe('notification api', () => {
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
       let version = 10;
 
-      notifyAuthNock
-      .get('/v2/template/' + templateId + '/version/' + version)
-      .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/template/' + templateId + '/version/' + version)
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.getTemplateByIdAndVersion(templateId, version)
       .then(function (response) {
@@ -586,9 +581,8 @@ describe('notification api', () => {
 
     it('should get all templates with unspecified template type', () => {
 
-      notifyAuthNock
-      .get('/v2/templates')
-      .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/templates')
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.getAllTemplates()
       .then(function (response) {
@@ -601,9 +595,8 @@ describe('notification api', () => {
 
       let templateType = 'sms'
 
-      notifyAuthNock
-      .get('/v2/templates?type=' + templateType)
-      .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/templates?type=' + templateType)
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.getAllTemplates(templateType)
       .then(function (response) {
@@ -618,9 +611,11 @@ describe('notification api', () => {
       let payload = {name: 'Foo' }
       let expectedPersonalisation = {personalisation: payload };
 
-      notifyAuthNock
-        .post('/v2/template/' + templateId + '/preview', expectedPersonalisation)
-        .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/template/' + templateId + '/preview', {
+        method: 'POST',
+        data: expectedPersonalisation
+      })
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.previewTemplateById(templateId, payload)
       .then(function (response) {
@@ -633,9 +628,8 @@ describe('notification api', () => {
 
       let templateId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-      notifyAuthNock
-      .post('/v2/template/' + templateId + '/preview')
-      .reply(200, {foo: 'bar'});
+      getNotifyAuthNock('/v2/template/' + templateId + '/preview', {method: 'POST'})
+        .reply(200, {foo: 'bar'}, responseOptions);
 
       return notifyClient.previewTemplateById(templateId)
       .then(function (response) {
@@ -646,9 +640,8 @@ describe('notification api', () => {
 
   it('should get latest 250 received texts', function() {
 
-    notifyAuthNock
-      .get('/v2/received-text-messages')
-      .reply(200, {"foo":"bar"});
+    getNotifyAuthNock('/v2/received-text-messages')
+      .reply(200, {"foo":"bar"}, responseOptions);
 
     return notifyClient.getReceivedTexts()
       .then(function(response){
@@ -660,9 +653,8 @@ describe('notification api', () => {
 
     var olderThanId = '35836a9e-5a97-4d99-8309-0c5a2c3dbc72';
 
-    notifyAuthNock
-      .get('/v2/received-text-messages?older_than=' + olderThanId)
-      .reply(200, {"foo":"bar"});
+    getNotifyAuthNock('/v2/received-text-messages?older_than=' + olderThanId)
+      .reply(200, {"foo":"bar"}, responseOptions);
 
     return notifyClient.getReceivedTexts(olderThanId)
     .then(function(response){

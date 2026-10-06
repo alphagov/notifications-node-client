@@ -1,4 +1,4 @@
-var defaultRestClient = require('axios').default,
+var defaultRestClient = require('undici').fetch,
     createGovukNotifyToken = require('../client/authentication.js'),
     notifyProductionAPI = 'https://api.notifications.service.gov.uk',
     version = require('../package.json').version;
@@ -10,6 +10,11 @@ function requireApiKey(apiKey) {
 }
 
 /**
+ * @template T
+ * @typedef {import('undici').Response & {data: T}} ClientResponse
+ */
+
+/**
  * @param {string} apiKeyOrUrl - API key (1 arg), or base URL (2-3 args)
  * @param {string} [serviceIdOrApiKey] - API key (2 args), or service ID (3 args)
  * @param {string} [apiKeyId] - API key (3 args)
@@ -18,6 +23,7 @@ function requireApiKey(apiKey) {
 function ApiClient(apiKeyOrUrl, serviceIdOrApiKey, apiKeyId) {
 
   this.proxy = null;
+  /** @type {import('undici').fetch} */
   this.restClient = defaultRestClient;
 
   if (arguments.length === 1) {
@@ -70,48 +76,90 @@ function createToken(requestMethod, requestPath, apiKeyId, serviceId) {
 }
 
 /**
+ * @template T return type
  * @param {string} path
- * @param {import('axios').AxiosRequestConfig} [additionalOptions]
- * @returns {Promise<import('axios').AxiosResponse>}
+ * @param {import('undici').RequestInit} [additionalOptions]
+ * @returns {Promise<ClientResponse<T>>}
  */
 ApiClient.prototype.get = function(path, additionalOptions) {
+  /** @type {import('undici').RequestInit} */
   var options = {
-    method: 'get',
-    url: this.urlBase + path,
+    method: 'GET',
     headers: {
       'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+      'Content-Type': 'application/json',
       'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
     }
   };
   Object.assign(options, additionalOptions)
-  if(this.proxy !== null) options.proxy = this.proxy;
 
-  return this.restClient(options);
+  return this._makeRequest(path, options);
 };
 
 /**
+ * @template T return type
  * @param {string} path
  * @param {object} data
- * @returns {Promise<import('axios').AxiosResponse>}
+ * @returns {Promise<ClientResponse<T>>}
  */
 ApiClient.prototype.post = function(path, data){
+  /** @type {import('undici').RequestInit} */
   var options = {
-    method: 'post',
-    url: this.urlBase + path,
-    data: data,
+    method: 'POST',
+    body: JSON.stringify(data),
     headers: {
       'Authorization': 'Bearer ' + createToken('GET', path, this.apiKeyId, this.serviceId),
+      'Content-Type': 'application/json',
       'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
     }
   };
 
-  if(this.proxy !== null) options.proxy = this.proxy;
-
-  return this.restClient(options);
+  return this._makeRequest(path, options);
 };
 
 /**
- * @param {import('axios').AxiosProxyConfig} proxyConfig
+ * Make a request with the configured client (and proxy)
+ * Parse the response as per the returned content-type
+ *
+ * @template T return type
+ * @param {string} path
+ * @param {import('undici').RequestInit} options
+ * @returns {Promise<ClientResponse<T>>}
+ * @private
+ */
+ApiClient.prototype._makeRequest = function(path, options) {
+  if(this.proxy !== null) options.dispatcher = this.proxy;
+
+  return this.restClient(this.urlBase + path, options)
+      .then(async res => {
+        // parse the response - even for errors
+        const contentType = res.headers?.get('Content-Type') || '';
+        if (contentType.includes('application/json')) {
+          // most notify response are JSON
+          res.data = await res.json();
+        } else if (contentType.includes('application/pdf')) {
+          // getting a letter as a PDF will return the PDF, not JSON
+          res.data = await res.arrayBuffer();
+        } else {
+          // fallback
+          res.data = await res.text();
+        }
+
+        if (!res.ok) {
+          // throw for non-2xx responses
+          var error = new Error(
+              'Request failed with status code ' + res.status
+          );
+          error.response = res;
+          throw error;
+        }
+
+        return res;
+      });
+}
+
+/**
+ * @param {import('undici').Dispatcher} proxyConfig
  * @returns {void}
  */
 ApiClient.prototype.setProxy = function(proxyConfig){
@@ -119,7 +167,7 @@ ApiClient.prototype.setProxy = function(proxyConfig){
 };
 
 /**
- * @param {import('axios').AxiosInstance} restClient
+ * @param {import('undici').fetch} restClient
  * @returns {void}
  */
 ApiClient.prototype.setClient = function(restClient){

@@ -62,12 +62,18 @@ var ApiClient = require('./api_client');
  */
 
 /**
+ * @template T
+ * @typedef {Promise<import('./api_client').ClientResponse<T>} ClientResponse
+ */
+
+/**
  * @param {string} apiKeyOrUrl - API key (1 arg), or base URL (2-3 args)
  * @param {string} [serviceIdOrApiKey] - API key (2 args), or service ID (3 args)
  * @param {string} [apiKeyId] - API key (3 args)
  * @constructor
  */
 function NotifyClient(apiKeyOrUrl, serviceIdOrApiKey, apiKeyId) {
+  /** @type {ApiClient} */
   this.apiClient = new (Function.prototype.bind.apply(
       ApiClient,
       [null].concat(Array.prototype.slice.call(arguments))
@@ -194,7 +200,7 @@ function _check_and_encode_file(file, size_limit) {
  * @param {string} templateId
  * @param {string} emailAddress
  * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string, sanitiseContentFor?: string[]}} [options]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>>}
+ * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>}
  */
 NotifyClient.prototype.sendEmail = function (templateId, emailAddress, options) {
   options = options || {};
@@ -216,7 +222,7 @@ NotifyClient.prototype.sendEmail = function (templateId, emailAddress, options) 
  * @param {string} templateId
  * @param {string} phoneNumber
  * @param {{personalisation?: Object, reference?: string, smsSenderId?: string}} [options]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, from_number: string}, uri: string, template: TemplateRef}>>}
+ * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, from_number: string}, uri: string, template: TemplateRef}>}
  */
 NotifyClient.prototype.sendSms = function (templateId, phoneNumber, options) {
   options = options || {};
@@ -236,7 +242,7 @@ NotifyClient.prototype.sendSms = function (templateId, phoneNumber, options) {
 /**
  * @param {string} templateId
  * @param {{personalisation?: Object, reference?: string}} [options]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string}, uri: string, template: TemplateRef, scheduled_for: string | null}>>}
+ * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, subject: string}, uri: string, template: TemplateRef, scheduled_for: string | null}>}
  */
 NotifyClient.prototype.sendLetter = function (templateId, options) {
   options = options || {};
@@ -255,7 +261,7 @@ NotifyClient.prototype.sendLetter = function (templateId, options) {
  * @param {string} reference
  * @param {Buffer | string} pdf_file
  * @param {"first" | "second" | "economy" | "europe" | "rest-of-world"} [postage]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, reference: string, postage: PostageType}>>}
+ * @returns {ClientResponse<{id: string, reference: string, postage: PostageType}>}
  */
 NotifyClient.prototype.sendPrecompiledLetter = function(reference, pdf_file, postage) {
   var postage = postage || undefined
@@ -272,7 +278,7 @@ NotifyClient.prototype.sendPrecompiledLetter = function(reference, pdf_file, pos
 
 /**
  * @param {string} notificationId
- * @returns {Promise<import('axios').AxiosResponse<NotificationResponse>>}
+ * @returns {ClientResponse<NotificationResponse>}
  */
 NotifyClient.prototype.getNotificationById = function(notificationId) {
   return this.apiClient.get('/v2/notifications/' + notificationId);
@@ -283,7 +289,7 @@ NotifyClient.prototype.getNotificationById = function(notificationId) {
  * @param {string} [status]
  * @param {string} [reference]
  * @param {string} [olderThanId]
- * @returns {Promise<import('axios').AxiosResponse<{notifications: NotificationResponse[], links: {current: string, next: string}}>>}
+ * @returns {ClientResponse<{notifications: NotificationResponse[], links: {current: string, next: string}}>}
  */
 NotifyClient.prototype.getNotifications = function(templateType, status, reference, olderThanId) {
   return this.apiClient.get('/v2/notifications' + buildGetAllNotificationsQuery(templateType, status, reference, olderThanId));
@@ -297,28 +303,17 @@ NotifyClient.prototype.getPdfForLetterNotification = function(notificationId) {
   const url = '/v2/notifications/' + notificationId + '/pdf'
 
   // Unlike other requests, we expect a successful response as an arraybuffer and an error as JSON
-  // Axios does not support flexible response types so we will need to handle the error case ourselves below
-  return this.apiClient.get(url, { responseType: 'arraybuffer' })
+  // ApiClient checks for the 'application/pdf' content-type header and returns an ArrayBuffer
+  return this.apiClient.get(url)
   .then(function(response) {
-    var pdf = Buffer.from(response.data, "base64")
-    return pdf
-  })
-  .catch(function(error) {
-    // If we receive an error, as the response is an arraybuffer rather than our usual JSON
-    // we need to convert it to JSON to be read by the user
-    string_of_error_body = new TextDecoder().decode(error.response.data);
-
-    // Then we replace the error data with the JSON error rather than the arraybuffer of the error
-    error.response.data = JSON.parse(string_of_error_body);
-
-    // and rethrow to let the user handle the error
-    throw error
+    // return the PDF as a buffer
+    return Buffer.from(response.data);
   });
 };
 
 /**
  * @param {string} templateId
- * @returns {Promise<import('axios').AxiosResponse<TemplateData>>}
+ * @returns {ClientResponse<TemplateData>}
  */
 NotifyClient.prototype.getTemplateById = function(templateId) {
   return this.apiClient.get('/v2/template/' + templateId);
@@ -327,7 +322,7 @@ NotifyClient.prototype.getTemplateById = function(templateId) {
 /**
  * @param {string} templateId
  * @param {number} version
- * @returns {Promise<import('axios').AxiosResponse<TemplateData>>}
+ * @returns {ClientResponse<TemplateData>}
  */
 NotifyClient.prototype.getTemplateByIdAndVersion = function(templateId, version) {
   return this.apiClient.get('/v2/template/' + templateId + '/version/' + version);
@@ -335,7 +330,7 @@ NotifyClient.prototype.getTemplateByIdAndVersion = function(templateId, version)
 
 /**
  * @param {NotificationType} [templateType]
- * @returns {Promise<import('axios').AxiosResponse<{templates: TemplateData[]}>>}
+ * @returns {ClientResponse<{templates: TemplateData[]}>}
  */
 NotifyClient.prototype.getAllTemplates = function(templateType) {
   let templateQuery = ''
@@ -350,7 +345,7 @@ NotifyClient.prototype.getAllTemplates = function(templateType) {
 /**
  * @param {string} templateId
  * @param {Object} [personalisation]
- * @returns {Promise<import('axios').AxiosResponse<{id: string, type: NotificationType, version: number, body: string, html?: string, subject?: string, postage?: PostageType}>>}
+ * @returns {ClientResponse<{id: string, type: NotificationType, version: number, body: string, html?: string, subject?: string, postage?: PostageType}>}
  */
 NotifyClient.prototype.previewTemplateById = function(templateId, personalisation) {
 
@@ -365,7 +360,7 @@ NotifyClient.prototype.previewTemplateById = function(templateId, personalisatio
 
 /**
  * @param {string} [olderThan]
- * @returns {Promise<import('axios').AxiosResponse<{received_text_messages: Array<{id: string, user_number: string, notify_number: string, created_at: string, service_id: string, content: string}>, links: {current: string, next: string}}>>}
+ * @returns {ClientResponse<{received_text_messages: Array<{id: string, user_number: string, notify_number: string, created_at: string, service_id: string, content: string}>, links: {current: string, next: string}}>}
  */
 NotifyClient.prototype.getReceivedTexts = function(olderThan){
   let queryString;
@@ -380,7 +375,7 @@ NotifyClient.prototype.getReceivedTexts = function(olderThan){
 };
 
 /**
- * @param {import('axios').AxiosProxyConfig} proxyConfig
+ * @param {import('undici').Dispatcher} proxyConfig
  * @returns {void}
  */
 NotifyClient.prototype.setProxy = function(proxyConfig) {
@@ -388,7 +383,7 @@ NotifyClient.prototype.setProxy = function(proxyConfig) {
 };
 
 /**
- * @param {import('axios').AxiosInstance} client
+ * @param {import('undici').fetch} client
  * @returns {void}
  */
 NotifyClient.prototype.setClient = function(client) {

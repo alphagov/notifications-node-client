@@ -1,3 +1,10 @@
+## 9.0.0
+
+* Replace `axios` with `undici` [fetch](https://undici.nodejs.org/api/Fetch)
+  * To use a proxy, pass a [ProxyAgent](https://undici.nodejs.org/api/ProxyAgent) to `.setProxy`
+  * Responses are now an instance of [Response](https://undici.nodejs.org/api/Fetch#class-response), but with a `data` property to mimic the Axios behaviour.
+  * Response which are not a 2xx status code still throw an error (this is not default fetch behaviour)
+
 ## 8.5.0
 
 * Add `personalisation` to template response types from `getTemplateById`, `getTemplateByIdAndVersion` and `getAllTemplates`. This is an object of placeholder names, for example `{"name": {"required": true}}`.

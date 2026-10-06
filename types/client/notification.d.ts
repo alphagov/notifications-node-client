@@ -1,5 +1,5 @@
 declare namespace _exports {
-    export { NotificationType, PostageType, TemplateRef, NotificationResponse, TemplateData };
+    export { NotificationType, PostageType, TemplateRef, NotificationResponse, TemplateData, ClientResponse };
 }
 declare namespace _exports {
     export { NotifyClient };
@@ -69,6 +69,7 @@ type TemplateData = {
         };
     };
 };
+type ClientResponse<T> = Promise<import("./api_client").ClientResponse<T>>;
 /**
  * @typedef {"sms" | "letter" | "email"} NotificationType
  */
@@ -123,6 +124,11 @@ type TemplateData = {
  * @property {string} [subject]
  * @property {string} [letter_contact_block]
  * @property {PostageType} [postage]
+ * @property {{[key: string]: {required: boolean}}} [personalisation]
+ */
+/**
+ * @template T
+ * @typedef {Promise<import('./api_client').ClientResponse<T>} ClientResponse
  */
 /**
  * @param {string} apiKeyOrUrl - API key (1 arg), or base URL (2-3 args)
@@ -189,18 +195,23 @@ declare class NotifyClient {
      * @property {{[key: string]: {required: boolean}}} [personalisation]
      */
     /**
+     * @template T
+     * @typedef {Promise<import('./api_client').ClientResponse<T>} ClientResponse
+     */
+    /**
      * @param {string} apiKeyOrUrl - API key (1 arg), or base URL (2-3 args)
      * @param {string} [serviceIdOrApiKey] - API key (2 args), or service ID (3 args)
      * @param {string} [apiKeyId] - API key (3 args)
      * @constructor
      */
     constructor(apiKeyOrUrl: string, serviceIdOrApiKey?: string, apiKeyId?: string, ...args: any[]);
-    apiClient: any;
+    /** @type {ApiClient} */
+    apiClient: ApiClient;
     /**
      * @param {string} templateId
      * @param {string} emailAddress
      * @param {{personalisation?: Object, reference?: string, emailReplyToId?: string, oneClickUnsubscribeURL?: string, sanitiseContentFor?: string[]}} [options]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>>}
+     * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, subject: string, from_email: string, one_click_unsubscribe_url?: string}, sanitised_content: Record<string, Record<string, string>>, uri: string, template: TemplateRef}>}
      */
     sendEmail(templateId: string, emailAddress: string, options?: {
         personalisation?: any;
@@ -208,7 +219,7 @@ declare class NotifyClient {
         emailReplyToId?: string;
         oneClickUnsubscribeURL?: string;
         sanitiseContentFor?: string[];
-    }): Promise<import("axios").AxiosResponse<{
+    }): ClientResponse<{
         id: string;
         reference?: string;
         content: {
@@ -220,18 +231,18 @@ declare class NotifyClient {
         sanitised_content: Record<string, Record<string, string>>;
         uri: string;
         template: TemplateRef;
-    }>>;
+    }>;
     /**
      * @param {string} templateId
      * @param {string} phoneNumber
      * @param {{personalisation?: Object, reference?: string, smsSenderId?: string}} [options]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, from_number: string}, uri: string, template: TemplateRef}>>}
+     * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, from_number: string}, uri: string, template: TemplateRef}>}
      */
     sendSms(templateId: string, phoneNumber: string, options?: {
         personalisation?: any;
         reference?: string;
         smsSenderId?: string;
-    }): Promise<import("axios").AxiosResponse<{
+    }): ClientResponse<{
         id: string;
         reference?: string;
         content: {
@@ -240,16 +251,16 @@ declare class NotifyClient {
         };
         uri: string;
         template: TemplateRef;
-    }>>;
+    }>;
     /**
      * @param {string} templateId
      * @param {{personalisation?: Object, reference?: string}} [options]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference?: string, content: {body: string, subject: string}, uri: string, template: TemplateRef, scheduled_for: string | null}>>}
+     * @returns {ClientResponse<{id: string, reference?: string, content: {body: string, subject: string}, uri: string, template: TemplateRef, scheduled_for: string | null}>}
      */
     sendLetter(templateId: string, options?: {
         personalisation?: any;
         reference?: string;
-    }): Promise<import("axios").AxiosResponse<{
+    }): ClientResponse<{
         id: string;
         reference?: string;
         content: {
@@ -259,37 +270,37 @@ declare class NotifyClient {
         uri: string;
         template: TemplateRef;
         scheduled_for: string | null;
-    }>>;
+    }>;
     /**
      * @param {string} reference
      * @param {Buffer | string} pdf_file
      * @param {"first" | "second" | "economy" | "europe" | "rest-of-world"} [postage]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, reference: string, postage: PostageType}>>}
+     * @returns {ClientResponse<{id: string, reference: string, postage: PostageType}>}
      */
-    sendPrecompiledLetter(reference: string, pdf_file: Buffer | string, postage?: "first" | "second" | "economy" | "europe" | "rest-of-world"): Promise<import("axios").AxiosResponse<{
+    sendPrecompiledLetter(reference: string, pdf_file: Buffer | string, postage?: "first" | "second" | "economy" | "europe" | "rest-of-world"): ClientResponse<{
         id: string;
         reference: string;
         postage: PostageType;
-    }>>;
+    }>;
     /**
      * @param {string} notificationId
-     * @returns {Promise<import('axios').AxiosResponse<NotificationResponse>>}
+     * @returns {ClientResponse<NotificationResponse>}
      */
-    getNotificationById(notificationId: string): Promise<import("axios").AxiosResponse<NotificationResponse>>;
+    getNotificationById(notificationId: string): ClientResponse<NotificationResponse>;
     /**
      * @param {string} [templateType]
      * @param {string} [status]
      * @param {string} [reference]
      * @param {string} [olderThanId]
-     * @returns {Promise<import('axios').AxiosResponse<{notifications: NotificationResponse[], links: {current: string, next: string}}>>}
+     * @returns {ClientResponse<{notifications: NotificationResponse[], links: {current: string, next: string}}>}
      */
-    getNotifications(templateType?: string, status?: string, reference?: string, olderThanId?: string): Promise<import("axios").AxiosResponse<{
+    getNotifications(templateType?: string, status?: string, reference?: string, olderThanId?: string): ClientResponse<{
         notifications: NotificationResponse[];
         links: {
             current: string;
             next: string;
         };
-    }>>;
+    }>;
     /**
      * @param {string} notificationId
      * @returns {Promise<Buffer>}
@@ -297,28 +308,28 @@ declare class NotifyClient {
     getPdfForLetterNotification(notificationId: string): Promise<Buffer>;
     /**
      * @param {string} templateId
-     * @returns {Promise<import('axios').AxiosResponse<TemplateData>>}
+     * @returns {ClientResponse<TemplateData>}
      */
-    getTemplateById(templateId: string): Promise<import("axios").AxiosResponse<TemplateData>>;
+    getTemplateById(templateId: string): ClientResponse<TemplateData>;
     /**
      * @param {string} templateId
      * @param {number} version
-     * @returns {Promise<import('axios').AxiosResponse<TemplateData>>}
+     * @returns {ClientResponse<TemplateData>}
      */
-    getTemplateByIdAndVersion(templateId: string, version: number): Promise<import("axios").AxiosResponse<TemplateData>>;
+    getTemplateByIdAndVersion(templateId: string, version: number): ClientResponse<TemplateData>;
     /**
      * @param {NotificationType} [templateType]
-     * @returns {Promise<import('axios').AxiosResponse<{templates: TemplateData[]}>>}
+     * @returns {ClientResponse<{templates: TemplateData[]}>}
      */
-    getAllTemplates(templateType?: NotificationType): Promise<import("axios").AxiosResponse<{
+    getAllTemplates(templateType?: NotificationType): ClientResponse<{
         templates: TemplateData[];
-    }>>;
+    }>;
     /**
      * @param {string} templateId
      * @param {Object} [personalisation]
-     * @returns {Promise<import('axios').AxiosResponse<{id: string, type: NotificationType, version: number, body: string, html?: string, subject?: string, postage?: PostageType}>>}
+     * @returns {ClientResponse<{id: string, type: NotificationType, version: number, body: string, html?: string, subject?: string, postage?: PostageType}>}
      */
-    previewTemplateById(templateId: string, personalisation?: any): Promise<import("axios").AxiosResponse<{
+    previewTemplateById(templateId: string, personalisation?: any): ClientResponse<{
         id: string;
         type: NotificationType;
         version: number;
@@ -326,12 +337,12 @@ declare class NotifyClient {
         html?: string;
         subject?: string;
         postage?: PostageType;
-    }>>;
+    }>;
     /**
      * @param {string} [olderThan]
-     * @returns {Promise<import('axios').AxiosResponse<{received_text_messages: Array<{id: string, user_number: string, notify_number: string, created_at: string, service_id: string, content: string}>, links: {current: string, next: string}}>>}
+     * @returns {ClientResponse<{received_text_messages: Array<{id: string, user_number: string, notify_number: string, created_at: string, service_id: string, content: string}>, links: {current: string, next: string}}>}
      */
-    getReceivedTexts(olderThan?: string): Promise<import("axios").AxiosResponse<{
+    getReceivedTexts(olderThan?: string): ClientResponse<{
         received_text_messages: Array<{
             id: string;
             user_number: string;
@@ -344,17 +355,17 @@ declare class NotifyClient {
             current: string;
             next: string;
         };
-    }>>;
+    }>;
     /**
-     * @param {import('axios').AxiosProxyConfig} proxyConfig
+     * @param {import('undici').Dispatcher} proxyConfig
      * @returns {void}
      */
-    setProxy(proxyConfig: import("axios").AxiosProxyConfig): void;
+    setProxy(proxyConfig: import("undici").Dispatcher): void;
     /**
-     * @param {import('axios').AxiosInstance} client
+     * @param {import('undici').fetch} client
      * @returns {void}
      */
-    setClient(client: import("axios").AxiosInstance): void;
+    setClient(client: typeof import("undici").fetch): void;
     /**
      * @param {Buffer | string} fileData
      * @param {{filename?: string, confirmEmailBeforeDownload?: boolean, retentionPeriod?: string}} [options]
@@ -371,3 +382,4 @@ declare class NotifyClient {
         retention_period: string | null;
     };
 }
+import ApiClient = require("./api_client");

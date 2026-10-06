@@ -1,13 +1,13 @@
 var expect = require('chai').expect,
   MockDate = require('mockdate'),
   ApiClient = require('../client/api_client.js'),
-  nock = require('nock'),
   createGovukNotifyToken = require('../client/authentication.js'),
   version = require('../package.json').version,
-  axios = require('axios'),
   sinon = require('sinon');
+const { MockAgent, setGlobalDispatcher, getGlobalDispatcher } = require('undici');
 
 describe('api client', function () {
+  const responseOptions =  {headers: {'Content-Type': 'application/json'}};
 
   beforeEach(function() {
     MockDate.set(1234567890000);
@@ -16,6 +16,21 @@ describe('api client', function () {
   afterEach(function() {
     MockDate.reset();
   });
+
+  function newMockAgent(baseUrl) {
+      // intercept requests with undici's MockAgent
+      const mockAgent = new MockAgent();
+      const dispatcher = getGlobalDispatcher();
+      setGlobalDispatcher(mockAgent);
+      const mockPool = mockAgent.get(baseUrl);
+      return {
+          mockPool,
+          reset() {
+              // restore the global dispatcher
+              setGlobalDispatcher(dispatcher);
+          }
+      }
+  }
 
   it('should make a get request with correct headers', function (done) {
 
@@ -33,90 +48,104 @@ describe('api client', function () {
       new ApiClient(urlBase, 'key_name' + '-' + serviceId + '-' + apiKeyId),
       new ApiClient('key_name' + ':' + serviceId + ':' + apiKeyId),
     ].forEach(function(client, index, clients) {
+        const { mockPool, reset } = newMockAgent(urlBase);
+        mockPool
+          .intercept({
+            path,
+            headers: {
+              'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
+              'Content-Type': 'application/json',
+              'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+            }
+          })
+          .reply(200, body, responseOptions)
 
-      nock(urlBase, {
-        reqheaders: {
-          'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
-          'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-        }
-      })
-        .get(path)
-        .reply(200, body);
-
-      client.get(path)
-        .then(function (response) {
-          expect(response.data).to.deep.equal(body);
-          if (index == clients.length - 1) done();
-      });
-
+        client
+          .get(path)
+          .then(function (response) {
+            expect(response.data).to.deep.equal(body);
+            if (index == clients.length - 1) done();
+          })
+          .finally(reset);
     });
 
   });
 
   it('should make a post request with correct headers', function (done) {
+      var urlBase = 'http://localhost',
+          path = '/email',
+          data = {
+              'data': 'qwjjs'
+          },
+          serviceId = 123,
+          apiKeyId = 'SECRET';
 
-    var urlBase = 'http://localhost',
-      path = '/email',
-      data = {
-        'data': 'qwjjs'
-      },
-      serviceId = 123,
-      apiKeyId = 'SECRET',
-      apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
+      const { mockPool, reset } = newMockAgent(urlBase);
+      mockPool
+       .intercept({
+         path,
+         method: 'POST',
+         headers: {
+           'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),
+           'Content-Type': 'application/json',
+           'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
+         }
+       })
+       .reply(200, {"hooray": "bkbbk"}, responseOptions)
 
-    nock(urlBase, {
-      reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('POST', path, apiKeyId, serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    })
-      .post(path, data)
-      .reply(200, {"hooray": "bkbbk"});
-
-    apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
-    apiClient.post(path, data)
-      .then(function (response) {
-        expect(response.status).to.equal(200);
-        done();
-    });
+      const apiClient = new ApiClient(urlBase, serviceId, apiKeyId);
+      apiClient.post(path, data)
+       .then(function (response) {
+         expect(response.status).to.equal(200);
+         done();
+       })
+       .catch(done)
+       .finally(reset);
   });
 
   it('should direct get requests through the proxy when set', function (done) {
     var urlBase = 'http://api.notifications.service.gov.uk',
-      proxyConfig = { host: 'addressofmyproxy.test', protocol: 'http'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 
-    nock("http://" + proxyConfig.host)
-      .get(urlBase + path)
-      .reply(200, 'test');
+    const mockAgent = new MockAgent()
+    const mockPool = mockAgent.get(urlBase)
+    mockPool
+      .intercept({ path })
+      .reply(200, 'test')
 
-    apiClient.setProxy(proxyConfig);
+    apiClient.setProxy(mockAgent);
     apiClient.get(path)
       .then(function (response) {
         expect(response.status).to.equal(200);
-        expect(response.config.proxy).to.eql(proxyConfig);
+        expect(response.data).to.equal('test');
         done();
-    });
+      })
+      .catch(done);
   });
 
   it('should direct post requests through the proxy when set', function (done) {
     var urlBase = 'http://api.notifications.service.gov.uk',
-      proxyConfig = { host: 'addressofmyproxy.test', protocol: 'http'},
       path = '/email',
       apiClient = new ApiClient(urlBase, 'apiKey');
 
-    nock("http://" + proxyConfig.host)
-      .post(urlBase + path)
-      .reply(200, 'test');
+    const mockAgent = new MockAgent()
+    const mockPool = mockAgent.get(urlBase)
+    mockPool
+     .intercept({
+         method: 'POST',
+         path
+     })
+     .reply(200, 'test')
 
-    apiClient.setProxy(proxyConfig);
+    apiClient.setProxy(mockAgent);
     apiClient.post(path)
       .then(function (response) {
         expect(response.status).to.equal(200);
-        expect(response.config.proxy).to.eql(proxyConfig);
+        expect(response.data).to.equal('test');
         done();
-    });
+      })
+      .catch(done);
   });
 
   it('should use the custom Axios client when set', function (done) {
@@ -128,27 +157,26 @@ describe('api client', function () {
       serviceId = 'c745a8d8-b48a-4b0d-96e5-dbea0165ebd1',
       apiKeyId = '8b3aa916-ec82-434e-b0c5-d5d9b371d6a3';
 
-    var customClientStub = sinon.stub().resolves({ data: body });
+    var customClientStub = sinon.stub().resolves({
+        json: () => Promise.resolve(body),
+        ok: true,
+        headers: {
+            get() {
+                return 'application/json'
+            }
+        }
+    });
 
     var apiClient = new ApiClient(serviceId, apiKeyId);
     apiClient.setClient(customClientStub);
-
-    nock(urlBase, {
-      reqheaders: {
-        'Authorization': 'Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId),
-        'User-Agent': 'NOTIFY-API-NODE-CLIENT/' + version
-      }
-    })
-      .get(path)
-      .reply(200, body);
 
     apiClient.get(path)
       .then(function (response) {
         expect(response.data).to.deep.equal(body);
         expect(customClientStub.calledOnce).to.be.true;
-        expect(customClientStub.args[0][0].url).to.equal(urlBase + path);
-        expect(customClientStub.args[0][0].headers['Authorization']).to.equal('Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId));
-        expect(customClientStub.args[0][0].headers['User-Agent']).to.equal('NOTIFY-API-NODE-CLIENT/' + version);
+        expect(customClientStub.args[0][0]).to.equal(urlBase + path);
+        expect(customClientStub.args[0][1].headers['Authorization']).to.equal('Bearer ' + createGovukNotifyToken('GET', path, apiKeyId, serviceId));
+        expect(customClientStub.args[0][1].headers['User-Agent']).to.equal('NOTIFY-API-NODE-CLIENT/' + version);
         done();
       })
       .catch(done);

@@ -2,6 +2,7 @@
 // It is NOT run as a test - it only needs to type-check.
 
 import { NotifyClient } from '..';
+import { fetch, ProxyAgent }  from "undici";
 
 // Constructor overloads
 const client1 = new NotifyClient('apiKeyId');
@@ -149,6 +150,7 @@ function testPrepareUpload() {
 }
 
 // setProxy
-client1.setProxy({ host: 'proxy.example.com', port: 8080 });
+client1.setProxy(new ProxyAgent({ uri: 'proxy.example.com:8080' }));
 
-// setClient - accepts axios instance
+// setClient - accepts fetch instance
+client1.setClient(fetch);
